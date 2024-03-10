@@ -45,6 +45,8 @@ public class ServerConfigReader {
 				if (line.trim().startsWith(DhcpConstants.OPTION)) {
 					ConfigOption cfgOption = new ConfigOption(line);
 					DHCPOption dhcpOption = DhcpOptionReader.createDHCPOption(cfgOption);
+					
+					serverConfig.getOptions().add(dhcpOption);
 				}
 
 			}
@@ -53,5 +55,12 @@ public class ServerConfigReader {
 
 		return serverConfig;
 
+	}
+	
+	private void assignAttributesToFields(String content, DhcpServerConfiguration serverConfig) {
+		
+		
+		
+		
 	}
 }

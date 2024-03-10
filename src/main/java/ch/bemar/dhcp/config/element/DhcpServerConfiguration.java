@@ -5,7 +5,11 @@ import java.util.Set;
 import org.dhcp4java.DHCPOption;
 
 import ch.bemar.dhcp.config.ConfName;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
 public class DhcpServerConfiguration {
 
 	@ConfName("default-lease-time")
