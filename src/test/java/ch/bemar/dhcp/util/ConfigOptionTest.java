@@ -1,9 +1,10 @@
 package ch.bemar.dhcp.util;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
+
 import ch.bemar.dhcp.config.reader.ConfigOption;
 import ch.bemar.dhcp.exception.OptionNotFoundException;
 
@@ -15,7 +16,7 @@ class ConfigOptionTest {
 		ConfigOption option = new ConfigOption("option domain-name \"bemar.local\";");
 
 		assertEquals("domain-name", option.getOptionName());
-		assertEquals("\"bemar.local\"", option.getOptionValue());
+		assertEquals("[\"bemar.local\"]", option.getOptionValues().toString());
 
 	}
 
@@ -25,7 +26,7 @@ class ConfigOptionTest {
 		ConfigOption option = new ConfigOption("option domain-name-servers 8.8.8.8, 8.8.4.4;");
 
 		assertEquals("domain-name-servers", option.getOptionName());
-		assertEquals("8.8.8.8, 8.8.4.4", option.getOptionValue());
+		assertEquals("[8.8.8.8, 8.8.4.4]", option.getOptionValues().toString());
 
 	}
 
