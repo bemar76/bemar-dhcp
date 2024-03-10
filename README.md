@@ -1,2 +1,2 @@
 # bemar-dhcp
-A dhcp server compatible to dhcp.conf
+A dhcp server compatible to dhcpd.conf
