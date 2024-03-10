@@ -40,20 +40,17 @@
 		<joda-time.version>2.10.3</joda-time.version>
 
 		<logback.version>1.2.11</logback.version>
+
+		<auto-service.version>1.1.1</auto-service.version>
 	</properties>
 
-
-
-
 	<dependencies>
-
 
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-core</artifactId>
 			<version>${logback.version}</version>
 		</dependency>
-
 
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -67,9 +64,19 @@
 			<version>${hibernate-types-52.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.google.auto.service</groupId>
+			<artifactId>auto-service-annotations</artifactId>
+			<version>${auto-service.version}</version>
+		</dependency>
 
-
-
+		<dependency>
+			<groupId>com.google.auto.service</groupId>
+			<artifactId>auto-service</artifactId>
+			<version>${auto-service.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>

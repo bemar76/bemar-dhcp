@@ -1,20 +1,19 @@
-package ch.bemar.dhcp.config.reader;
+package ch.bemar.dhcp.constants;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.dhcp4java.DHCPConstants;
-import org.dhcp4java.DHCPOption;
 
-public class DHCPOptionMapper {
+import lombok.extern.slf4j.Slf4j;
 
-	private static final Map<String, Byte> optionToByteMap;
+@Slf4j
+public class DhcpOptionMapper {
 
-	static {
-		optionToByteMap = new HashMap<>();
-		// Fügen Sie hier die Zuordnungen der DHCP-Optionen zu den Bytes ein
+	private static final Map<String, Byte> optionToByteMap = new HashMap<>();
+
+	private DhcpOptionMapper() {
+
 		optionToByteMap.put("subnet-mask", DHCPConstants.DHO_SUBNET_MASK);
 		optionToByteMap.put("time-offset", DHCPConstants.DHO_TIME_OFFSET);
 		optionToByteMap.put("router", DHCPConstants.DHO_ROUTERS);
@@ -103,25 +102,27 @@ public class DHCPOptionMapper {
 		optionToByteMap.put("subnet-selection", DHCPConstants.DHO_SUBNET_SELECTION);
 		optionToByteMap.put("domain-search", DHCPConstants.DHO_DOMAIN_SEARCH);
 		optionToByteMap.put("classless-route", DHCPConstants.DHO_CLASSLESS_ROUTE);
-		// Fügen Sie weitere Optionen hinzu ...
+		// exotic options
+		optionToByteMap.put("sip-servers-dhcp-option", (byte) 120);
+		optionToByteMap.put("classless-static-route-option", (byte) 121);
+		optionToByteMap.put("cablelabs-client-configuration", (byte) 122);
+		optionToByteMap.put("geoconf-civic", (byte) 123);
+		optionToByteMap.put("ieee-802-1q-vlan-id", (byte) 124);
+		optionToByteMap.put("ieee-802-1d/p-layer-2-priority", (byte) 125);
+		optionToByteMap.put("diffserv-code-point", (byte) 133);
+		optionToByteMap.put("http-proxy-for-phone-specific-applications", (byte) 135);
+		optionToByteMap.put("pxe-uefi-http-boot", (byte) 175);
+		optionToByteMap.put("tftp-server-address", (byte) 150);
+		optionToByteMap.put("etherboot", (byte) 175);
+		optionToByteMap.put("ip-telephone", (byte) 176);
+		optionToByteMap.put("packetcable-and-cablehome", (byte) 177);
+		optionToByteMap.put("vendor-identifying-vendor-class", (byte) 124);
+		optionToByteMap.put("vendor-identifying-vendor-specific-information", (byte) 125);
+
 	}
 
-	public static DHCPOption createDHCPOption(String optionName, String optionValue) {
-        Byte optionType = optionToByteMap.get(optionName);
-        if (optionType != null) {
-            byte[] valueBytes;
-            try {
-                // Versuchen, den Optionwert in eine IP-Adresse umzuwandeln
-                InetAddress address = InetAddress.getByName(optionValue);
-                valueBytes = address.getAddress();
-            } catch (UnknownHostException e) {
-                // Wenn der Optionwert keine IP-Adresse ist, konvertieren Sie ihn in Bytes
-                valueBytes = optionValue.getBytes();
-            }
-            return new DHCPOption(optionType, valueBytes);
-        } else {
-            return null; // Option nicht gefunden
-        }
-    }
+	public static byte getOptionByteByName(String name) {
+		return optionToByteMap.get(name);
+	}
 
 }

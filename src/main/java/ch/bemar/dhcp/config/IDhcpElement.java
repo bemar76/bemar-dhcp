@@ -1,6 +1,6 @@
 package ch.bemar.dhcp.config;
 
-public interface IDHCPElement {
+public interface IDhcpElement {
 
 	public byte[] getValue();
 

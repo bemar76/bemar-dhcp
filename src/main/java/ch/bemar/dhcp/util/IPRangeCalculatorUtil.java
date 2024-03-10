@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.google.common.net.InetAddresses;
 
-public class IPRangeCalculator {
+public class IPRangeCalculatorUtil {
 	public static void main(String[] args) {
 
 	}

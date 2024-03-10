@@ -1,6 +1,6 @@
 package ch.bemar.dhcp.config;
 
-public interface IDHCPOption extends IDHCPElement {
+public interface IDhcpOption extends IDhcpElement {
 
 	public byte getCode();
 }

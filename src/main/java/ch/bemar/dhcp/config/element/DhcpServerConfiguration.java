@@ -1,24 +1,12 @@
 package ch.bemar.dhcp.config.element;
 
-import java.net.InetAddress;
 import java.util.Set;
 
 import org.dhcp4java.DHCPOption;
 
 import ch.bemar.dhcp.config.ConfName;
-import lombok.Data;
 
-@Data
-public class DhcpSubnetConfig {
-
-	@ConfName("subnet")
-	private InetAddress subnetAddress;
-
-	@ConfName("netmask")
-	private InetAddress netmask;
-
-	@ConfName("range")
-	private IpRange range;
+public class DhcpServerConfiguration {
 
 	@ConfName("default-lease-time")
 	private Integer defaultLeaseTime;
@@ -26,8 +14,11 @@ public class DhcpSubnetConfig {
 	@ConfName("max-lease-time")
 	private Integer maxLeaseTime;
 
+	@ConfName("authoritative")
+	private boolean authoritative;
+
 	private Set<DHCPOption> options;
 
-	private Set<HostConfiguration> hosts;
+	private Set<DhcpSubnetConfig> subnets;
 
 }

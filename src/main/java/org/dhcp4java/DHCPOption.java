@@ -37,7 +37,7 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import ch.bemar.dhcp.config.IDHCPOption;
+import ch.bemar.dhcp.config.IDhcpOption;
 
 /**
  * Class for manipulating DHCP options (used internally).
@@ -47,7 +47,7 @@ import ch.bemar.dhcp.config.IDHCPOption;
  * 
  *          Immutable object.
  */
-public class DHCPOption implements Serializable, IDHCPOption {
+public class DHCPOption implements Serializable, IDhcpOption {
 	private static final long serialVersionUID = 2L;
 	private static final Logger logger = Logger.getLogger(DHCPOption.class.getName().toLowerCase());
 
