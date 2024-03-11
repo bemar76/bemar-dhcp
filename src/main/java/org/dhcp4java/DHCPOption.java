@@ -18,7 +18,94 @@
  */
 package org.dhcp4java;
 
-import static org.dhcp4java.DHCPConstants.*;
+import static org.dhcp4java.DHCPConstants.DHO_ALL_SUBNETS_LOCAL;
+import static org.dhcp4java.DHCPConstants.DHO_ARP_CACHE_TIMEOUT;
+import static org.dhcp4java.DHCPConstants.DHO_ASSOCIATED_IP;
+import static org.dhcp4java.DHCPConstants.DHO_AUTO_CONFIGURE;
+import static org.dhcp4java.DHCPConstants.DHO_BOOTFILE;
+import static org.dhcp4java.DHCPConstants.DHO_BOOT_SIZE;
+import static org.dhcp4java.DHCPConstants.DHO_BROADCAST_ADDRESS;
+import static org.dhcp4java.DHCPConstants.DHO_CLIENT_LAST_TRANSACTION_TIME;
+import static org.dhcp4java.DHCPConstants.DHO_COOKIE_SERVERS;
+import static org.dhcp4java.DHCPConstants.DHO_DEFAULT_IP_TTL;
+import static org.dhcp4java.DHCPConstants.DHO_DEFAULT_TCP_TTL;
+import static org.dhcp4java.DHCPConstants.DHO_DHCP_AGENT_OPTIONS;
+import static org.dhcp4java.DHCPConstants.DHO_DHCP_LEASE_TIME;
+import static org.dhcp4java.DHCPConstants.DHO_DHCP_MAX_MESSAGE_SIZE;
+import static org.dhcp4java.DHCPConstants.DHO_DHCP_MESSAGE;
+import static org.dhcp4java.DHCPConstants.DHO_DHCP_MESSAGE_TYPE;
+import static org.dhcp4java.DHCPConstants.DHO_DHCP_OPTION_OVERLOAD;
+import static org.dhcp4java.DHCPConstants.DHO_DHCP_PARAMETER_REQUEST_LIST;
+import static org.dhcp4java.DHCPConstants.DHO_DHCP_REBINDING_TIME;
+import static org.dhcp4java.DHCPConstants.DHO_DHCP_RENEWAL_TIME;
+import static org.dhcp4java.DHCPConstants.DHO_DHCP_REQUESTED_ADDRESS;
+import static org.dhcp4java.DHCPConstants.DHO_DHCP_SERVER_IDENTIFIER;
+import static org.dhcp4java.DHCPConstants.DHO_DOMAIN_NAME;
+import static org.dhcp4java.DHCPConstants.DHO_DOMAIN_NAME_SERVERS;
+import static org.dhcp4java.DHCPConstants.DHO_DOMAIN_SEARCH;
+import static org.dhcp4java.DHCPConstants.DHO_END;
+import static org.dhcp4java.DHCPConstants.DHO_EXTENSIONS_PATH;
+import static org.dhcp4java.DHCPConstants.DHO_FINGER_SERVER;
+import static org.dhcp4java.DHCPConstants.DHO_FONT_SERVERS;
+import static org.dhcp4java.DHCPConstants.DHO_HOST_NAME;
+import static org.dhcp4java.DHCPConstants.DHO_IEEE802_3_ENCAPSULATION;
+import static org.dhcp4java.DHCPConstants.DHO_IMPRESS_SERVERS;
+import static org.dhcp4java.DHCPConstants.DHO_INTERFACE_MTU;
+import static org.dhcp4java.DHCPConstants.DHO_IP_FORWARDING;
+import static org.dhcp4java.DHCPConstants.DHO_IRC_SERVER;
+import static org.dhcp4java.DHCPConstants.DHO_LOG_SERVERS;
+import static org.dhcp4java.DHCPConstants.DHO_LPR_SERVERS;
+import static org.dhcp4java.DHCPConstants.DHO_MASK_SUPPLIER;
+import static org.dhcp4java.DHCPConstants.DHO_MAX_DGRAM_REASSEMBLY;
+import static org.dhcp4java.DHCPConstants.DHO_MERIT_DUMP;
+import static org.dhcp4java.DHCPConstants.DHO_MOBILE_IP_HOME_AGENT;
+import static org.dhcp4java.DHCPConstants.DHO_NAME_SERVERS;
+import static org.dhcp4java.DHCPConstants.DHO_NAME_SERVICE_SEARCH;
+import static org.dhcp4java.DHCPConstants.DHO_NDS_CONTEXT;
+import static org.dhcp4java.DHCPConstants.DHO_NDS_SERVERS;
+import static org.dhcp4java.DHCPConstants.DHO_NDS_TREE_NAME;
+import static org.dhcp4java.DHCPConstants.DHO_NETBIOS_DD_SERVER;
+import static org.dhcp4java.DHCPConstants.DHO_NETBIOS_NAME_SERVERS;
+import static org.dhcp4java.DHCPConstants.DHO_NETBIOS_NODE_TYPE;
+import static org.dhcp4java.DHCPConstants.DHO_NETBIOS_SCOPE;
+import static org.dhcp4java.DHCPConstants.DHO_NISPLUS_DOMAIN;
+import static org.dhcp4java.DHCPConstants.DHO_NISPLUS_SERVER;
+import static org.dhcp4java.DHCPConstants.DHO_NIS_SERVERS;
+import static org.dhcp4java.DHCPConstants.DHO_NNTP_SERVER;
+import static org.dhcp4java.DHCPConstants.DHO_NON_LOCAL_SOURCE_ROUTING;
+import static org.dhcp4java.DHCPConstants.DHO_NTP_SERVERS;
+import static org.dhcp4java.DHCPConstants.DHO_NWIP_DOMAIN_NAME;
+import static org.dhcp4java.DHCPConstants.DHO_PAD;
+import static org.dhcp4java.DHCPConstants.DHO_PATH_MTU_AGING_TIMEOUT;
+import static org.dhcp4java.DHCPConstants.DHO_PATH_MTU_PLATEAU_TABLE;
+import static org.dhcp4java.DHCPConstants.DHO_PERFORM_MASK_DISCOVERY;
+import static org.dhcp4java.DHCPConstants.DHO_POLICY_FILTER;
+import static org.dhcp4java.DHCPConstants.DHO_POP3_SERVER;
+import static org.dhcp4java.DHCPConstants.DHO_RESOURCE_LOCATION_SERVERS;
+import static org.dhcp4java.DHCPConstants.DHO_ROOT_PATH;
+import static org.dhcp4java.DHCPConstants.DHO_ROUTERS;
+import static org.dhcp4java.DHCPConstants.DHO_ROUTER_DISCOVERY;
+import static org.dhcp4java.DHCPConstants.DHO_ROUTER_SOLICITATION_ADDRESS;
+import static org.dhcp4java.DHCPConstants.DHO_SMTP_SERVER;
+import static org.dhcp4java.DHCPConstants.DHO_STATIC_ROUTES;
+import static org.dhcp4java.DHCPConstants.DHO_STDA_SERVER;
+import static org.dhcp4java.DHCPConstants.DHO_STREETTALK_SERVER;
+import static org.dhcp4java.DHCPConstants.DHO_SUBNET_MASK;
+import static org.dhcp4java.DHCPConstants.DHO_SUBNET_SELECTION;
+import static org.dhcp4java.DHCPConstants.DHO_SWAP_SERVER;
+import static org.dhcp4java.DHCPConstants.DHO_TCP_KEEPALIVE_GARBAGE;
+import static org.dhcp4java.DHCPConstants.DHO_TCP_KEEPALIVE_INTERVAL;
+import static org.dhcp4java.DHCPConstants.DHO_TFTP_SERVER;
+import static org.dhcp4java.DHCPConstants.DHO_TIME_OFFSET;
+import static org.dhcp4java.DHCPConstants.DHO_TIME_SERVERS;
+import static org.dhcp4java.DHCPConstants.DHO_TRAILER_ENCAPSULATION;
+import static org.dhcp4java.DHCPConstants.DHO_USER_AUTHENTICATION_PROTOCOL;
+import static org.dhcp4java.DHCPConstants.DHO_USER_CLASS;
+import static org.dhcp4java.DHCPConstants.DHO_VENDOR_CLASS_IDENTIFIER;
+import static org.dhcp4java.DHCPConstants.DHO_WWW_SERVER;
+import static org.dhcp4java.DHCPConstants.DHO_X_DISPLAY_MANAGER;
+import static org.dhcp4java.DHCPConstants._DHCP_CODES;
+import static org.dhcp4java.DHCPConstants._DHO_NAMES;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -37,8 +124,6 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import ch.bemar.dhcp.config.IDhcpOption;
-
 /**
  * Class for manipulating DHCP options (used internally).
  * 
@@ -47,7 +132,7 @@ import ch.bemar.dhcp.config.IDhcpOption;
  * 
  *          Immutable object.
  */
-public class DHCPOption implements Serializable, IDhcpOption {
+public class DHCPOption implements Serializable {
 	private static final long serialVersionUID = 2L;
 	private static final Logger logger = Logger.getLogger(DHCPOption.class.getName().toLowerCase());
 
@@ -261,7 +346,8 @@ public class DHCPOption implements Serializable, IDhcpOption {
 			throw new IllegalStateException("value is null");
 		}
 		if (this.value.length != 1) {
-			throw new DHCPBadPacketException("option " + this.code + " is wrong size:" + this.value.length + " should be 1");
+			throw new DHCPBadPacketException(
+					"option " + this.code + " is wrong size:" + this.value.length + " should be 1");
 		}
 		return this.value[0];
 	}
@@ -295,7 +381,8 @@ public class DHCPOption implements Serializable, IDhcpOption {
 			throw new IllegalStateException("value is null");
 		}
 		if (this.value.length != 2) {
-			throw new DHCPBadPacketException("option " + this.code + " is wrong size:" + this.value.length + " should be 2");
+			throw new DHCPBadPacketException(
+					"option " + this.code + " is wrong size:" + this.value.length + " should be 2");
 		}
 
 		return (short) ((this.value[0] & 0xff) << 8 | (this.value[1] & 0xFF));
@@ -333,9 +420,11 @@ public class DHCPOption implements Serializable, IDhcpOption {
 			throw new IllegalStateException("value is null");
 		}
 		if (this.value.length != 4) {
-			throw new DHCPBadPacketException("option " + this.code + " is wrong size:" + this.value.length + " should be 4");
+			throw new DHCPBadPacketException(
+					"option " + this.code + " is wrong size:" + this.value.length + " should be 4");
 		}
-		return ((this.value[0] & 0xFF) << 24 | (this.value[1] & 0xFF) << 16 | (this.value[2] & 0xFF) << 8 | (this.value[3] & 0xFF));
+		return ((this.value[0] & 0xFF) << 24 | (this.value[1] & 0xFF) << 16 | (this.value[2] & 0xFF) << 8
+				| (this.value[3] & 0xFF));
 	}
 
 	// TODO
@@ -358,7 +447,8 @@ public class DHCPOption implements Serializable, IDhcpOption {
 		} else if (value.length == 2) { // short
 			return ((value[0] & 0xff) << 8 | (value[1] & 0xFF));
 		} else if (value.length == 4) {
-			return ((this.value[0] & 0xFF) << 24 | (this.value[1] & 0xFF) << 16 | (this.value[2] & 0xFF) << 8 | (this.value[3] & 0xFF));
+			return ((this.value[0] & 0xFF) << 24 | (this.value[1] & 0xFF) << 16 | (this.value[2] & 0xFF) << 8
+					| (this.value[3] & 0xFF));
 		} else {
 			return null;
 		}
@@ -396,7 +486,8 @@ public class DHCPOption implements Serializable, IDhcpOption {
 			throw new IllegalStateException("value is null");
 		}
 		if (this.value.length != 4) {
-			throw new DHCPBadPacketException("option " + this.code + " is wrong size:" + this.value.length + " should be 4");
+			throw new DHCPBadPacketException(
+					"option " + this.code + " is wrong size:" + this.value.length + " should be 4");
 		}
 		try {
 			return InetAddress.getByAddress(this.value);
@@ -475,7 +566,8 @@ public class DHCPOption implements Serializable, IDhcpOption {
 		}
 		if ((this.value.length % 2) != 0) // multiple of 2
 		{
-			throw new DHCPBadPacketException("option " + this.code + " is wrong size:" + this.value.length + " should be 2*X");
+			throw new DHCPBadPacketException(
+					"option " + this.code + " is wrong size:" + this.value.length + " should be 2*X");
 		}
 
 		short[] shorts = new short[this.value.length / 2];
@@ -538,7 +630,8 @@ public class DHCPOption implements Serializable, IDhcpOption {
 		}
 		if ((this.value.length % 4) != 0) // multiple of 4
 		{
-			throw new DHCPBadPacketException("option " + this.code + " is wrong size:" + this.value.length + " should be 4*X");
+			throw new DHCPBadPacketException(
+					"option " + this.code + " is wrong size:" + this.value.length + " should be 4*X");
 		}
 		try {
 			byte[] addr = new byte[4];
@@ -963,7 +1056,8 @@ public class DHCPOption implements Serializable, IDhcpOption {
 	}
 
 	public static byte[] int2Bytes(int val) {
-		byte[] raw = { (byte) ((val & 0xFF000000) >>> 24), (byte) ((val & 0X00FF0000) >>> 16), (byte) ((val & 0x0000FF00) >>> 8), (byte) ((val & 0x000000FF)) };
+		byte[] raw = { (byte) ((val & 0xFF000000) >>> 24), (byte) ((val & 0X00FF0000) >>> 16),
+				(byte) ((val & 0x0000FF00) >>> 8), (byte) ((val & 0x000000FF)) };
 		return raw;
 	}
 
@@ -1360,31 +1454,42 @@ public class DHCPOption implements Serializable, IDhcpOption {
 	//
 	// list of formats by options
 	//
-	private static final Object[] _OPTION_FORMATS = { DHO_SUBNET_MASK, OptionFormat.INET, DHO_TIME_OFFSET, OptionFormat.INT, DHO_ROUTERS, OptionFormat.INETS,
-			DHO_TIME_SERVERS, OptionFormat.INETS, DHO_NAME_SERVERS, OptionFormat.INETS, DHO_DOMAIN_NAME_SERVERS, OptionFormat.INETS, DHO_LOG_SERVERS,
-			OptionFormat.INETS, DHO_COOKIE_SERVERS, OptionFormat.INETS, DHO_LPR_SERVERS, OptionFormat.INETS, DHO_IMPRESS_SERVERS, OptionFormat.INETS,
-			DHO_RESOURCE_LOCATION_SERVERS, OptionFormat.INETS, DHO_HOST_NAME, OptionFormat.STRING, DHO_BOOT_SIZE, OptionFormat.SHORT, DHO_MERIT_DUMP,
-			OptionFormat.STRING, DHO_DOMAIN_NAME, OptionFormat.STRING, DHO_SWAP_SERVER, OptionFormat.INET, DHO_ROOT_PATH, OptionFormat.STRING,
-			DHO_EXTENSIONS_PATH, OptionFormat.STRING, DHO_IP_FORWARDING, OptionFormat.BYTE, DHO_NON_LOCAL_SOURCE_ROUTING, OptionFormat.BYTE, DHO_POLICY_FILTER,
-			OptionFormat.INETS, DHO_MAX_DGRAM_REASSEMBLY, OptionFormat.SHORT, DHO_DEFAULT_IP_TTL, OptionFormat.BYTE, DHO_PATH_MTU_AGING_TIMEOUT,
-			OptionFormat.INT, DHO_PATH_MTU_PLATEAU_TABLE, OptionFormat.SHORTS, DHO_INTERFACE_MTU, OptionFormat.SHORT, DHO_ALL_SUBNETS_LOCAL, OptionFormat.BYTE,
-			DHO_BROADCAST_ADDRESS, OptionFormat.INET, DHO_PERFORM_MASK_DISCOVERY, OptionFormat.BYTE, DHO_MASK_SUPPLIER, OptionFormat.BYTE, DHO_ROUTER_DISCOVERY,
-			OptionFormat.BYTE, DHO_ROUTER_SOLICITATION_ADDRESS, OptionFormat.INET, DHO_STATIC_ROUTES, OptionFormat.INETS, DHO_TRAILER_ENCAPSULATION,
-			OptionFormat.BYTE, DHO_ARP_CACHE_TIMEOUT, OptionFormat.INT, DHO_IEEE802_3_ENCAPSULATION, OptionFormat.BYTE, DHO_DEFAULT_TCP_TTL, OptionFormat.BYTE,
-			DHO_TCP_KEEPALIVE_INTERVAL, OptionFormat.INT, DHO_TCP_KEEPALIVE_GARBAGE, OptionFormat.BYTE, DHO_NIS_SERVERS, OptionFormat.INETS, DHO_NTP_SERVERS,
-			OptionFormat.INETS, DHO_NETBIOS_NAME_SERVERS, OptionFormat.INETS, DHO_NETBIOS_DD_SERVER, OptionFormat.INETS, DHO_NETBIOS_NODE_TYPE,
-			OptionFormat.BYTE, DHO_NETBIOS_SCOPE, OptionFormat.STRING, DHO_FONT_SERVERS, OptionFormat.INETS, DHO_X_DISPLAY_MANAGER, OptionFormat.INETS,
-			DHO_DHCP_REQUESTED_ADDRESS, OptionFormat.INET, DHO_DHCP_LEASE_TIME, OptionFormat.INT, DHO_DHCP_OPTION_OVERLOAD, OptionFormat.BYTE,
-			DHO_DHCP_MESSAGE_TYPE, OptionFormat.BYTE, DHO_DHCP_SERVER_IDENTIFIER, OptionFormat.INET, DHO_DHCP_PARAMETER_REQUEST_LIST, OptionFormat.BYTES,
-			DHO_DHCP_MESSAGE, OptionFormat.STRING, DHO_DHCP_MAX_MESSAGE_SIZE, OptionFormat.SHORT, DHO_DHCP_RENEWAL_TIME, OptionFormat.INT,
-			DHO_DHCP_REBINDING_TIME, OptionFormat.INT, DHO_VENDOR_CLASS_IDENTIFIER, OptionFormat.STRING, DHO_NWIP_DOMAIN_NAME, OptionFormat.STRING,
-			DHO_NISPLUS_DOMAIN, OptionFormat.STRING, DHO_NISPLUS_SERVER, OptionFormat.STRING, DHO_TFTP_SERVER, OptionFormat.STRING, DHO_BOOTFILE,
-			OptionFormat.STRING, DHO_MOBILE_IP_HOME_AGENT, OptionFormat.INETS, DHO_SMTP_SERVER, OptionFormat.INETS, DHO_POP3_SERVER, OptionFormat.INETS,
-			DHO_NNTP_SERVER, OptionFormat.INETS, DHO_WWW_SERVER, OptionFormat.INETS, DHO_FINGER_SERVER, OptionFormat.INETS, DHO_IRC_SERVER, OptionFormat.INETS,
-			DHO_STREETTALK_SERVER, OptionFormat.INETS, DHO_STDA_SERVER, OptionFormat.INETS, DHO_NDS_SERVERS, OptionFormat.INETS, DHO_NDS_TREE_NAME,
-			OptionFormat.STRING, DHO_NDS_CONTEXT, OptionFormat.STRING, DHO_CLIENT_LAST_TRANSACTION_TIME, OptionFormat.INT, DHO_ASSOCIATED_IP,
-			OptionFormat.INETS, DHO_USER_AUTHENTICATION_PROTOCOL, OptionFormat.STRING, DHO_AUTO_CONFIGURE, OptionFormat.BYTE, DHO_NAME_SERVICE_SEARCH,
-			OptionFormat.SHORTS, DHO_SUBNET_SELECTION, OptionFormat.INET, DHO_DOMAIN_SEARCH, OptionFormat.STRING,
+	private static final Object[] _OPTION_FORMATS = { DHO_SUBNET_MASK, OptionFormat.INET, DHO_TIME_OFFSET,
+			OptionFormat.INT, DHO_ROUTERS, OptionFormat.INETS, DHO_TIME_SERVERS, OptionFormat.INETS, DHO_NAME_SERVERS,
+			OptionFormat.INETS, DHO_DOMAIN_NAME_SERVERS, OptionFormat.INETS, DHO_LOG_SERVERS, OptionFormat.INETS,
+			DHO_COOKIE_SERVERS, OptionFormat.INETS, DHO_LPR_SERVERS, OptionFormat.INETS, DHO_IMPRESS_SERVERS,
+			OptionFormat.INETS, DHO_RESOURCE_LOCATION_SERVERS, OptionFormat.INETS, DHO_HOST_NAME, OptionFormat.STRING,
+			DHO_BOOT_SIZE, OptionFormat.SHORT, DHO_MERIT_DUMP, OptionFormat.STRING, DHO_DOMAIN_NAME,
+			OptionFormat.STRING, DHO_SWAP_SERVER, OptionFormat.INET, DHO_ROOT_PATH, OptionFormat.STRING,
+			DHO_EXTENSIONS_PATH, OptionFormat.STRING, DHO_IP_FORWARDING, OptionFormat.BYTE,
+			DHO_NON_LOCAL_SOURCE_ROUTING, OptionFormat.BYTE, DHO_POLICY_FILTER, OptionFormat.INETS,
+			DHO_MAX_DGRAM_REASSEMBLY, OptionFormat.SHORT, DHO_DEFAULT_IP_TTL, OptionFormat.BYTE,
+			DHO_PATH_MTU_AGING_TIMEOUT, OptionFormat.INT, DHO_PATH_MTU_PLATEAU_TABLE, OptionFormat.SHORTS,
+			DHO_INTERFACE_MTU, OptionFormat.SHORT, DHO_ALL_SUBNETS_LOCAL, OptionFormat.BYTE, DHO_BROADCAST_ADDRESS,
+			OptionFormat.INET, DHO_PERFORM_MASK_DISCOVERY, OptionFormat.BYTE, DHO_MASK_SUPPLIER, OptionFormat.BYTE,
+			DHO_ROUTER_DISCOVERY, OptionFormat.BYTE, DHO_ROUTER_SOLICITATION_ADDRESS, OptionFormat.INET,
+			DHO_STATIC_ROUTES, OptionFormat.INETS, DHO_TRAILER_ENCAPSULATION, OptionFormat.BYTE, DHO_ARP_CACHE_TIMEOUT,
+			OptionFormat.INT, DHO_IEEE802_3_ENCAPSULATION, OptionFormat.BYTE, DHO_DEFAULT_TCP_TTL, OptionFormat.BYTE,
+			DHO_TCP_KEEPALIVE_INTERVAL, OptionFormat.INT, DHO_TCP_KEEPALIVE_GARBAGE, OptionFormat.BYTE, DHO_NIS_SERVERS,
+			OptionFormat.INETS, DHO_NTP_SERVERS, OptionFormat.INETS, DHO_NETBIOS_NAME_SERVERS, OptionFormat.INETS,
+			DHO_NETBIOS_DD_SERVER, OptionFormat.INETS, DHO_NETBIOS_NODE_TYPE, OptionFormat.BYTE, DHO_NETBIOS_SCOPE,
+			OptionFormat.STRING, DHO_FONT_SERVERS, OptionFormat.INETS, DHO_X_DISPLAY_MANAGER, OptionFormat.INETS,
+			DHO_DHCP_REQUESTED_ADDRESS, OptionFormat.INET, DHO_DHCP_LEASE_TIME, OptionFormat.INT,
+			DHO_DHCP_OPTION_OVERLOAD, OptionFormat.BYTE, DHO_DHCP_MESSAGE_TYPE, OptionFormat.BYTE,
+			DHO_DHCP_SERVER_IDENTIFIER, OptionFormat.INET, DHO_DHCP_PARAMETER_REQUEST_LIST, OptionFormat.BYTES,
+			DHO_DHCP_MESSAGE, OptionFormat.STRING, DHO_DHCP_MAX_MESSAGE_SIZE, OptionFormat.SHORT, DHO_DHCP_RENEWAL_TIME,
+			OptionFormat.INT, DHO_DHCP_REBINDING_TIME, OptionFormat.INT, DHO_VENDOR_CLASS_IDENTIFIER,
+			OptionFormat.STRING, DHO_NWIP_DOMAIN_NAME, OptionFormat.STRING, DHO_NISPLUS_DOMAIN, OptionFormat.STRING,
+			DHO_NISPLUS_SERVER, OptionFormat.STRING, DHO_TFTP_SERVER, OptionFormat.STRING, DHO_BOOTFILE,
+			OptionFormat.STRING, DHO_MOBILE_IP_HOME_AGENT, OptionFormat.INETS, DHO_SMTP_SERVER, OptionFormat.INETS,
+			DHO_POP3_SERVER, OptionFormat.INETS, DHO_NNTP_SERVER, OptionFormat.INETS, DHO_WWW_SERVER,
+			OptionFormat.INETS, DHO_FINGER_SERVER, OptionFormat.INETS, DHO_IRC_SERVER, OptionFormat.INETS,
+			DHO_STREETTALK_SERVER, OptionFormat.INETS, DHO_STDA_SERVER, OptionFormat.INETS, DHO_NDS_SERVERS,
+			OptionFormat.INETS, DHO_NDS_TREE_NAME, OptionFormat.STRING, DHO_NDS_CONTEXT, OptionFormat.STRING,
+			DHO_CLIENT_LAST_TRANSACTION_TIME, OptionFormat.INT, DHO_ASSOCIATED_IP, OptionFormat.INETS,
+			DHO_USER_AUTHENTICATION_PROTOCOL, OptionFormat.STRING, DHO_AUTO_CONFIGURE, OptionFormat.BYTE,
+			DHO_NAME_SERVICE_SEARCH, OptionFormat.SHORTS, DHO_SUBNET_SELECTION, OptionFormat.INET, DHO_DOMAIN_SEARCH,
+			OptionFormat.STRING,
 
 	};
 	static final Map<Byte, OptionFormat> _DHO_FORMATS = new LinkedHashMap<Byte, OptionFormat>();

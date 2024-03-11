@@ -1,17 +1,10 @@
 package ch.bemar.dhcp.config.reader;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.StringReader;
-import java.nio.charset.StandardCharsets;
+import java.lang.reflect.Field;
 
-import org.apache.commons.io.FileUtils;
-import org.dhcp4java.DHCPOption;
-
-import com.google.common.base.Strings;
-
-import ch.bemar.dhcp.config.element.DhcpServerConfiguration;
-import ch.bemar.dhcp.constants.DhcpConstants;
+import ch.bemar.dhcp.config.DhcpServerConfiguration;
+import ch.bemar.dhcp.config.element.field.ConfigToFieldMapper;
 import ch.bemar.dhcp.exception.OptionNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,30 +17,28 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ServerConfigReader {
 
+	private SubnetReader subnetReader;
+
+
+	public ServerConfigReader() {
+		this.subnetReader = new SubnetReader();
+		this.fieldMapper = new ConfigToFieldMapper();
+	}
+
 	public DhcpServerConfiguration readConfigFromFile(File file) throws OptionNotFoundException, Exception {
 
-		String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-		log.debug("read content {} from file {}", content, file);
-
-		BufferedReader br = new BufferedReader(new StringReader(content));
-		log.debug("created buffered reader from content");
+		ConfigFile confFile = new ConfigFile(file);
 
 		DhcpServerConfiguration serverConfig = new DhcpServerConfiguration();
 		log.debug("created config model");
 
-		String line = null;
+		while (confFile.hasElements()) {
 
-		while ((line = br.readLine()) != null) {
-			log.debug("current line: {}", line);
+			handleField(confFile.getCurrentLine(), serverConfig);
 
-			if (!Strings.isNullOrEmpty(line)) {
+			if (confFile.getPreview().toLowerCase().startsWith("subnet")) {
 
-				if (line.trim().startsWith(DhcpConstants.OPTION)) {
-					ConfigOption cfgOption = new ConfigOption(line);
-					DHCPOption dhcpOption = DhcpOptionReader.createDHCPOption(cfgOption);
-					
-					serverConfig.getOptions().add(dhcpOption);
-				}
+				serverConfig.getSubnets().add(subnetReader.readSubnet(confFile));
 
 			}
 
@@ -56,11 +47,20 @@ public class ServerConfigReader {
 		return serverConfig;
 
 	}
-	
-	private void assignAttributesToFields(String content, DhcpServerConfiguration serverConfig) {
-		
-		
-		
-		
+
+	private void handleField(String line, DhcpServerConfiguration serverConfig) {
+		Field[] fields = serverConfig.getClass().getFields();
+
+		for (Field field : fields) {
+
+			if (fieldMapper.match(line, field)) {
+
+				fieldMapper.setValue(line, field, serverConfig);
+
+			}
+
+		}
+
 	}
+
 }

@@ -76,7 +76,7 @@
 			<version>${auto-service.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
@@ -95,9 +95,6 @@
 			<artifactId>maven-compiler-plugin</artifactId>
 			<version>${maven-compiler-plugin.version}</version>
 		</dependency>
-
-
-
 
 		<dependency>
 			<groupId>javax.annotation</groupId>
@@ -118,7 +115,6 @@
 			<version>${logback-classic.version}</version>
 		</dependency>
 
-
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
@@ -130,8 +126,6 @@
 			<artifactId>junit-jupiter-engine</artifactId>
 			<version>${junit-jupiter.version}</version>
 		</dependency>
-
-
 
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -145,15 +139,11 @@
 			<version>${commons-validator.version}</version>
 		</dependency>
 
-
-
 		<dependency>
 			<groupId>org.apache.maven.wagon</groupId>
 			<artifactId>wagon-webdav-jackrabbit</artifactId>
 			<version>${wagon-webdav-jackrabbit.version}</version>
 		</dependency>
-
-
 
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -161,37 +151,37 @@
 			<version>${guava-version}</version>
 		</dependency>
 
-
-
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>${lombok.version}</version>
 		</dependency>
 
-
-
-
-
 	</dependencies>
 
 
-
-
-
-
-
-
 	<build>
-		<extensions>
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-webdav-jackrabbit</artifactId>
-				<version>${wagon-webdav-jackrabbit.version}</version>
-			</extension>
-		</extensions>
+
 		<plugins>
 
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>com.google.auto.service</groupId>
+							<artifactId>auto-service</artifactId>
+							<version>${auto-service.version}</version>
+						</path>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${lombok.version}</version> <!-- Verwenden Sie die aktuellste Version -->
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
 
 			<plugin>
 				<groupId>org.owasp</groupId>
