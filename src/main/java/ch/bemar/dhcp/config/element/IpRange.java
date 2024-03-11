@@ -8,11 +8,13 @@ import org.hibernate.tool.hbm2x.StringUtils;
 
 import com.google.common.collect.Lists;
 
+import ch.bemar.dhcp.config.ConfigName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
+@ConfigName("range")
 public class IpRange implements IConfigElement<List<InetAddress>> {
 
 	public IpRange(String configLine) throws UnknownHostException {

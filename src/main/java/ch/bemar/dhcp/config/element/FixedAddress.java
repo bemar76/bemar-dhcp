@@ -6,16 +6,16 @@ import ch.bemar.dhcp.config.ConfigName;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@ConfigName("next-server")
-public class NextServer extends ASingleInetAddress {
+@ConfigName("fixed-address")
+public class FixedAddress extends ASingleInetAddress {
 
-	public NextServer(String configLine) throws UnknownHostException {
+	public FixedAddress(String configLine) throws UnknownHostException {
 		super(configLine);
 	}
 
 	@Override
 	public String getKeyWord() {
-		return "next-server";
+		return "fixed-address";
 	}
 
 }

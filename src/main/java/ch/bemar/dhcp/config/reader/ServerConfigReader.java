@@ -4,7 +4,6 @@ import java.io.File;
 import java.lang.reflect.Field;
 
 import ch.bemar.dhcp.config.DhcpServerConfiguration;
-import ch.bemar.dhcp.config.element.field.ConfigToFieldMapper;
 import ch.bemar.dhcp.exception.OptionNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,7 +21,6 @@ public class ServerConfigReader {
 
 	public ServerConfigReader() {
 		this.subnetReader = new SubnetReader();
-		this.fieldMapper = new ConfigToFieldMapper();
 	}
 
 	public DhcpServerConfiguration readConfigFromFile(File file) throws OptionNotFoundException, Exception {
@@ -53,11 +51,7 @@ public class ServerConfigReader {
 
 		for (Field field : fields) {
 
-			if (fieldMapper.match(line, field)) {
-
-				fieldMapper.setValue(line, field, serverConfig);
-
-			}
+			
 
 		}
 

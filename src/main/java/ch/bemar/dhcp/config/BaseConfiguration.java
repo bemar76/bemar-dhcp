@@ -3,6 +3,7 @@ package ch.bemar.dhcp.config;
 import java.util.List;
 
 import ch.bemar.dhcp.config.element.Allow;
+import ch.bemar.dhcp.config.element.Authoritative;
 import ch.bemar.dhcp.config.element.DdnsUpdateStyle;
 import ch.bemar.dhcp.config.element.DdnsUpdates;
 import ch.bemar.dhcp.config.element.DefaultLeaseTime;
@@ -13,7 +14,7 @@ import lombok.Data;
 @Data
 public class BaseConfiguration {
 
-	private String authoritative;
+	private Authoritative authoritative;
 
 	private List<Allow> allows;
 

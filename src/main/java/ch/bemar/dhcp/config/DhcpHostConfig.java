@@ -10,7 +10,7 @@ import ch.bemar.dhcp.config.element.HostName;
 import lombok.Data;
 
 @Data
-public class DhcpHostConfig extends BaseConfiguration {
+public class DhcpHostConfig extends BaseConfiguration  {
 
 	private HostName hostname;
 

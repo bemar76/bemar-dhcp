@@ -23,6 +23,7 @@ import java.util.Arrays;
 
 import org.hibernate.tool.hbm2x.StringUtils;
 
+import ch.bemar.dhcp.config.ConfigName;
 import ch.bemar.dhcp.config.element.IConfigElement;
 
 /**
@@ -31,6 +32,7 @@ import ch.bemar.dhcp.config.element.IConfigElement;
  * @author Stephan Hadinger
  * @version 1.00
  */
+@ConfigName("hardware")
 public class HardwareAddress implements Serializable, IConfigElement<byte[]> {
 
 	private static final long serialVersionUID = 2L;
@@ -47,12 +49,12 @@ public class HardwareAddress implements Serializable, IConfigElement<byte[]> {
 	public HardwareAddress(String configLine) {
 
 		String[] tokens = StringUtils.split(configLine);
-		if (tokens.length != 2) {
+		if (tokens.length != 3) {
 			throw new IllegalArgumentException("HardwareAddress needs 2 parameters");
 		}
 
 		this.hardwareType = HTYPE_ETHER;
-		this.hardwareAddress = DHCPPacket.hex2Bytes(tokens[2]);
+		this.hardwareAddress = getHardwareAddressByString(tokens[2].trim());
 
 	}
 
@@ -137,11 +139,18 @@ public class HardwareAddress implements Serializable, IConfigElement<byte[]> {
 	 * @param macStr
 	 * @return the newly created HardwareAddress object
 	 */
-	public static HardwareAddress getHardwareAddressByString(String macStr) {
+	public byte[] getHardwareAddressByString(String macStr) {
 		if (macStr == null) {
 			throw new NullPointerException("macStr is null");
 		}
-		String[] macAdrItems = macStr.split(":");
+		String[] macAdrItems = null;
+
+		if (macStr.contains(":"))
+			macAdrItems = macStr.split(":");
+
+		if (macStr.contains("-"))
+			macAdrItems = macStr.split("-");
+
 		if (macAdrItems.length != 6) {
 			throw new IllegalArgumentException("macStr[" + macStr + "] has not 6 items");
 		}
@@ -153,7 +162,7 @@ public class HardwareAddress implements Serializable, IConfigElement<byte[]> {
 			}
 			macBytes[i] = (byte) val;
 		}
-		return new HardwareAddress(macBytes);
+		return macBytes;
 	}
 
 	@Override
