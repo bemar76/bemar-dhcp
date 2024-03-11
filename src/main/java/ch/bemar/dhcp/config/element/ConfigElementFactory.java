@@ -27,10 +27,10 @@ public class ConfigElementFactory {
 
 		for (Class<? extends IConfigElement> clazz : elements) {
 
-			log.debug("inspecting class {} for config line {}", clazz, line);
+			log.trace("inspecting class {} for config line {}", clazz, line);
 
 			ConfigName anno = clazz.getAnnotation(ConfigName.class);
-			log.debug("Class annotation: {}", anno);
+			log.trace("Class annotation: {}", anno);
 
 			if (anno == null) {
 				throw new IllegalStateException("The clazz " + clazz + " has no ConfigName annotation");

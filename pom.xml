@@ -33,9 +33,7 @@
 		<junit-jupiter.version>5.9.1</junit-jupiter.version>
 
 		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-		<jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
 
-		<wagon-webdav-jackrabbit.version>1.0</wagon-webdav-jackrabbit.version>
 
 		<joda-time.version>2.10.3</joda-time.version>
 
@@ -91,11 +89,6 @@
 			<version>${joda-time.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.jacoco</groupId>
-			<artifactId>jacoco-maven-plugin</artifactId>
-			<version>${jacoco-maven-plugin.version}</version>
-		</dependency>
 
 
 		<dependency>
@@ -127,12 +120,21 @@
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 			<version>${junit-jupiter.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
 			<version>${junit-jupiter.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-params</artifactId>
+			<version>${junit-jupiter.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
@@ -147,11 +149,7 @@
 			<version>${commons-validator.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.maven.wagon</groupId>
-			<artifactId>wagon-webdav-jackrabbit</artifactId>
-			<version>${wagon-webdav-jackrabbit.version}</version>
-		</dependency>
+
 
 		<dependency>
 			<groupId>com.google.guava</groupId>

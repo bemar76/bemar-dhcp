@@ -6,16 +6,16 @@ import ch.bemar.dhcp.config.ConfigName;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@ConfigName("host-name")
-public class HostName extends ASingleString {
+@ConfigName("primary")
+public class Primary extends ASingleInetAddress {
 
-	public HostName(String configLine) throws UnknownHostException {
+	public Primary(String configLine) throws UnknownHostException {
 		super(configLine);
 	}
 
 	@Override
 	public String getKeyWord() {
-		return "host-name";
+		return "primary";
 	}
 
 }
