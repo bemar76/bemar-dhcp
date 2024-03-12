@@ -79,11 +79,11 @@ public class ConfigFile {
 
 	public String getPreview() {
 		int tmpCursor = cursor + 1;
-		
+
 		if (tmpCursor < lines.size()) {
 			return getLine(tmpCursor);
 		}
-		
+
 		return null;
 	}
 
@@ -92,13 +92,28 @@ public class ConfigFile {
 	}
 
 	/**
-	 * returns ths next line of config file trimmed and without semicolon
+	 * returns the next line of config file trimmed and without semicolon. Does
+	 * increase line cursor.
+	 * 
+	 * @return
+	 */
+	public synchronized String getNextLine() {
+		if (hasElements()) {
+			return lines.get(++cursor).replace(DhcpConstants.SEMICOLON, "").trim();
+		}
+
+		return null;
+	}
+
+	/**
+	 * returns the current line of config file trimmed and without semicolon. Does
+	 * not increase line cursor.
 	 * 
 	 * @return
 	 */
 	public synchronized String getCurrentLine() {
 		if (hasElements()) {
-			return lines.get(cursor++).replace(DhcpConstants.SEMICOLON, "").trim();
+			return lines.get(cursor).replace(DhcpConstants.SEMICOLON, "").trim();
 		}
 
 		return null;

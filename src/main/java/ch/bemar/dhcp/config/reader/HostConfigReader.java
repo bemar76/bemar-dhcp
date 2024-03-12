@@ -2,7 +2,7 @@ package ch.bemar.dhcp.config.reader;
 
 import ch.bemar.dhcp.config.DhcpHostConfig;
 
-public class HostConfigReader {
+public class HostConfigReader extends AConfigReader{
 
 	public HostConfigReader() {
 

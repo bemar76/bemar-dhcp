@@ -46,7 +46,9 @@ public class ConfigElementFactory {
 
 		}
 
-		throw new ConfigElementNotFoundException("No config element found for " + line);
+		log.warn("no config element found for line: '{}'");
+		return null;
+//		throw new ConfigElementNotFoundException("No config element found for " + line);
 	}
 
 	private static Set<Class<? extends IConfigElement>> findAllConfigElementClasses() {

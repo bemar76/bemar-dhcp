@@ -12,7 +12,7 @@ import ch.bemar.dhcp.exception.OptionNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class DhcpOptionReader {
+public class DhcpOptionReader extends AConfigReader{
 
 	public static DHCPOption createDHCPOption(ConfigOption option) throws Exception {
 

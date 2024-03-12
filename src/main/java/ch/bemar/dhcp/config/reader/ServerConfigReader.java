@@ -1,9 +1,12 @@
 package ch.bemar.dhcp.config.reader;
 
 import java.io.File;
-import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
+
+import org.apache.commons.io.FileUtils;
 
 import ch.bemar.dhcp.config.DhcpServerConfiguration;
+import ch.bemar.dhcp.config.element.ConfigElementFactory;
 import ch.bemar.dhcp.exception.OptionNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,27 +17,34 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 @Slf4j
-public class ServerConfigReader {
+public class ServerConfigReader extends AConfigReader {
 
 	private SubnetReader subnetReader;
 
+	private ConfigElementFactory elementFactory;
 
 	public ServerConfigReader() {
 		this.subnetReader = new SubnetReader();
+		this.elementFactory = new ConfigElementFactory();
 	}
 
 	public DhcpServerConfiguration readConfigFromFile(File file) throws OptionNotFoundException, Exception {
+		return readConfigFromFile(FileUtils.readFileToString(file, StandardCharsets.UTF_8));
+	}
 
-		ConfigFile confFile = new ConfigFile(file);
+	public DhcpServerConfiguration readConfigFromFile(String content) throws OptionNotFoundException, Exception {
+
+		ConfigFile confFile = new ConfigFile(content);
 
 		DhcpServerConfiguration serverConfig = new DhcpServerConfiguration();
 		log.debug("created config model");
 
 		while (confFile.hasElements()) {
 
-			handleField(confFile.getCurrentLine(), serverConfig);
+			if (handleLine(confFile.getNextLine(), serverConfig)) {
+				log.info("line processed: {}", confFile.getCurrentLine());
 
-			if (confFile.getPreview().toLowerCase().startsWith("subnet")) {
+			} else if (confFile.getPreview().toLowerCase().startsWith("subnet")) {
 
 				serverConfig.getSubnets().add(subnetReader.readSubnet(confFile));
 
@@ -43,17 +53,6 @@ public class ServerConfigReader {
 		}
 
 		return serverConfig;
-
-	}
-
-	private void handleField(String line, DhcpServerConfiguration serverConfig) {
-		Field[] fields = serverConfig.getClass().getFields();
-
-		for (Field field : fields) {
-
-			
-
-		}
 
 	}
 
