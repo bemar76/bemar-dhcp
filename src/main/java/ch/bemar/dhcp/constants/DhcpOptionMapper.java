@@ -12,7 +12,7 @@ public class DhcpOptionMapper {
 
 	private static final Map<String, Byte> optionToByteMap = new HashMap<>();
 
-	private DhcpOptionMapper() {
+	static {
 
 		optionToByteMap.put("subnet-mask", DHCPConstants.DHO_SUBNET_MASK);
 		optionToByteMap.put("time-offset", DHCPConstants.DHO_TIME_OFFSET);
@@ -103,21 +103,21 @@ public class DhcpOptionMapper {
 		optionToByteMap.put("domain-search", DHCPConstants.DHO_DOMAIN_SEARCH);
 		optionToByteMap.put("classless-route", DHCPConstants.DHO_CLASSLESS_ROUTE);
 		// exotic options
-		optionToByteMap.put("sip-servers-dhcp-option", (byte) 120);
-		optionToByteMap.put("classless-static-route-option", (byte) 121);
-		optionToByteMap.put("cablelabs-client-configuration", (byte) 122);
-		optionToByteMap.put("geoconf-civic", (byte) 123);
-		optionToByteMap.put("ieee-802-1q-vlan-id", (byte) 124);
-		optionToByteMap.put("ieee-802-1d/p-layer-2-priority", (byte) 125);
-		optionToByteMap.put("diffserv-code-point", (byte) 133);
-		optionToByteMap.put("http-proxy-for-phone-specific-applications", (byte) 135);
-		optionToByteMap.put("pxe-uefi-http-boot", (byte) 175);
-		optionToByteMap.put("tftp-server-address", (byte) 150);
-		optionToByteMap.put("etherboot", (byte) 175);
-		optionToByteMap.put("ip-telephone", (byte) 176);
-		optionToByteMap.put("packetcable-and-cablehome", (byte) 177);
-		optionToByteMap.put("vendor-identifying-vendor-class", (byte) 124);
-		optionToByteMap.put("vendor-identifying-vendor-specific-information", (byte) 125);
+//		optionToByteMap.put("sip-servers-dhcp-option", (byte) 120);
+//		optionToByteMap.put("classless-static-route-option", (byte) 121);
+//		optionToByteMap.put("cablelabs-client-configuration", (byte) 122);
+//		optionToByteMap.put("geoconf-civic", (byte) 123);
+//		optionToByteMap.put("ieee-802-1q-vlan-id", (byte) 124);
+//		optionToByteMap.put("ieee-802-1d/p-layer-2-priority", (byte) 125);
+//		optionToByteMap.put("diffserv-code-point", (byte) 133);
+//		optionToByteMap.put("http-proxy-for-phone-specific-applications", (byte) 135);
+//		optionToByteMap.put("pxe-uefi-http-boot", (byte) 175);
+//		optionToByteMap.put("tftp-server-address", (byte) 150);
+//		optionToByteMap.put("etherboot", (byte) 175);
+//		optionToByteMap.put("ip-telephone", (byte) 176);
+//		optionToByteMap.put("packetcable-and-cablehome", (byte) 177);
+//		optionToByteMap.put("vendor-identifying-vendor-class", (byte) 124);
+//		optionToByteMap.put("vendor-identifying-vendor-specific-information", (byte) 125);
 
 	}
 

@@ -1437,7 +1437,7 @@ public class DHCPOption implements Serializable {
 	//
 	// formats of options
 	//
-	enum OptionFormat {
+	public enum OptionFormat {
 		INET, // 4 bytes IP, size = 4
 		INETS, // list of 4 bytes IP, size = 4*n
 		INT, // 4 bytes integer, size = 4
@@ -1492,7 +1492,7 @@ public class DHCPOption implements Serializable {
 			OptionFormat.STRING,
 
 	};
-	static final Map<Byte, OptionFormat> _DHO_FORMATS = new LinkedHashMap<Byte, OptionFormat>();
+	public static final Map<Byte, OptionFormat> _DHO_FORMATS = new LinkedHashMap<Byte, OptionFormat>();
 
 	/*
 	 * preload at startup Maps with constants allowing reverse lookup
