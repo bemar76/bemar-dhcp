@@ -1,19 +1,23 @@
 package ch.bemar.dhcp.config;
 
-import java.util.Set;
-
-import org.dhcp4java.DHCPOption;
 import org.dhcp4java.HardwareAddress;
 
-import ch.bemar.dhcp.config.element.Subnet;
+import ch.bemar.dhcp.config.element.FixedAddress;
 import lombok.Data;
 
 @Data
 public class DhcpHostConfig extends BaseConfiguration {
 
-	private HardwareAddress macAddress;
+	private String name;
 
-	private Subnet fixedIpAddress;
+	private HardwareAddress hardwareAddress;
 
-	private Set<DHCPOption> options;
+	private FixedAddress fixedIpAddress;
+
+	
+	public String toString() {
+		return machMalString(this);
+	}
+	
+	
 }

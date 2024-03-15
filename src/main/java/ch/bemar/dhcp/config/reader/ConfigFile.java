@@ -25,7 +25,7 @@ public class ConfigFile {
 
 	private List<String> lines;
 
-	private int cursor = 0;
+	private int cursor = -1;
 
 	public ConfigFile(File file) throws IOException {
 		this.content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
@@ -51,16 +51,16 @@ public class ConfigFile {
 		while ((line = br.readLine()) != null) {
 			log.debug("current line: {}", line);
 
-			if (!Strings.isNullOrEmpty(line) && !line.trim().startsWith("#")) {
+			if (!Strings.isNullOrEmpty(line.trim()) && !line.trim().startsWith("#")) {
 
 				if (StringUtils.countMatches(line, DhcpConstants.SEMICOLON) > 1) {
 
 					String[] tokens = StringUtils.split(line, DhcpConstants.SEMICOLON);
-					lines.addAll(Lists.newArrayList(tokens));
+					lines.addAll(Lists.newArrayList(filterSemicolons(tokens)));
 
 				} else {
 
-					lines.add(line);
+					lines.add(filterSemicolon(line));
 				}
 			}
 
@@ -70,25 +70,8 @@ public class ConfigFile {
 
 	}
 
-	public void decreaseCursor() {
-		cursor--;
-		if (cursor < 0) {
-			cursor = 0;
-		}
-	}
-
-	public String getPreview() {
-		int tmpCursor = cursor + 1;
-
-		if (tmpCursor < lines.size()) {
-			return getLine(tmpCursor);
-		}
-
-		return null;
-	}
-
 	public synchronized boolean hasElements() {
-		return cursor < lines.size();
+		return cursor + 1 < lines.size();
 	}
 
 	/**
@@ -99,7 +82,7 @@ public class ConfigFile {
 	 */
 	public synchronized String getNextLine() {
 		if (hasElements()) {
-			return lines.get(++cursor).replace(DhcpConstants.SEMICOLON, "").trim();
+			return lines.get(++cursor);
 		}
 
 		return null;
@@ -112,14 +95,21 @@ public class ConfigFile {
 	 * @return
 	 */
 	public synchronized String getCurrentLine() {
-		if (hasElements()) {
-			return lines.get(cursor).replace(DhcpConstants.SEMICOLON, "").trim();
-		}
 
-		return null;
+		return lines.get(cursor);
 	}
 
-	public String getLine(int index) {
-		return lines.get(index);
+	private String filterSemicolon(String line) {
+		if (line.trim().endsWith(DhcpConstants.SEMICOLON)) {
+			return StringUtils.substringBeforeLast(line, DhcpConstants.SEMICOLON).trim();
+		}
+		return line;
+	}
+
+	private String[] filterSemicolons(String[] lines) {
+		for (int i = 0; i < lines.length; i++) {
+			lines[i] = filterSemicolon(lines[i]);
+		}
+		return lines;
 	}
 }

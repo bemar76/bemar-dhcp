@@ -25,4 +25,8 @@ public abstract class ASingleInetAddress implements IConfigElement<InetAddress> 
 
 	private final InetAddress value;
 
+	public String toString() {
+		return this.getKeyWord() + " = " + this.value;
+	}
+
 }

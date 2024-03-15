@@ -20,4 +20,7 @@ public abstract class ASingleInteger implements IConfigElement<Integer> {
 
 	private Integer value;
 
+	public String toString() {
+		return this.getKeyWord() + " = " + this.value;
+	}
 }

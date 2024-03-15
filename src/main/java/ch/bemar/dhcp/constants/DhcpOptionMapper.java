@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.dhcp4java.DHCPConstants;
 
+import ch.bemar.dhcp.exception.OptionNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -16,10 +17,11 @@ public class DhcpOptionMapper {
 
 		optionToByteMap.put("subnet-mask", DHCPConstants.DHO_SUBNET_MASK);
 		optionToByteMap.put("time-offset", DHCPConstants.DHO_TIME_OFFSET);
-		optionToByteMap.put("router", DHCPConstants.DHO_ROUTERS);
+		optionToByteMap.put("routers", DHCPConstants.DHO_ROUTERS);
 		optionToByteMap.put("time-server", DHCPConstants.DHO_TIME_SERVERS);
 		optionToByteMap.put("name-server", DHCPConstants.DHO_NAME_SERVERS);
 		optionToByteMap.put("domain-name-server", DHCPConstants.DHO_DOMAIN_NAME_SERVERS);
+		optionToByteMap.put("domain-name-servers", DHCPConstants.DHO_DOMAIN_NAME_SERVERS);
 		optionToByteMap.put("log-server", DHCPConstants.DHO_LOG_SERVERS);
 		optionToByteMap.put("cookie-server", DHCPConstants.DHO_COOKIE_SERVERS);
 		optionToByteMap.put("lpr-server", DHCPConstants.DHO_LPR_SERVERS);
@@ -121,8 +123,13 @@ public class DhcpOptionMapper {
 
 	}
 
-	public static byte getOptionByteByName(String name) {
-		return optionToByteMap.get(name);
+	public static Byte getOptionByteByName(String name) throws OptionNotFoundException {
+		log.debug("search option: {}", name);
+		Byte b = optionToByteMap.get(name);
+		if (b == null) {
+			throw new OptionNotFoundException("No option type for '" + name + "' found");
+		}
+		return b;
 	}
 
 }

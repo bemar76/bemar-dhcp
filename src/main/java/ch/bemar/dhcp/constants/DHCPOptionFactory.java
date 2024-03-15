@@ -4,9 +4,9 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.dhcp4java.DHCPOption;
 import org.dhcp4java.DHCPOption.OptionFormat;
-import org.hibernate.tool.hbm2x.StringUtils;
 
 import com.google.common.collect.Lists;
 
@@ -23,7 +23,15 @@ public class DHCPOptionFactory {
 
 		Class format = DHCPOption.getOptionFormat(option);
 
-		return getOptionByCodeAndValue(option, tokens[2]);
+		return getOptionByCodeAndValue(option, removeQuotes(tokens[2]));
+	}
+
+	private String removeQuotes(String value) {
+		if (value.contains("\"")) {
+			return StringUtils.remove(value, "\"");
+		}
+
+		return value;
 	}
 
 	private static InetAddress[] toAddressArray(String value) throws UnknownHostException {

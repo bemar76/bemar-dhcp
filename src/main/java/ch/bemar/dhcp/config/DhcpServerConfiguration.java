@@ -2,19 +2,21 @@ package ch.bemar.dhcp.config;
 
 import java.util.Set;
 
-import org.dhcp4java.DHCPOption;
+import com.google.common.collect.Sets;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-public class DhcpServerConfiguration extends BaseConfiguration{
+public class DhcpServerConfiguration extends BaseConfiguration {
 
-	
-
-	private Set<DHCPOption> options;
+	public DhcpServerConfiguration() {
+		this.subnets = Sets.newHashSet();
+	}
 
 	private Set<DhcpSubnetConfig> subnets;
+
+	public String toString() {
+		return machMalString(this);
+	}
 
 }

@@ -20,4 +20,7 @@ public abstract class ASingleString implements IConfigElement<String> {
 
 	private String value;
 
+	public String toString() {
+		return this.getKeyWord() + " = " + this.value;
+	}
 }
