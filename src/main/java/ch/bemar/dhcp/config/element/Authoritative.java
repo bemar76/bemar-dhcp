@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 public class Authoritative implements IConfigElement<Boolean> {
 
 	public Authoritative(String configLine) throws UnknownHostException {
-		
+
 	}
 
 	@Override
@@ -23,4 +23,7 @@ public class Authoritative implements IConfigElement<Boolean> {
 		return true; // if this instance exists, the server is authoritative
 	}
 
+	public String toString() {
+		return "authoritative";
+	}
 }

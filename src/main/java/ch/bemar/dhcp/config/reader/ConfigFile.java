@@ -56,11 +56,11 @@ public class ConfigFile {
 				if (StringUtils.countMatches(line, DhcpConstants.SEMICOLON) > 1) {
 
 					String[] tokens = StringUtils.split(line, DhcpConstants.SEMICOLON);
-					lines.addAll(Lists.newArrayList(filterSemicolons(tokens)));
+					lines.addAll(Lists.newArrayList(cleanUpLines(tokens)));
 
 				} else {
 
-					lines.add(filterSemicolon(line));
+					lines.add(cleanUpLine(line));
 				}
 			}
 
@@ -98,6 +98,17 @@ public class ConfigFile {
 
 		return lines.get(cursor);
 	}
+	
+	private String cleanUpLine(String line) {
+		return filterSemicolon(removeComment(line));
+	}
+	
+	private String[] cleanUpLines(String[] lines) {
+		for (int i = 0; i < lines.length; i++) {
+			lines[i] = filterSemicolon(removeComment(lines[i]));
+		}
+		return lines;
+	}
 
 	private String filterSemicolon(String line) {
 		if (line.trim().endsWith(DhcpConstants.SEMICOLON)) {
@@ -111,5 +122,14 @@ public class ConfigFile {
 			lines[i] = filterSemicolon(lines[i]);
 		}
 		return lines;
+	}
+	
+	private String removeComment(String line) {
+		if(line.contains("#")) {
+		
+			return StringUtils.substringBefore(line, "#");
+		}
+		
+		return line;
 	}
 }

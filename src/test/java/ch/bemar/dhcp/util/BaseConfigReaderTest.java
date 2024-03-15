@@ -12,12 +12,12 @@ import ch.bemar.dhcp.config.DhcpSubnetConfig;
 import ch.bemar.dhcp.config.reader.ServerConfigReader;
 import ch.bemar.dhcp.exception.OptionNotFoundException;
 
-public class ConfigReaderTest {
+public class BaseConfigReaderTest {
 
 	@Test
 	void testServerConfigRead() throws OptionNotFoundException, Exception {
 
-		String content = IOUtils.toString(this.getClass().getResourceAsStream("/dhcpd.conf"), StandardCharsets.UTF_8);
+		String content = IOUtils.toString(this.getClass().getResourceAsStream("/base_dhcpd.conf"), StandardCharsets.UTF_8);
 
 		ServerConfigReader scr = new ServerConfigReader();
 
