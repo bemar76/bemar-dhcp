@@ -15,7 +15,7 @@ import ch.bemar.dhcp.config.element.DdnsUpdates;
 import ch.bemar.dhcp.config.element.DefaultLeaseTime;
 import ch.bemar.dhcp.config.element.LogFacility;
 import ch.bemar.dhcp.config.element.MaxLeaseTime;
-import ch.bemar.dhcp.util.ReflectionFieldUtil;
+import ch.bemar.dhcp.util.ReflectionUtils;
 import lombok.Data;
 
 @Data
@@ -50,7 +50,7 @@ public class BaseConfiguration {
 
 		StringBuilder sb = new StringBuilder();
 
-		Field[] fields = ReflectionFieldUtil.getAllFields(config.getClass());
+		Field[] fields = ReflectionUtils.getAllFields(config.getClass());
 
 		for (Field field : fields) {
 

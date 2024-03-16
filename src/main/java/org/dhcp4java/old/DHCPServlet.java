@@ -16,15 +16,27 @@
  *	License along with this library; if not, write to the Free Software
  *	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.dhcp4java;
+package org.dhcp4java.old;
 
-import java.net.DatagramPacket;
+import static org.dhcp4java.DHCPConstants.BOOTREPLY;
+import static org.dhcp4java.DHCPConstants.BOOTREQUEST;
+import static org.dhcp4java.DHCPConstants.DHCPDECLINE;
+import static org.dhcp4java.DHCPConstants.DHCPDISCOVER;
+import static org.dhcp4java.DHCPConstants.DHCPINFORM;
+import static org.dhcp4java.DHCPConstants.DHCPRELEASE;
+import static org.dhcp4java.DHCPConstants.DHCPREQUEST;
+
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static org.dhcp4java.DHCPConstants.*;
+import org.dhcp4java.DHCPPacket;
+
+import ch.bemar.dhcp.core.DatagramPacket;
+import ch.bemar.dhcp.exception.DHCPBadPacketException;
+import ch.bemar.dhcp.exception.TypeNotFoundException;
 
 /**
  * General Interface for a "DHCP Servlet"
@@ -99,7 +111,9 @@ public class DHCPServlet {
 			}
 
 			// do the real work
-			DHCPPacket response = this.service(request); // call service function
+			DHCPPacket response = this.processPacket(request); // call
+																									// service
+																									// function
 			// done
 			if (logger.isLoggable(Level.FINER)) {
 				logger.finer("service() done");
@@ -125,7 +139,8 @@ public class DHCPServlet {
 
 			logger.info("response: " + response.toString());
 
-			responseDatagram = new DatagramPacket(responseBuf, responseBuf.length, address, port);
+			responseDatagram = new DatagramPacket(responseBuf, responseBuf.length, address, port,
+					requestDatagram.getId());
 			if (logger.isLoggable(Level.FINER)) {
 				logger.finer("Sending back to" + address.getHostAddress() + '(' + port + ')');
 			}
@@ -155,8 +170,9 @@ public class DHCPServlet {
 	 * @param request DHCP request from the client
 	 * @return response DHCP response to send back to client, <tt>null</tt> if no
 	 *         response
+	 * @throws TypeNotFoundException
 	 */
-	protected DHCPPacket service(DHCPPacket request) {
+	protected DHCPPacket processPacket(DHCPPacket request) throws TypeNotFoundException {
 		Byte dhcpMessageType;
 
 		if (request == null) {

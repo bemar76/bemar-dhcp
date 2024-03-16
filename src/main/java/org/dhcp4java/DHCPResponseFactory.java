@@ -34,8 +34,10 @@ import static org.dhcp4java.DHCPConstants.INADDR_BROADCAST;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.util.Collection;
 import java.util.logging.Logger;
+
+import ch.bemar.dhcp.config.mgmt.IAddress;
+import ch.bemar.dhcp.exception.DHCPBadPacketException;
 
 /**
  * This class provides some standard factories for DHCP responses.
@@ -74,8 +76,7 @@ public final class DHCPResponseFactory {
 	 * @param options
 	 * @return the newly created OFFER Packet
 	 */
-	public static final DHCPPacket makeDHCPOffer(DHCPPacket request, InetAddress offeredAddress, int leaseTime, InetAddress serverIdentifier, String message,
-			DHCPOption[] options) {
+	public static final DHCPPacket makeDHCPOffer(DHCPPacket request, IAddress offeredAddress, DHCPOption[] options) {
 		// check request
 		if (request == null) {
 			throw new NullPointerException("request is null");
@@ -94,7 +95,7 @@ public final class DHCPResponseFactory {
 		if (offeredAddress == null) {
 			throw new IllegalArgumentException("offeredAddress must not be null");
 		}
-		if (!(offeredAddress instanceof Inet4Address)) {
+		if (!(offeredAddress.getAddress() instanceof Inet4Address)) {
 			throw new IllegalArgumentException("offeredAddress must be IPv4");
 		}
 
@@ -108,7 +109,7 @@ public final class DHCPResponseFactory {
 		// Secs is left to 0
 		resp.setFlags(request.getFlags());
 		// Ciaddr is left to 0.0.0.0
-		resp.setYiaddr(offeredAddress);
+		resp.setYiaddr(offeredAddress.getAddress());
 		// Siaddr ?
 		resp.setGiaddrRaw(request.getGiaddrRaw());
 		resp.setChaddr(request.getChaddr());
@@ -119,9 +120,9 @@ public final class DHCPResponseFactory {
 		resp.setDHCPMessageType(DHCPOFFER);
 
 		// set standard options
-		resp.setOptionAsInt(DHO_DHCP_LEASE_TIME, leaseTime);
-		resp.setOptionAsInetAddress(DHO_DHCP_SERVER_IDENTIFIER, serverIdentifier);
-		resp.setOptionAsString(DHO_DHCP_MESSAGE, message); // if null, it is removed
+//		resp.setOptionAsInt(DHO_DHCP_LEASE_TIME, offeredAddress.getLeaseTime());
+//		resp.setOptionAsInetAddress(DHO_DHCP_SERVER_IDENTIFIER, serverIdentifier);
+//		resp.setOptionAsString(DHO_DHCP_MESSAGE, message); // if null, it is removed
 
 		if (options != null) {
 			for (DHCPOption opt : options) {
@@ -151,8 +152,7 @@ public final class DHCPResponseFactory {
 	 * @param options
 	 * @return the newly created ACK Packet
 	 */
-	public static final DHCPPacket makeDHCPAck(DHCPPacket request, InetAddress offeredAddress, int leaseTime, InetAddress serverIdentifier, String message,
-			DHCPOption[] options) {
+	public static final DHCPPacket makeDHCPAck(DHCPPacket request, IAddress offeredAddress, DHCPOption[] options) {
 		// check request
 		if (request == null) {
 			throw new NullPointerException("request is null");
@@ -171,7 +171,7 @@ public final class DHCPResponseFactory {
 		if (offeredAddress == null) {
 			throw new IllegalArgumentException("offeredAddress must not be null");
 		}
-		if (!(offeredAddress instanceof Inet4Address)) {
+		if (!(offeredAddress.getAddress() instanceof Inet4Address)) {
 			throw new IllegalArgumentException("offeredAddress must be IPv4");
 		}
 
@@ -186,7 +186,7 @@ public final class DHCPResponseFactory {
 		resp.setFlags(request.getFlags());
 		resp.setCiaddrRaw(request.getCiaddrRaw());
 		if (requestMessageType != DHCPINFORM) {
-			resp.setYiaddr(offeredAddress);
+			resp.setYiaddr(offeredAddress.getAddress());
 		}
 		// Siaddr ?
 		resp.setGiaddrRaw(request.getGiaddrRaw());
@@ -199,10 +199,10 @@ public final class DHCPResponseFactory {
 
 		// set standard options
 		if (requestMessageType == DHCPREQUEST) { // rfc 2131
-			resp.setOptionAsInt(DHO_DHCP_LEASE_TIME, leaseTime);
+			resp.setOptionAsInt(DHO_DHCP_LEASE_TIME, offeredAddress.getLeaseTime());
 		}
-		resp.setOptionAsInetAddress(DHO_DHCP_SERVER_IDENTIFIER, serverIdentifier);
-		resp.setOptionAsString(DHO_DHCP_MESSAGE, message); // if null, it is removed
+		// resp.setOptionAsInetAddress(DHO_DHCP_SERVER_IDENTIFIER, serverIdentifier);
+		// resp.setOptionAsString(DHO_DHCP_MESSAGE, message); // if null, it is removed
 
 		if (options != null) {
 			for (DHCPOption opt : options) {
@@ -232,7 +232,7 @@ public final class DHCPResponseFactory {
 	 * @param message
 	 * @return the newly created NAK Packet
 	 */
-	public static final DHCPPacket makeDHCPNak(DHCPPacket request, InetAddress serverIdentifier, String message) {
+	public static final DHCPPacket makeDHCPNak(DHCPPacket request, String message, InetAddress serverIdentifier) {
 		// check request
 		if (request == null) {
 			throw new NullPointerException("request is null");

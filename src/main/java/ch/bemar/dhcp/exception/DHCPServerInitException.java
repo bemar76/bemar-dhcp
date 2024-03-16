@@ -16,41 +16,44 @@
  *	License along with this library; if not, write to the Free Software
  *	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.dhcp4java.examples;
-
-import java.util.Random;
-
-import org.dhcp4java.DHCPPacket;
-
-
-import static org.dhcp4java.DHCPConstants.*;
+package ch.bemar.dhcp.exception;
 
 /**
- * Example of DHCP Client (under construction).
- *
+ * Thrown to indicate there was a problem starting the DHCP Server.
+ * 
  * @author Stephan Hadinger
  * @version 1.00
  */
-public class DHCPClient {
-    private static byte[] macAddress = {
-        (byte) 0x00, (byte) 0x01, (byte) 0x02, (byte) 0x03, (byte) 0x04, (byte) 0x05
-    };
-
-    private DHCPClient() {
-    	throw new UnsupportedOperationException();
+public class DHCPServerInitException extends Exception {
+	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * 
+	 *
+	 */
+	public DHCPServerInitException() {
+		super();
+	}
+	
+    /**
+     * @param message
+     */
+    public DHCPServerInitException(String message) {
+        super(message);
     }
 
-    public static void main(String[] args) {
-        // first send discover
-        DHCPPacket discover = new DHCPPacket();
+    /**
+     * @param cause
+     */
+    public DHCPServerInitException(Throwable cause) {
+        super(cause);
+    }
 
-        discover.setOp(BOOTREQUEST);
-        discover.setHtype(HTYPE_ETHER);
-        discover.setHlen((byte) 6);
-        discover.setHops((byte) 0);
-        discover.setXid( (new Random()).nextInt() );
-        discover.setSecs((short) 0);
-        discover.setFlags((short) 0);
-        discover.setChaddr(macAddress);
+    /**
+     * @param message
+     * @param cause
+     */
+    public DHCPServerInitException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

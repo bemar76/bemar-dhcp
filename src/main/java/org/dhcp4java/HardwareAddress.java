@@ -48,13 +48,21 @@ public class HardwareAddress implements Serializable, IConfigElement<byte[]> {
 
 	public HardwareAddress(String configLine) {
 
-		String[] tokens = StringUtils.split(configLine);
-		if (tokens.length != 3) {
-			throw new IllegalArgumentException("HardwareAddress needs 2 parameters");
-		}
+		String[] tokens = StringUtils.split(configLine.trim());
+		if (tokens.length == 1) {
 
-		this.hardwareType = HTYPE_ETHER;
-		this.hardwareAddress = getHardwareAddressByString(tokens[2].trim());
+			this.hardwareType = HTYPE_ETHER;
+			this.hardwareAddress = getHardwareAddressByString(tokens[0].trim());
+
+		} else if (tokens.length != 3) {
+
+			throw new IllegalArgumentException("HardwareAddress needs 2 parameters");
+		} else {
+
+			this.hardwareType = HTYPE_ETHER;
+			this.hardwareAddress = getHardwareAddressByString(tokens[2].trim());
+
+		}
 
 	}
 

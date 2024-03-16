@@ -27,7 +27,7 @@ public class ComplexConfigReaderTest {
 
 		ServerConfigReader scr = new ServerConfigReader();
 
-		DhcpServerConfiguration config = scr.readConfigFromFile(content);
+		DhcpServerConfiguration config = scr.readConfigFromString(content);
 
 		System.out.println(config);
 

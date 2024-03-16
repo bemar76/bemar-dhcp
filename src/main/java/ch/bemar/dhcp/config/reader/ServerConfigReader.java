@@ -4,9 +4,11 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.FileUtils;
+import org.dhcp4java.DHCPOption;
 
 import ch.bemar.dhcp.config.BaseConfiguration;
 import ch.bemar.dhcp.config.DhcpServerConfiguration;
+import ch.bemar.dhcp.config.DhcpSubnetConfig;
 import ch.bemar.dhcp.exception.OptionNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,10 +29,10 @@ public class ServerConfigReader extends AConfigReader {
 	}
 
 	public DhcpServerConfiguration readConfigFromFile(File file) throws OptionNotFoundException, Exception {
-		return readConfigFromFile(FileUtils.readFileToString(file, StandardCharsets.UTF_8));
+		return readConfigFromString(FileUtils.readFileToString(file, StandardCharsets.UTF_8));
 	}
 
-	public DhcpServerConfiguration readConfigFromFile(String content) throws OptionNotFoundException, Exception {
+	public DhcpServerConfiguration readConfigFromString(String content) throws OptionNotFoundException, Exception {
 
 		ConfigFile confFile = new ConfigFile(content);
 
@@ -38,7 +40,7 @@ public class ServerConfigReader extends AConfigReader {
 		log.debug("created config model");
 
 		while (confFile.hasElements()) {
-			
+
 			String line = confFile.getNextLine();
 
 			if (line.startsWith("subnet")) {
@@ -53,12 +55,26 @@ public class ServerConfigReader extends AConfigReader {
 
 		}
 
+		log.info("copying options from global config to subnet config");
+		for (DHCPOption option : serverConfig.getOptions()) {
+
+			for (DhcpSubnetConfig subnet : serverConfig.getSubnets()) {
+
+				if (!subnet.getOptions().contains(option)) {
+					log.info("Option {} not present in subnet {}", option, subnet);
+					subnet.getOptions().add(option);
+				}
+
+			}
+
+		}
+
 		return serverConfig;
 
 	}
 
 	@Override
-	protected boolean handleLine(String line, BaseConfiguration config) throws Exception {		
+	protected boolean handleLine(String line, BaseConfiguration config) throws Exception {
 		return super.handleLine(line, config);
 	}
 

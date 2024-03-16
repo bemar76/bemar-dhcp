@@ -5,24 +5,20 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.net.InetAddresses;
+import ch.bemar.dhcp.config.element.IpRange;
 
 public class IPRangeCalculatorUtil {
 	public static void main(String[] args) {
 
 	}
 
-	public static List<String> calculateAllIPsInRange(String startIP, String endIP, String subnetMask)
+	public static List<InetAddress> calculateAllIPsInRange(IpRange range, InetAddress subnetMask)
 			throws UnknownHostException {
-		List<String> allIPsInRange = new ArrayList<>();
+		List<InetAddress> allIPsInRange = new ArrayList<>();
 
-		InetAddress startAddr = InetAddress.getByName(startIP);
-		InetAddress endAddr = InetAddress.getByName(endIP);
-		InetAddress maskAddr = InetAddress.getByName(subnetMask);
-
-		byte[] startBytes = startAddr.getAddress();
-		byte[] endBytes = endAddr.getAddress();
-		byte[] maskBytes = maskAddr.getAddress();
+		byte[] startBytes = range.getStart().getAddress();
+		byte[] endBytes = range.getEnd().getAddress();
+		byte[] maskBytes = subnetMask.getAddress();
 
 		// Berechnung der Netzwerkadresse und der Broadcast-Adresse
 		byte[] networkAddress = new byte[4];
@@ -35,7 +31,7 @@ public class IPRangeCalculatorUtil {
 		// Iteration über alle IP-Adressen im Bereich
 		byte[] currentAddress = networkAddress.clone();
 		while (!isGreaterThan(currentAddress, broadcastAddress) && !isEqual(currentAddress, endBytes)) {
-			String currentIP = InetAddress.getByAddress(currentAddress).getHostAddress();
+			InetAddress currentIP = InetAddress.getByAddress(currentAddress);
 			if (isGreaterThan(currentAddress, startBytes)) {
 				allIPsInRange.add(currentIP);
 			}
@@ -45,16 +41,14 @@ public class IPRangeCalculatorUtil {
 
 		// Add the end IP address if it's within the range
 		if (isEqual(currentAddress, endBytes)) {
-			allIPsInRange.add(endIP);
+			allIPsInRange.add(range.getEnd());
 		}
 
 		return allIPsInRange;
 	}
 
-	public static InetAddress getBroadcastAddress(String startIP, String subnetMask) throws UnknownHostException {
-
-		InetAddress startAddr = InetAddress.getByName(startIP);
-		InetAddress maskAddr = InetAddress.getByName(subnetMask);
+	public static InetAddress getBroadcastAddress(InetAddress startAddr, InetAddress maskAddr)
+			throws UnknownHostException {
 
 		byte[] startBytes = startAddr.getAddress();
 		byte[] maskBytes = maskAddr.getAddress();

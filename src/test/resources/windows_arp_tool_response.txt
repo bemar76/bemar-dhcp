@@ -1,0 +1,35 @@
+
+Schnittstelle: 192.168.64.61 --- 0x14
+  Internetadresse       Physische Adresse     Typ
+  192.168.64.1          04-b4-fe-c2-81-be     dynamisch
+  192.168.64.47         50-1e-2d-32-78-62     dynamisch
+  192.168.64.49         56-e6-36-44-83-70     dynamisch
+  192.168.64.62         30-4a-26-17-b8-26     dynamisch
+  192.168.64.72         f8-f5-32-33-79-04     dynamisch
+  192.168.64.73         f6-ff-ba-de-01-65     dynamisch
+  192.168.64.83         50-56-bf-0d-5f-50     dynamisch
+  192.168.64.84         3c-7a-aa-6c-5d-18     dynamisch
+  192.168.64.87         ec-b5-fa-1c-36-29     dynamisch
+  192.168.64.92         00-22-64-bb-7c-3f     dynamisch
+  192.168.64.107        00-06-78-4a-29-c8     dynamisch
+  192.168.64.210        80-3f-5d-f3-41-73     dynamisch
+  192.168.64.255        ff-ff-ff-ff-ff-ff     statisch
+  224.0.0.22            01-00-5e-00-00-16     statisch
+  224.0.0.251           01-00-5e-00-00-fb     statisch
+  224.0.0.252           01-00-5e-00-00-fc     statisch
+  239.255.255.250       01-00-5e-7f-ff-fa     statisch
+  255.255.255.255       ff-ff-ff-ff-ff-ff     statisch
+
+Schnittstelle: 172.21.96.1 --- 0x1e
+  Internetadresse       Physische Adresse     Typ
+  172.21.111.255        ff-ff-ff-ff-ff-ff     statisch
+  224.0.0.22            01-00-5e-00-00-16     statisch
+  224.0.0.251           01-00-5e-00-00-fb     statisch
+  239.255.255.250       01-00-5e-7f-ff-fa     statisch
+
+Schnittstelle: 172.29.240.1 --- 0x24
+  Internetadresse       Physische Adresse     Typ
+  172.29.255.255        ff-ff-ff-ff-ff-ff     statisch
+  224.0.0.22            01-00-5e-00-00-16     statisch
+  224.0.0.251           01-00-5e-00-00-fb     statisch
+  239.255.255.250       01-00-5e-7f-ff-fa     statisch

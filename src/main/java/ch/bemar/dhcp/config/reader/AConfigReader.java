@@ -10,7 +10,7 @@ import ch.bemar.dhcp.config.element.ConfigElementFactory;
 import ch.bemar.dhcp.config.element.IConfigElement;
 import ch.bemar.dhcp.constants.DHCPOptionFactory;
 import ch.bemar.dhcp.constants.DhcpConstants;
-import ch.bemar.dhcp.util.ReflectionFieldUtil;
+import ch.bemar.dhcp.util.ReflectionUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -65,7 +65,7 @@ public abstract class AConfigReader {
 
 		if (element != null) {
 
-			for (Field field : ReflectionFieldUtil.getAllFields(config.getClass())) {
+			for (Field field : ReflectionUtils.getAllFields(config.getClass())) {
 
 				if (field.getType().isAssignableFrom(element.getClass())) {
 					try {
