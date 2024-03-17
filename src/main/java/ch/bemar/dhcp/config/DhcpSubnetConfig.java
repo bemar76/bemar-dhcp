@@ -11,6 +11,7 @@ import com.google.common.collect.Sets;
 import ch.bemar.dhcp.config.element.IpRange;
 import ch.bemar.dhcp.config.element.Netmask;
 import ch.bemar.dhcp.config.element.Subnet;
+import ch.bemar.dhcp.constants.DhcpConstants;
 import ch.bemar.dhcp.util.IPAddressInRange;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -36,16 +37,9 @@ public class DhcpSubnetConfig extends BaseConfiguration {
 	}
 
 	public String getDomainName() {
-		for (DHCPOption option : super.getOptions()) {
 
-			if (option.getCode() == DHCPConstants.DHO_DOMAIN_NAME) {
-				return option.getValueAsString();
-			}
+		return super.getOptionValueAsString(getOptions(), DHCPConstants.DHO_DOMAIN_NAME);
 
-		}
-
-		log.error("no domain name was found in options");
-		return null;
 	}
 
 	public boolean isIpAddressInSubnet(InetAddress ipToCheck) throws Exception {

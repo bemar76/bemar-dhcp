@@ -1,6 +1,7 @@
 package ch.bemar.dhcp.config;
 
 import java.lang.reflect.Field;
+import java.net.InetAddress;
 import java.util.Collection;
 import java.util.List;
 
@@ -17,8 +18,10 @@ import ch.bemar.dhcp.config.element.LogFacility;
 import ch.bemar.dhcp.config.element.MaxLeaseTime;
 import ch.bemar.dhcp.util.ReflectionUtils;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 @Data
+@Slf4j
 public class BaseConfiguration {
 
 	public BaseConfiguration() {
@@ -73,6 +76,34 @@ public class BaseConfiguration {
 
 		return sb.toString();
 
+	}
+
+	public String getOptionValueAsString(List<DHCPOption> options, byte b) {
+
+		for (DHCPOption option : options) {
+
+			if (option.getCode() == b) {
+				return option.getValueAsString();
+			}
+
+		}
+
+		log.error("no ooption in options with byte {}", b);
+		return null;
+	}
+
+	public InetAddress getOptionValueAsInetAddress(List<DHCPOption> options, byte b) {
+
+		for (DHCPOption option : options) {
+
+			if (option.getCode() == b) {
+				return option.getValueAsInetAddr();
+			}
+
+		}
+
+		log.error("no ooption in options with byte {}", b);
+		return null;
 	}
 
 }

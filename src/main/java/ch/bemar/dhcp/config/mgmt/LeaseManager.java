@@ -62,7 +62,8 @@ public class LeaseManager {
 
 	public IAddress handleNextFreeLeasing(Address address, HardwareAddress mac) {
 
-		if (!address.isConflict() || address.getReservedFor() != null) {
+		if (address.isConflict()
+				|| (address.getReservedFor() != null && address.getLeasedUntil() > System.currentTimeMillis())) {
 
 			log.debug("address in conflict: {}", address.isConflict());
 			log.debug("address reserved for: {}", address.getReservedFor());

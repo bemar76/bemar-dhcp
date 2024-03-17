@@ -20,7 +20,9 @@ public class TransportSocket {
 
 		java.net.DatagramPacket packet = new java.net.DatagramPacket(new byte[PACKET_SIZE], PACKET_SIZE);
 
+		log.info("Waiting for UDP packet");
 		serverSocket.receive(packet);
+		log.info("Got packet");
 
 		return new DatagramPacket(packet, id);
 	}
@@ -42,8 +44,11 @@ public class TransportSocket {
 
 	public void send(DatagramPacket responseDatagram) throws IOException {
 
-		serverSocket.send(responseDatagram.getPacket());
-
+		if (responseDatagram != null)
+			serverSocket.send(responseDatagram.getPacket());
+		else {
+			log.warn("response datagramm is null. nothing to send");
+		}
 	}
 
 }

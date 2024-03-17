@@ -18,7 +18,7 @@ public class DatagramPacket {
 	}
 
 	public DatagramPacket(byte[] responseBuf, int length, InetAddress address, int port, String id) {
-		this.packet = new java.net.DatagramPacket(responseBuf, port, length, address, port);
+		this.packet = new java.net.DatagramPacket(responseBuf, 0, length, address, port);
 		this.id = id;
 	}
 

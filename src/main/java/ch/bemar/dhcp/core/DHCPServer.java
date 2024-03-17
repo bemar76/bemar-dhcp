@@ -1,5 +1,6 @@
 package ch.bemar.dhcp.core;
 
+import java.io.IOException;
 import java.time.Duration;
 
 import org.apache.commons.lang3.ThreadUtils;
@@ -42,6 +43,13 @@ public class DHCPServer implements Runnable {
 	public void run() {
 
 		boolean run = true;
+
+		try {
+			socketManager.startListen();
+		} catch (IOException e) {
+			log.error(e.getMessage(), e);
+			run = false;
+		}
 
 		while (run) {
 

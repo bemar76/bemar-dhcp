@@ -1,11 +1,8 @@
 package ch.bemar.dhcp.core;
 
-import java.io.IOException;
 import java.net.InetAddress;
-import java.util.logging.Level;
 
 import org.dhcp4java.DHCPPacket;
-import org.dhcp4java.old.DHCPServletDispatcher;
 
 import ch.bemar.dhcp.config.DhcpServerConfiguration;
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
@@ -64,10 +61,7 @@ public class DatagramHandler implements IDatagramHandler {
 			log.debug(request.toString());
 
 			// do the real work
-			DHCPPacket response = this.processPacket(request); // call
-																// service
-																// function
-			// done
+			DHCPPacket response = processPacket(request); // call service function
 
 			log.debug("service() done");
 

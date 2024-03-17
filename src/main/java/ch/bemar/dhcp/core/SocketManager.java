@@ -50,8 +50,14 @@ public class SocketManager {
 
 				DatagramSocket socket = bindToInterface(cfg);
 
-				socketHandlerAssignments
-						.add(new SocketHandlerHolder(new TransportSocket(socket, cfg.getName()), handler));
+				TransportSocket ts = new TransportSocket(socket, cfg.getName());
+
+				socketHandlerAssignments.add(new SocketHandlerHolder(ts, handler));
+
+				log.info("Handler '{}' was successfully bound to listener '{}' with subnet config {}",
+						handler.getSubnetConfig().getDomainName(), ts.getId(), handler.getSubnetConfig().getRange());
+
+				return;
 			}
 
 		}
