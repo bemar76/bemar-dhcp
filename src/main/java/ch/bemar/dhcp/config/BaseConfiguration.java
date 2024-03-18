@@ -78,32 +78,5 @@ public class BaseConfiguration {
 
 	}
 
-	public String getOptionValueAsString(List<DHCPOption> options, byte b) {
-
-		for (DHCPOption option : options) {
-
-			if (option.getCode() == b) {
-				return option.getValueAsString();
-			}
-
-		}
-
-		log.error("no ooption in options with byte {}", b);
-		return null;
-	}
-
-	public InetAddress getOptionValueAsInetAddress(List<DHCPOption> options, byte b) {
-
-		for (DHCPOption option : options) {
-
-			if (option.getCode() == b) {
-				return option.getValueAsInetAddr();
-			}
-
-		}
-
-		log.error("no ooption in options with byte {}", b);
-		return null;
-	}
-
+	
 }

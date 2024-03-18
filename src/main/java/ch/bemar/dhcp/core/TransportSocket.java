@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TransportSocket {
 
 	/** default MTU for ethernet */
-	protected static final int PACKET_SIZE = 1500;
+	public static final int PACKET_SIZE = 1500;
 
 	private final String id;
 	private final DatagramSocket serverSocket;

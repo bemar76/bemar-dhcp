@@ -7,6 +7,7 @@ import static org.dhcp4java.DHCPConstants.DHCPOFFER;
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +19,11 @@ import org.dhcp4java.DHCPResponseUtil;
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
 import ch.bemar.dhcp.config.mgmt.AddressManagement;
 import ch.bemar.dhcp.config.mgmt.IAddress;
+import ch.bemar.dhcp.constants.DhcpConstants;
+import ch.bemar.dhcp.core.TransportSocket;
 import ch.bemar.dhcp.exception.DHCPBadPacketException;
 import ch.bemar.dhcp.exception.NoAddressFoundException;
+import ch.bemar.dhcp.util.DhcpOptionUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -61,7 +65,7 @@ public class DhcpDiscoverProcessor implements IProcessor {
 		return null;
 	}
 
-	public DHCPPacket createOfferPacket(DHCPPacket request, IAddress offeredAddress) {
+	public DHCPPacket createOfferPacket(DHCPPacket request, IAddress offeredAddress) throws UnknownHostException {
 		// check request
 		if (request == null) {
 			throw new NullPointerException("request is null");
@@ -104,29 +108,58 @@ public class DhcpDiscoverProcessor implements IProcessor {
 		// we set the DHCPOFFER type
 		resp.setDHCPMessageType(DHCPOFFER);
 
-		// set standard options
-		resp.setOptionAsInt(DHCPConstants.DHO_DHCP_LEASE_TIME, offeredAddress.getLeaseTime());
-		// resp.setOptionAsInetAddress(DHCPConstants.DHO_DHCP_SERVER_IDENTIFIER,
-		// serverIdentifier);
-		// resp.setOptionAsString(DHCPConstants.DHO_DHCP_MESSAGE, message); // if null,
-		// it is removed
+		resp.setOptions(subnetConfig.getOptions());
 
-		InetAddress subnet = subnetConfig.getOptionValueAsInetAddress(subnetConfig.getOptions(),
-				DHCPConstants.DHO_SUBNET_MASK);
-		if (subnet == null) {
-			resp.setOptionAsInetAddress(DHCPConstants.DHO_SUBNET_MASK, subnetConfig.getSubnetAddress().getValue());
+		handleStandardOptions(request, resp, offeredAddress);
+
+		return resp;
+	}
+
+	private void handleStandardOptions(DHCPPacket request, DHCPPacket response, IAddress offeredAddress)
+			throws UnknownHostException {
+
+		if (!DhcpOptionUtils.hasOption(response.getOptionsCollection(), DHCPConstants.DHO_DHCP_LEASE_TIME))
+			response.setOptionAsInt(DHCPConstants.DHO_DHCP_LEASE_TIME, offeredAddress.getLeaseTime());
+
+		if (!DhcpOptionUtils.hasOption(response.getOptionsCollection(), DHCPConstants.DHO_SUBNET_MASK))
+			response.setOption(DhcpOptionUtils.findOptionOrDefault(subnetConfig.getOptions(),
+					DHCPConstants.DHO_SUBNET_MASK, subnetConfig.getNetmask().getValue()));
+
+		if (!DhcpOptionUtils.hasOption(response.getOptionsCollection(), DHCPConstants.DHO_INTERFACE_MTU))
+			response.setOption(DhcpOptionUtils.findOptionOrDefault(subnetConfig.getOptions(),
+					DHCPConstants.DHO_INTERFACE_MTU, Short.parseShort(TransportSocket.PACKET_SIZE + "")));
+
+		if (!DhcpOptionUtils.hasOption(response.getOptionsCollection(), DHCPConstants.DHO_BROADCAST_ADDRESS))
+			response.setOption(DhcpOptionUtils.findOptionOrDefault(subnetConfig.getOptions(),
+					DHCPConstants.DHO_BROADCAST_ADDRESS, subnetConfig.getBroadcastAddress()));
+
+		if (!DhcpOptionUtils.hasOption(response.getOptionsCollection(), DHCPConstants.DHO_DHCP_RENEWAL_TIME)) {
+
+			int t1 = new Double(offeredAddress.getLeaseTime() * DhcpConstants.RENEWAL_FACTOR).intValue();
+
+			response.setOption(DhcpOptionUtils.findOptionOrDefault(subnetConfig.getOptions(),
+					DHCPConstants.DHO_DHCP_RENEWAL_TIME, t1));
+
+		}
+
+		if (!DhcpOptionUtils.hasOption(response.getOptionsCollection(), DHCPConstants.DHO_DHCP_REBINDING_TIME)) {
+
+			int t2 = new Double(offeredAddress.getLeaseTime() * DhcpConstants.REBIND_FACTOR).intValue();
+
+			response.setOption(DhcpOptionUtils.findOptionOrDefault(subnetConfig.getOptions(),
+					DHCPConstants.DHO_DHCP_REBINDING_TIME, t2));
+
 		}
 
 		// we set address/port according to rfc
-		resp.setAddrPort(DHCPResponseUtil.getDefaultSocketAddress(request, DHCPOFFER));
-
-		return resp;
+		response.setAddrPort(DHCPResponseUtil.getDefaultSocketAddress(request, DHCPOFFER));
 	}
 
 	@Override
 	public byte processType() {
 
 		return DHCPConstants.DHCPDISCOVER;
+
 	}
 
 }

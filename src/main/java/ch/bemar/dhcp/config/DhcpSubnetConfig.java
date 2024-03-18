@@ -1,6 +1,7 @@
 package ch.bemar.dhcp.config;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Set;
 
 import org.dhcp4java.DHCPConstants;
@@ -11,7 +12,8 @@ import com.google.common.collect.Sets;
 import ch.bemar.dhcp.config.element.IpRange;
 import ch.bemar.dhcp.config.element.Netmask;
 import ch.bemar.dhcp.config.element.Subnet;
-import ch.bemar.dhcp.constants.DhcpConstants;
+import ch.bemar.dhcp.util.BroadcastAddressCalculator;
+import ch.bemar.dhcp.util.DhcpOptionUtils;
 import ch.bemar.dhcp.util.IPAddressInRange;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -38,13 +40,18 @@ public class DhcpSubnetConfig extends BaseConfiguration {
 
 	public String getDomainName() {
 
-		return super.getOptionValueAsString(getOptions(), DHCPConstants.DHO_DOMAIN_NAME);
+		DHCPOption option = DhcpOptionUtils.findOption(getOptions(), DHCPConstants.DHO_DOMAIN_NAME);
+		return option.getValueAsString();
 
 	}
 
 	public boolean isIpAddressInSubnet(InetAddress ipToCheck) throws Exception {
 
 		return IPAddressInRange.isIpAddressInRange(ipToCheck, subnetAddress.getValue());
+	}
+
+	public InetAddress getBroadcastAddress() throws UnknownHostException {
+		return BroadcastAddressCalculator.calculateBroadcastAddress(range.getStart(), netmask.getValue());
 	}
 
 }
