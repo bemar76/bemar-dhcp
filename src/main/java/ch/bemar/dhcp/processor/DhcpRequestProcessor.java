@@ -11,25 +11,22 @@ import static org.dhcp4java.DHCPConstants.DHO_DHCP_SERVER_IDENTIFIER;
 
 import java.io.IOException;
 import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 
 import org.dhcp4java.DHCPConstants;
-import org.dhcp4java.DHCPOption;
 import org.dhcp4java.DHCPPacket;
-import org.dhcp4java.DHCPResponseUtil;
 
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
 import ch.bemar.dhcp.config.mgmt.AddressManagement;
 import ch.bemar.dhcp.config.mgmt.IAddress;
 import ch.bemar.dhcp.exception.DHCPBadPacketException;
 import ch.bemar.dhcp.exception.NoAddressFoundException;
+import ch.bemar.dhcp.util.DhcpOptionUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class DhcpRequestProcessor implements IProcessor {
+public class DhcpRequestProcessor extends AProcessor {
 
 	private final DhcpSubnetConfig subnetConfig;
 
@@ -57,22 +54,11 @@ public class DhcpRequestProcessor implements IProcessor {
 				log.info("got ip {} for mac {}", offered.getAddress().getHostAddress(),
 						request.getHardwareAddress().getHardwareAddressHex());
 
-				List<DHCPOption> options = new ArrayList<>();
-
-				options.addAll(subnetConfig.getOptions());
-
-				return makeDHCPAck(request, offered, options.toArray(new DHCPOption[0]));
+				return makeDHCPAck(request, offered);
 
 			} else {
 
-				Optional<DHCPOption> serverIdentifier = subnetConfig.getOptions().stream()
-						.filter(o -> o.getCode() == DHCPConstants.DHO_DHCP_SERVER_IDENTIFIER).findFirst();
-				if (serverIdentifier.isEmpty()) {
-					throw new IllegalStateException("No server Identifier found");
-				}
-
-				return makeDHCPNak(request, "No address found. Try again later",
-						serverIdentifier.get().getValueAsInetAddr());
+				return makeDHCPNak(request, "No address found. Try again later");
 			}
 
 		} catch (
@@ -99,8 +85,9 @@ public class DhcpRequestProcessor implements IProcessor {
 	 * @param offeredAddress
 	 * @param options
 	 * @return the newly created ACK Packet
+	 * @throws UnknownHostException
 	 */
-	public static final DHCPPacket makeDHCPAck(DHCPPacket request, IAddress offeredAddress, DHCPOption[] options) {
+	public final DHCPPacket makeDHCPAck(DHCPPacket request, IAddress offeredAddress) throws UnknownHostException {
 		// check request
 		if (request == null) {
 			throw new NullPointerException("request is null");
@@ -123,45 +110,38 @@ public class DhcpRequestProcessor implements IProcessor {
 			throw new IllegalArgumentException("offeredAddress must be IPv4");
 		}
 
-		DHCPPacket resp = new DHCPPacket();
+		DHCPPacket response = new DHCPPacket();
 
-		resp.setOp(BOOTREPLY);
-		resp.setHtype(request.getHtype());
-		resp.setHlen(request.getHlen());
+		response.setOp(BOOTREPLY);
+		response.setHtype(request.getHtype());
+		response.setHlen(request.getHlen());
 		// Hops is left to 0
-		resp.setXid(request.getXid());
+		response.setXid(request.getXid());
 		// Secs is left to 0
-		resp.setFlags(request.getFlags());
-		resp.setCiaddrRaw(request.getCiaddrRaw());
+		response.setFlags(request.getFlags());
+		response.setCiaddrRaw(request.getCiaddrRaw());
 		if (requestMessageType != DHCPINFORM) {
-			resp.setYiaddr(offeredAddress.getAddress());
+			response.setYiaddr(offeredAddress.getAddress());
 		}
 		// Siaddr ?
-		resp.setGiaddrRaw(request.getGiaddrRaw());
-		resp.setChaddr(request.getChaddr());
+		response.setGiaddrRaw(request.getGiaddrRaw());
+		response.setChaddr(request.getChaddr());
 		// sname left empty
 		// file left empty
 
 		// we set the DHCPOFFER type
-		resp.setDHCPMessageType(DHCPACK);
+		response.setDHCPMessageType(DHCPACK);
 
 		// set standard options
 		if (requestMessageType == DHCPREQUEST) { // rfc 2131
-			resp.setOptionAsInt(DHO_DHCP_LEASE_TIME, offeredAddress.getLeaseTime());
-		}
-		// resp.setOptionAsInetAddress(DHO_DHCP_SERVER_IDENTIFIER, serverIdentifier);
-		// resp.setOptionAsString(DHO_DHCP_MESSAGE, message); // if null, it is removed
-
-		if (options != null) {
-			for (DHCPOption opt : options) {
-				resp.setOption(opt.applyOption(request));
-			}
+			response.setOptionAsInt(DHO_DHCP_LEASE_TIME, offeredAddress.getLeaseTime());
 		}
 
-		// we set address/port according to rfc
-		resp.setAddrPort(DHCPResponseUtil.getDefaultSocketAddress(request, DHCPACK));
+		response.setOptions(subnetConfig.getOptions());
 
-		return resp;
+		handleStandardOptions(request, response, offeredAddress);
+
+		return response;
 	}
 
 	/**
@@ -179,8 +159,9 @@ public class DhcpRequestProcessor implements IProcessor {
 	 * @param serverIdentifier
 	 * @param message
 	 * @return the newly created NAK Packet
+	 * @throws UnknownHostException
 	 */
-	public static final DHCPPacket makeDHCPNak(DHCPPacket request, String message, InetAddress serverIdentifier) {
+	public final DHCPPacket makeDHCPNak(DHCPPacket request, String message) throws UnknownHostException {
 		// check request
 		if (request == null) {
 			throw new NullPointerException("request is null");
@@ -196,42 +177,47 @@ public class DhcpRequestProcessor implements IProcessor {
 			throw new DHCPBadPacketException("request is not DHCPREQUEST");
 		}
 
-		DHCPPacket resp = new DHCPPacket();
+		DHCPPacket response = new DHCPPacket();
 
-		resp.setOp(BOOTREPLY);
-		resp.setHtype(request.getHtype());
-		resp.setHlen(request.getHlen());
+		response.setOp(BOOTREPLY);
+		response.setHtype(request.getHtype());
+		response.setHlen(request.getHlen());
 		// Hops is left to 0
-		resp.setXid(request.getXid());
+		response.setXid(request.getXid());
 		// Secs is left to 0
-		resp.setFlags(request.getFlags());
+		response.setFlags(request.getFlags());
 		// ciaddr left to 0
 		// yiaddr left to 0
 		// Siaddr ?
-		resp.setGiaddrRaw(request.getGiaddrRaw());
-		resp.setChaddr(request.getChaddr());
+		response.setGiaddrRaw(request.getGiaddrRaw());
+		response.setChaddr(request.getChaddr());
 		// sname left empty
 		// file left empty
 
 		// we set the DHCPOFFER type
-		resp.setDHCPMessageType(DHCPNAK);
+		response.setDHCPMessageType(DHCPNAK);
 
 		// set standard options
-		resp.setOptionAsInetAddress(DHO_DHCP_SERVER_IDENTIFIER, serverIdentifier);
-		resp.setOptionAsString(DHO_DHCP_MESSAGE, message); // if null, it is removed
+		response.setOption(DhcpOptionUtils.findOption(subnetConfig.getOptions(), DHO_DHCP_SERVER_IDENTIFIER));
+		response.setOptionAsString(DHO_DHCP_MESSAGE, message); // if null, it is removed
 
 		// we do not set other options for this type of message
 
 		// we set address/port according to rfc
-		resp.setAddrPort(DHCPResponseUtil.getDefaultSocketAddress(request, DHCPNAK));
+		response.setAddrPort(new InetSocketAddress(getSubnetConfig().getBroadcastAddress().getHostAddress(), 68));
 
-		return resp;
+		return response;
 	}
 
 	@Override
 	public byte processType() {
 
 		return DHCPConstants.DHCPREQUEST;
+	}
+
+	@Override
+	protected DhcpSubnetConfig getSubnetConfig() {
+		return this.subnetConfig;
 	}
 
 }
