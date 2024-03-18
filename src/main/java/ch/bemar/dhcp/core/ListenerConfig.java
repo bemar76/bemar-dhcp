@@ -3,11 +3,11 @@ package ch.bemar.dhcp.core;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import org.openjdk.tools.sjavac.Log;
-
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 @Getter
+@Slf4j
 public class ListenerConfig {
 
 	public ListenerConfig(String cfg) {
@@ -23,7 +23,7 @@ public class ListenerConfig {
 			this.ifaceName = null;
 
 		} catch (UnknownHostException e) {
-			Log.info("no address");
+			log.info("no address");
 
 			this.ifaceName = tokens[0].trim();
 			this.address = null;

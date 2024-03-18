@@ -9,7 +9,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class Arp {
+public class Arp implements Comparable<Arp> {
 	
 	private InetAddress ip;
 	private HardwareAddress mac;
@@ -17,6 +17,10 @@ public class Arp {
 	@Override
 	public String toString() {
 		return "Arp [ip=" + ip + ", mac=" + mac + ", dynamic=" + dynamic + "]";
+	}
+	@Override
+	public int compareTo(Arp o) {
+		return this.ip.getHostAddress().compareTo(o.getIp().getHostAddress());
 	}
 	
 	

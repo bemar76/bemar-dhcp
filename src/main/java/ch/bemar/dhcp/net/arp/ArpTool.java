@@ -8,8 +8,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.dhcp4java.HardwareAddress;
-import org.hibernate.tool.hbm2x.StringUtils;
 
 public class ArpTool {
 

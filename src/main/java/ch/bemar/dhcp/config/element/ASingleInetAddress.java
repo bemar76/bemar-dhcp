@@ -3,7 +3,7 @@ package ch.bemar.dhcp.config.element;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import org.hibernate.tool.hbm2x.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

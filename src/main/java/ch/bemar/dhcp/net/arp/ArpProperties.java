@@ -54,4 +54,7 @@ public class ArpProperties {
 		return props.getProperty("line_arp_header_start");
 	}
 
+	public boolean isArpActive() {
+		return "true".equalsIgnoreCase(props.getProperty("arp"));
+	}
 }

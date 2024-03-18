@@ -12,21 +12,27 @@ public class ArpTableProvider {
 
 	private ArpTool tool;
 
+	private ArpProperties props;
+
 	public ArpTableProvider() throws IOException {
 		this.tool = new ArpTool();
+		props = new ArpProperties();
 		refresh();
 	}
 
 	public synchronized Arp foundInArp(InetAddress address) {
 
-		return table.hasArp(address);
+		if (props.isArpActive())
+			return table.hasArp(address);
 
+		return null;
 	}
 
 	public synchronized void refresh() {
 		try {
 
-			table = tool.getTable();
+			if (props.isArpActive())
+				table = tool.getTable();
 
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);

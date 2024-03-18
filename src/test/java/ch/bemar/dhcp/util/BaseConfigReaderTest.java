@@ -38,7 +38,7 @@ public class BaseConfigReaderTest {
 
 		Assertions.assertEquals("IpRange(start=/192.168.64.100, end=/192.168.64.200)", subnet.getRange().toString());
 
-		Assertions.assertEquals("[DHO_ROUTERS(3)=192.168.64.1 , DHO_DOMAIN_NAME_SERVERS(6)=8.8.8.8 8.8.4.4 ]",
+		Assertions.assertEquals("[DHO_ROUTERS(3)=192.168.64.1 , DHO_DOMAIN_NAME_SERVERS(6)=8.8.8.8 8.8.4.4 , DHO_DOMAIN_NAME(15)=\"bemar.local\"]",
 				subnet.getOptions().toString());
 
 		Assertions.assertEquals("max-lease-time = 7200", subnet.getMaxLeaseTime().toString());

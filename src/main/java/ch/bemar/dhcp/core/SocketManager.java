@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
-import org.hibernate.tool.hbm2x.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -141,7 +141,7 @@ public class SocketManager {
 			DatagramSocket socket = new DatagramSocket(null);
 			socket.bind(socketAddress);
 
-			System.out.println("Socket erfolgreich an " + interfaceAddress + " gebunden.");
+			log.info("Socket erfolgreich an " + interfaceAddress + " gebunden.");
 
 			return socket;
 

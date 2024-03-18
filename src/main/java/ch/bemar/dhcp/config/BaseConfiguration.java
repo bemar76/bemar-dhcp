@@ -1,7 +1,6 @@
 package ch.bemar.dhcp.config;
 
 import java.lang.reflect.Field;
-import java.net.InetAddress;
 import java.util.Collection;
 import java.util.List;
 
@@ -45,9 +44,6 @@ public class BaseConfiguration {
 
 	private List<DHCPOption> options;
 
-	public String toString() {
-		return machMalString(this);
-	}
 
 	public static String machMalString(Object config) {
 
@@ -78,5 +74,6 @@ public class BaseConfiguration {
 
 	}
 
+	
 	
 }

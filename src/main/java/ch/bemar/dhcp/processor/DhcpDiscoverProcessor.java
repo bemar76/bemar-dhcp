@@ -7,6 +7,7 @@ import static org.dhcp4java.DHCPConstants.DHCPOFFER;
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
@@ -152,7 +153,7 @@ public class DhcpDiscoverProcessor implements IProcessor {
 		}
 
 		// we set address/port according to rfc
-		response.setAddrPort(DHCPResponseUtil.getDefaultSocketAddress(request, DHCPOFFER));
+		response.setAddrPort(new InetSocketAddress(subnetConfig.getBroadcastAddress().getHostAddress(), 68));
 	}
 
 	@Override

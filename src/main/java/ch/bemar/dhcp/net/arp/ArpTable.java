@@ -1,11 +1,15 @@
 package ch.bemar.dhcp.net.arp;
 
 import java.net.InetAddress;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.dhcp4java.HardwareAddress;
+import org.apache.commons.lang3.StringUtils;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -58,7 +62,23 @@ public class ArpTable {
 
 	@Override
 	public String toString() {
-		return "ArpTable [arpTable=" + arpTable + "]";
+		StringBuilder sb = new StringBuilder();
+
+		List<Interface> ifaces = Lists.newArrayList(arpTable.keySet());
+		Collections.sort(ifaces);
+		for (Interface iface : ifaces) {
+			sb.append(iface).append("=");
+
+			List<Arp> arps = Lists.newArrayList(arpTable.get(iface));
+			Collections.sort(arps);
+
+			sb.append(StringUtils.join(arps));
+
+			sb.append("\n");
+		}
+
+		return sb.toString();
+
 	}
 
 }

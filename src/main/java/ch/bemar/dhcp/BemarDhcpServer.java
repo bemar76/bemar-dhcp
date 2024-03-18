@@ -47,7 +47,7 @@ public class BemarDhcpServer {
 		try {
 			cmd = parser.parse(options, args);
 		} catch (ParseException e) {
-			System.out.println(e.getMessage());
+			log.error(e.getMessage(), e);
 			formatter.printHelp("bemar-dhcp", options);
 
 			System.exit(1);

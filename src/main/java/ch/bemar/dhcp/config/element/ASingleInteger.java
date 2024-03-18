@@ -1,6 +1,6 @@
 package ch.bemar.dhcp.config.element;
 
-import org.hibernate.tool.hbm2x.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import lombok.Data;
 

@@ -21,7 +21,7 @@ package org.dhcp4java;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.hibernate.tool.hbm2x.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import ch.bemar.dhcp.config.ConfigName;
 import ch.bemar.dhcp.config.element.IConfigElement;

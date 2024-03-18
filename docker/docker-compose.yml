@@ -1,0 +1,17 @@
+version: '3.9'
+
+services:
+
+  bemar-dhcp:
+    image: bemar-dhcp:0.1
+    restart: always
+    ports:
+      - "67:67/udp"
+    volumes:
+      - "bemarDhcpVol:/app/log"
+    environment:
+      - TZ=Europe/Berlin
+      
+
+volumes:
+  bemarDhcpVol:

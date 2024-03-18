@@ -53,7 +53,7 @@ public class ComplexConfigReaderTest {
 
 		Assertions.assertEquals("IpRange(start=/10.0.0.100, end=/10.0.0.220)", subnet.getRange().toString());
 
-		Assertions.assertEquals("[DHO_SUBNET_MASK(1)=255.255.255.0, DHO_BROADCAST_ADDRESS(28)=10.0.0.255]",
+		Assertions.assertEquals("[DHO_SUBNET_MASK(1)=255.255.255.0, DHO_BROADCAST_ADDRESS(28)=10.0.0.255, DHO_DOMAIN_NAME(15)=\"example.org\", DHO_DOMAIN_NAME_SERVERS(6)=192.168.64.1 192.168.64.1 ]",
 				subnet.getOptions().toString());
 
 		Assertions.assertEquals("max-lease-time = 6000", subnet.getMaxLeaseTime().toString());
@@ -74,23 +74,27 @@ public class ComplexConfigReaderTest {
 
 		});
 
-		Assertions.assertEquals("[ibmpseries\n" //
-				+ "00:09:6b:ab:0e:f2\n" //
-				+ "fixed-address = /10.0.0.141\n" //
-				+ "next-server = /10.0.0.20\n" //
-				+ ", ibmx3655\n" //
-				+ "00:14:5e:5a:31:57\n" //
-				+ "fixed-address = /10.0.0.200\n" //
-				+ "[DHO_SUBNET_MASK(1)=255.255.255.0, DHO_DOMAIN_NAME_SERVERS(6)=10.0.0.20 , DHO_DOMAIN_NAME(15)=\"site\", DHO_VENDOR_CLASS_IDENTIFIER(60)=\"PXEClient\"]\n" //
-				+ ", sunTarget1\n" //
-				+ "00:03:ba:92:92:f0\n" //
-				+ "fixed-address = /10.0.0.142\n" //
-				+ "next-server = /10.0.0.20\n" //
-				+ "[DHO_ROUTERS(3)=10.0.0.15 ]\n" //
-				+ ", x41\n" //
-				+ "00:0a:e4:2f:66:38\n" //
-				+ "fixed-address = /10.0.0.201\n" //
-				+ "[DHO_SUBNET_MASK(1)=255.255.255.0, DHO_DOMAIN_NAME_SERVERS(6)=10.0.0.20 , DHO_DOMAIN_NAME(15)=\"site\"]\n" //
+		Assertions.assertEquals("[ibmpseries\n"
+				+ "00:09:6b:ab:0e:f2\n"
+				+ "fixed-address = /10.0.0.141\n"
+				+ "next-server = /10.0.0.20\n"
+				+ "Logger[ch.bemar.dhcp.config.BaseConfiguration]\n"
+				+ ", ibmx3655\n"
+				+ "00:14:5e:5a:31:57\n"
+				+ "fixed-address = /10.0.0.200\n"
+				+ "Logger[ch.bemar.dhcp.config.BaseConfiguration]\n"
+				+ "[DHO_SUBNET_MASK(1)=255.255.255.0, DHO_DOMAIN_NAME_SERVERS(6)=10.0.0.20 , DHO_DOMAIN_NAME(15)=\"site\", DHO_VENDOR_CLASS_IDENTIFIER(60)=\"PXEClient\"]\n"
+				+ ", sunTarget1\n"
+				+ "00:03:ba:92:92:f0\n"
+				+ "fixed-address = /10.0.0.142\n"
+				+ "next-server = /10.0.0.20\n"
+				+ "Logger[ch.bemar.dhcp.config.BaseConfiguration]\n"
+				+ "[DHO_ROUTERS(3)=10.0.0.15 ]\n"
+				+ ", x41\n"
+				+ "00:0a:e4:2f:66:38\n"
+				+ "fixed-address = /10.0.0.201\n"
+				+ "Logger[ch.bemar.dhcp.config.BaseConfiguration]\n"
+				+ "[DHO_SUBNET_MASK(1)=255.255.255.0, DHO_DOMAIN_NAME_SERVERS(6)=10.0.0.20 , DHO_DOMAIN_NAME(15)=\"site\"]\n"
 				+ "]", hosts.toString());
 
 	}

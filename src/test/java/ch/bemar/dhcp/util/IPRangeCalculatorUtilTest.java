@@ -29,9 +29,9 @@ class IPRangeCalculatorUtilTest {
 			List<InetAddress> allIPsInRange = IPRangeCalculatorUtil.calculateAllIPsInRange(new IpRange(startIP, endIP),
 					subnetMask);
 			System.out.println("All IPs within the range:");
-			for (InetAddress ip : allIPsInRange) {
-				System.out.println(ip.getHostAddress());
-			}
+//			for (InetAddress ip : allIPsInRange) {
+//				System.out.println(ip.getHostAddress());
+//			}
 
 			Assertions.assertEquals(567, allIPsInRange.size());
 		} catch (UnknownHostException e) {
@@ -56,10 +56,10 @@ class IPRangeCalculatorUtilTest {
 		try {
 			List<InetAddress> allIPsInRange = IPRangeCalculatorUtil.calculateAllIPsInRange(new IpRange(startIP, endIP),
 					subnetMask);
-			System.out.println("All IPs within the range:");
-			for (InetAddress ip : allIPsInRange) {
-				System.out.println(ip.getHostAddress());
-			}
+//			System.out.println("All IPs within the range:");
+//			for (InetAddress ip : allIPsInRange) {
+//				System.out.println(ip.getHostAddress());
+//			}
 
 			Assertions.assertEquals(211, allIPsInRange.size());
 		} catch (UnknownHostException e) {
@@ -85,9 +85,9 @@ class IPRangeCalculatorUtilTest {
 			List<InetAddress> allIPsInRange = IPRangeCalculatorUtil.calculateAllIPsInRange(new IpRange(startIP, endIP),
 					subnetMask);
 			System.out.println("All IPs within the range:");
-			for (InetAddress ip : allIPsInRange) {
-				System.out.println(ip.getHostAddress());
-			}
+//			for (InetAddress ip : allIPsInRange) {
+//				System.out.println(ip.getHostAddress());
+//			}
 
 			Assertions.assertEquals(31699, allIPsInRange.size());
 		} catch (UnknownHostException e) {
@@ -112,9 +112,9 @@ class IPRangeCalculatorUtilTest {
 		try {
 			List<InetAddress> allIPsInRange = IPRangeCalculatorUtil.calculateAllIPsInRange(new IpRange(startIP, endIP), subnetMask);
 			System.out.println("All IPs within the range:");
-			for (InetAddress ip : allIPsInRange) {
-				System.out.println(ip.getHostAddress());
-			}
+//			for (InetAddress ip : allIPsInRange) {
+//				System.out.println(ip.getHostAddress());
+//			}
 
 			Assertions.assertEquals(32766, allIPsInRange.size());
 		} catch (UnknownHostException e) {
