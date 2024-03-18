@@ -10,6 +10,7 @@ import org.dhcp4java.HardwareAddress;
 
 import com.google.common.collect.Sets;
 
+import ch.bemar.dhcp.config.DhcpHostConfig;
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
 import ch.bemar.dhcp.exception.NoAddressFoundException;
 import ch.bemar.dhcp.util.IPRangeCalculatorUtil;
@@ -47,6 +48,14 @@ public class AddressManagement {
 			Address a = new Address(ip, subnet.getSubnetAddress(), subnet.getDefaultLeaseTime(),
 					subnet.getMaxLeaseTime());
 
+			for (DhcpHostConfig host : subnet.getHosts()) {
+
+				if (host.getFixedIpAddress().getValue().equals(ip)) {
+					a.setReservedFor(host.getHardwareAddress());
+				}
+
+			}
+
 			addresses.add(a);
 			log.trace("adding ip {} to db", a);
 		}
@@ -71,8 +80,9 @@ public class AddressManagement {
 
 		for (Address address : addresses) {
 
-			if (address.getReservedFor() != null
-					&& (address.getReservedFor().equals(mac) || address.getLeasedTo().equals(mac))) {
+			if ((address.getReservedFor() != null && address.getReservedFor().equals(mac))
+					|| (mac.equals(address.getLeasedTo()))) {
+
 				log.info("Found reservation or leasing for {}", mac);
 
 				IAddress addr = leaseManager.handleReservedLeasing(address, mac);
@@ -85,7 +95,7 @@ public class AddressManagement {
 
 		}
 
-		log.error("No address was found for mac: {}", mac);
+		log.error("No reservation was found for mac: {}", mac);
 
 		return null;
 
@@ -103,7 +113,7 @@ public class AddressManagement {
 
 		}
 
-		log.error("No address was found for mac: {}", mac);
+		log.error("No free address was found for mac: {}", mac);
 
 		return null;
 	}

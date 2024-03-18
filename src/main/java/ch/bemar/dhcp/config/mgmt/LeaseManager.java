@@ -21,7 +21,7 @@ public class LeaseManager {
 	public IAddress handleReservedLeasing(Address address, HardwareAddress mac) {
 
 		log.debug("address in conflict: {}", address.isConflict());
-		if (!address.isConflict()) {
+		if (address.isConflict()) {
 			return null;
 		}
 
@@ -123,7 +123,6 @@ public class LeaseManager {
 	}
 
 	private IAddress setMacAndGetIp(Address address, HardwareAddress mac) {
-
 		address.setLeasedTo(mac);
 		return address;
 	}

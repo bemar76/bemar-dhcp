@@ -2,6 +2,8 @@ package ch.bemar.dhcp.config.mgmt;
 
 import java.net.InetAddress;
 
+import org.dhcp4java.HardwareAddress;
+
 public interface IAddress {
 
 	public InetAddress getAddress();
@@ -11,4 +13,10 @@ public interface IAddress {
 	public int getLeaseTime();
 
 	public long getLeasedUntil();
+
+	public long getLastContact();
+
+	public HardwareAddress getReservedFor();
+
+	public HardwareAddress getLeasedTo();
 }

@@ -1,5 +1,6 @@
 package ch.bemar.dhcp.config.element;
 
+import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import ch.bemar.dhcp.config.ConfigName;
@@ -11,6 +12,11 @@ public class Subnet extends ASingleInetAddress {
 
 	public Subnet(String configLine) throws UnknownHostException {
 		super(configLine);
+	}
+
+	public Subnet(InetAddress value) {
+		super(value);
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override

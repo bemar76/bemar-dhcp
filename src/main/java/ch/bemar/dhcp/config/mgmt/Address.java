@@ -40,6 +40,10 @@ public class Address implements IAddress {
 			this.maxLeaseTime = 604800 * 1000;
 
 	}
+	
+	void setReservedFor(HardwareAddress hw) {
+		this.reservedFor = hw;
+	}
 
 	public void setLeasedTo(HardwareAddress mac) {
 		this.leasedTo = mac;
@@ -75,5 +79,14 @@ public class Address implements IAddress {
 		return lastContact + getLeaseTime();
 	}
 
+	@Override
+	public String toString() {
+		return "Address [ip=" + ip + ", subnet=" + subnet + ", defaultLeaseTime=" + defaultLeaseTime + ", maxLeaseTime="
+				+ maxLeaseTime + ", reservedFor=" + reservedFor + ", leasedTo=" + leasedTo + ", lastContact="
+				+ lastContact + ", conflict=" + conflict + ", arp=" + arp + ", leasedUntil()=" + getLeasedUntil()
+				+ "]";
+	}
+
 	
+
 }

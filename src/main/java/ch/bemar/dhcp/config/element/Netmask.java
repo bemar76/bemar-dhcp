@@ -1,5 +1,6 @@
 package ch.bemar.dhcp.config.element;
 
+import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import ch.bemar.dhcp.config.ConfigName;
@@ -11,6 +12,10 @@ public class Netmask extends ASingleInetAddress {
 
 	public Netmask(String configLine) throws UnknownHostException {
 		super(configLine);
+	}
+
+	public Netmask(InetAddress address) {
+		super(address);
 	}
 
 	@Override

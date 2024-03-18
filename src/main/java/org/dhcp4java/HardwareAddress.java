@@ -88,6 +88,29 @@ public class HardwareAddress implements Serializable, IConfigElement<byte[]> {
 		return hardwareType;
 	}
 
+	public String getAsMac() {
+
+		if (hardwareAddress == null || hardwareAddress.length != 6) {
+			throw new IllegalArgumentException("Ein gültiges MAC-Byte-Array muss genau 6 Bytes lang sein.");
+		}
+
+		// StringBuilder für effiziente String-Konstruktion
+		StringBuilder macStrBuilder = new StringBuilder(18); // 17 Zeichen für die MAC-Adresse + 1 für zusätzliche
+																// Sicherheit
+		for (int i = 0; i < hardwareAddress.length; i++) {
+			// Konvertiert jedes Byte in einen Hexadezimal-String und fügt es dem
+			// StringBuilder hinzu
+			macStrBuilder.append(String.format("%02x", hardwareAddress[i] & 0xff));
+
+			// Fügt nach jedem Byte außer dem letzten einen Doppelpunkt hinzu
+			if (i < hardwareAddress.length - 1) {
+				macStrBuilder.append(":");
+			}
+		}
+
+		return macStrBuilder.toString();
+	}
+
 	/**
 	 * 
 	 * <p>

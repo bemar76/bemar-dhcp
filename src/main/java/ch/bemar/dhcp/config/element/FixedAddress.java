@@ -1,5 +1,6 @@
 package ch.bemar.dhcp.config.element;
 
+import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import ch.bemar.dhcp.config.ConfigName;
@@ -11,6 +12,10 @@ public class FixedAddress extends ASingleInetAddress {
 
 	public FixedAddress(String configLine) throws UnknownHostException {
 		super(configLine);
+	}
+
+	public FixedAddress(InetAddress value) {
+		super(value);
 	}
 
 	@Override
