@@ -7,8 +7,6 @@ import org.apache.commons.lang3.ThreadUtils;
 
 import ch.bemar.dhcp.config.DhcpServerConfiguration;
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
-import ch.bemar.dhcp.constants.DhcpConstants;
-import ch.bemar.dhcp.util.PropertiesLoader;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -27,7 +25,7 @@ public class DHCPServer implements Runnable {
 
 		log.info("Starting bemar-DHCP");
 
-		socketManager = new SocketManager(PropertiesLoader.loadProperties(DhcpConstants.DEFAULT_PROPERTIES_FILE));
+		socketManager = new SocketManager();
 
 		for (DhcpSubnetConfig subnetConfig : serverConfig.getSubnets()) {
 

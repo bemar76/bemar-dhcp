@@ -7,14 +7,13 @@ import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
 import java.net.SocketAddress;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
-
-import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import ch.bemar.dhcp.env.EnvConstants;
+import ch.bemar.dhcp.env.EnvironmentManager;
 import ch.bemar.dhcp.exception.DHCPServerInitException;
 import ch.bemar.dhcp.exception.InterfaceException;
 import lombok.RequiredArgsConstructor;
@@ -30,12 +29,11 @@ public class SocketManager {
 
 	private final List<ListenerConfig> listenerConfigs;
 
-	public SocketManager(Properties props) throws IOException, DHCPServerInitException {
+	public SocketManager() throws IOException, DHCPServerInitException {
 		socketHandlerAssignments = Sets.newConcurrentHashSet();
 		this.listenerConfigs = Lists.newArrayList();
 
-		String[] tokens = StringUtils.split(props.getProperty(LISTENERS), ",");
-		for (String listenerCfg : tokens) {
+		for (String listenerCfg : EnvironmentManager.getInstance().getEnvAsStringList(EnvConstants.LISTENERS, ",")) {
 
 			listenerConfigs.add(new ListenerConfig(listenerCfg.trim()));
 

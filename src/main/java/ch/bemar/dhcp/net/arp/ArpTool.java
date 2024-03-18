@@ -1,7 +1,6 @@
 package ch.bemar.dhcp.net.arp;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.InetAddress;
@@ -11,19 +10,16 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.dhcp4java.HardwareAddress;
 
+import ch.bemar.dhcp.env.EnvironmentManager;
+
 public class ArpTool {
-
-	private ArpProperties props;
-
-	public ArpTool() throws IOException {
-		props = new ArpProperties();
-	}
 
 	ArpTable getTable() throws Exception {
 
 		try {
 
-			Process process = Runtime.getRuntime().exec(props.getCmd());
+			Process process = Runtime.getRuntime()
+					.exec(EnvironmentManager.getInstance().getEnvAsString(ArpPropertiesConstants.CMD));
 			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
 			String content = IOUtils.toString(reader);
@@ -52,11 +48,13 @@ public class ArpTool {
 
 			while ((line = reader.readLine()) != null) {
 
-				if (line.trim().startsWith(props.getIfaceLineStart())) {
+				if (line.trim().startsWith(
+						EnvironmentManager.getInstance().getEnvAsString(ArpPropertiesConstants.LINE_IFACE_START))) {
 
 					iface = getInterface(line);
 
-				} else if (!line.trim().isEmpty() && !line.trim().startsWith(props.getArpHeaderStartWith())) {
+				} else if (!line.trim().isEmpty() && !line.trim().startsWith(EnvironmentManager.getInstance()
+						.getEnvAsString(ArpPropertiesConstants.COL_LINE_ARP_HEADER_START))) {
 
 					table.addEntry(iface, getArpEntry(line));
 
@@ -77,15 +75,21 @@ public class ArpTool {
 
 		String[] tokens = StringUtils.split(line.trim());
 
-		return new Interface(InetAddress.getByName(tokens[props.getIfaceIpColIndex()]),
-				tokens[props.getIfaceNameColIndex()]);
+		return new Interface(
+				InetAddress.getByName(
+						tokens[EnvironmentManager.getInstance().getEnvAsInteger(ArpPropertiesConstants.COL_IFACE_IP)]),
+				tokens[EnvironmentManager.getInstance().getEnvAsInteger(ArpPropertiesConstants.COL_IFACE_NAME)]);
 
 	}
 
 	private Arp getArpEntry(String line) throws UnknownHostException {
 		String[] tokens = StringUtils.split(line.trim());
 
-		return new Arp(InetAddress.getByName(tokens[props.getArpIpColIndex()]),
-				new HardwareAddress(tokens[props.getArpIpMacIndex()]), props.getTypeDynamic().equals(tokens[2]));
+		return new Arp(
+				InetAddress.getByName(
+						tokens[EnvironmentManager.getInstance().getEnvAsInteger(ArpPropertiesConstants.COL_IP)]),
+				new HardwareAddress(
+						tokens[EnvironmentManager.getInstance().getEnvAsInteger(ArpPropertiesConstants.COL_MAC)]),
+				EnvironmentManager.getInstance().getEnvAsString(ArpPropertiesConstants.TYPE_DYNAMIC).equals(tokens[2]));
 	}
 }

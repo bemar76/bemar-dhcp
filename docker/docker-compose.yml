@@ -11,7 +11,8 @@ services:
       - "bemarDhcpVol:/app/log"
     environment:
       - TZ=Europe/Berlin
+      - listeners=eth0:67:bemar.local
+      - arp.arp_active=false
       
-
 volumes:
   bemarDhcpVol:

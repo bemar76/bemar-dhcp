@@ -18,6 +18,8 @@ import ch.bemar.dhcp.config.DhcpServerConfiguration;
 import ch.bemar.dhcp.config.reader.ServerConfigReader;
 import ch.bemar.dhcp.constants.DhcpConstants;
 import ch.bemar.dhcp.core.DHCPServer;
+import ch.bemar.dhcp.env.EnvConstants;
+import ch.bemar.dhcp.env.EnvironmentManager;
 import ch.bemar.dhcp.exception.OptionNotFoundException;
 import ch.bemar.dhcp.util.NetworkInterfaceInfo;
 import ch.bemar.dhcp.util.PropertiesLoader;
@@ -38,6 +40,8 @@ public class BemarDhcpServer {
 	 */
 	public static void main(String[] args) throws Exception {
 
+		EnvironmentManager.getInstance();
+
 		Options options = buildOptions();
 
 		CommandLineParser parser = new DefaultParser();
@@ -53,9 +57,6 @@ public class BemarDhcpServer {
 			System.exit(1);
 			return;
 		}
-
-		Properties properties = PropertiesLoader.loadProperties(DhcpConstants.DEFAULT_PROPERTIES_FILE);
-		log.info("got application properties: {}", properties);
 
 		ServerConfigReader scr = new ServerConfigReader();
 		DhcpServerConfiguration config = null;
@@ -74,10 +75,10 @@ public class BemarDhcpServer {
 
 		} else {
 
-			InputStream is = BemarDhcpServer.class.getResourceAsStream("/" + DhcpConstants.DEFAULT_CONFIG_FILE);
+			InputStream is = BemarDhcpServer.class.getResourceAsStream("/" + EnvConstants.DEFAULT_CONFIG_FILE);
 
 			if (is == null) {
-				log.error("Could not find {} in classpath", DhcpConstants.DEFAULT_CONFIG_FILE);
+				log.error("Could not find {} in classpath", EnvConstants.DEFAULT_CONFIG_FILE);
 				System.exit(2);
 			}
 

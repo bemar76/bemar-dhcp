@@ -7,9 +7,6 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import ch.bemar.dhcp.net.arp.ArpTable;
-import ch.bemar.dhcp.net.arp.ArpTool;
-
 public class ArpTableTest {
 
 	@Test
