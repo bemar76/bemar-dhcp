@@ -8,6 +8,8 @@ import org.dhcp4java.HardwareAddress;
 import ch.bemar.dhcp.config.mgmt.IAddress;
 
 public class AddressService implements IService{
+	
+	private AddressDao dao;
 
 	@Override
 	public void update(IAddress address) {
@@ -41,6 +43,12 @@ public class AddressService implements IService{
 
 	@Override
 	public Collection<IAddress> findAllWithValidLease() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection<IAddress> findAllWithInvalidLease() {
 		// TODO Auto-generated method stub
 		return null;
 	}

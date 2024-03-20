@@ -41,26 +41,54 @@ public class AddressDao implements IDao<DbAddress, String, String> {
 
 	@Override
 	public DbAddress findByAddress(String address) {
-		// TODO Auto-generated method stub
-		return null;
+
+		return getSession().find(DbAddress.class, address);
 	}
 
 	@Override
 	public Collection<DbAddress> findByReservedMac(String hw) {
-		// TODO Auto-generated method stub
-		return null;
+
+		String sql = "Select * from DbAddress where reservedFor = :reservedFor";
+
+		NativeQuery<DbAddress> query = getSession().createNativeQuery(sql, DbAddress.class);
+
+		query.setParameter("reservedFor", hw);
+
+		return query.list();
 	}
 
 	@Override
 	public Collection<DbAddress> findByLeasedMac(String hw) {
-		// TODO Auto-generated method stub
-		return null;
+
+		String sql = "Select * from DbAddress where leasedTo = :leasedTo";
+
+		NativeQuery<DbAddress> query = getSession().createNativeQuery(sql, DbAddress.class);
+
+		query.setParameter("leasedTo", hw);
+
+		return query.list();
 	}
 
 	@Override
 	public Collection<DbAddress> findAllWithValidLease() {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "Select * from DbAddress where leasedUntil > :now";
+
+		NativeQuery<DbAddress> query = getSession().createNativeQuery(sql, DbAddress.class);
+
+		query.setParameter("now", System.currentTimeMillis());
+
+		return query.list();
+	}
+	
+	@Override
+	public Collection<DbAddress> findAllWithInvalidLease() {
+		String sql = "Select * from DbAddress where leasedUntil <= :now";
+
+		NativeQuery<DbAddress> query = getSession().createNativeQuery(sql, DbAddress.class);
+
+		query.setParameter("now", System.currentTimeMillis());
+
+		return query.list();
 	}
 
 }

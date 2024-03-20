@@ -15,5 +15,7 @@ public interface IDao<T, M, A> {
 	public Collection<T> findByLeasedMac(M hw);
 
 	public Collection<T> findAllWithValidLease();
+	
+	public Collection<T> findAllWithInvalidLease();
 
 }

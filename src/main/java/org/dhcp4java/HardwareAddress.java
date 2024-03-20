@@ -170,7 +170,7 @@ public class HardwareAddress implements Serializable, IConfigElement<byte[]> {
 	 * @param macStr
 	 * @return the newly created HardwareAddress object
 	 */
-	public byte[] getHardwareAddressByString(String macStr) {
+	public static byte[] getHardwareAddressByString(String macStr) {
 		if (macStr == null) {
 			throw new NullPointerException("macStr is null");
 		}

@@ -17,12 +17,12 @@ public class DbAddress {
 	private String subnet;
 	private int defaultLeaseTime;
 	private int maxLeaseTime;
-	private int leasedUntil;
+	private long leasedUntil;
 	private String hostname;
 	private String reservedFor;
 	private String leasedTo;
-	long lastContact;
-	boolean conflict;
-	boolean arp;
+	private long lastContact;
+	private boolean conflict;
+	private boolean arp;
 
 }

@@ -19,9 +19,9 @@ import lombok.Data;
 public class Address implements IAddress {
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-	
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
 	private InetAddress ip;
 	private Subnet subnet;
 	private int defaultLeaseTime;
@@ -32,6 +32,10 @@ public class Address implements IAddress {
 	long lastContact;
 	boolean conflict;
 	boolean arp;
+
+	public Address() {
+
+	}
 
 	public Address(InetAddress ip, Subnet subnet, DefaultLeaseTime defaultLeaseTime, MaxLeaseTime maxLeaseTime) {
 		super();
@@ -50,7 +54,7 @@ public class Address implements IAddress {
 
 	}
 
-	void setReservedFor(HardwareAddress hw) {
+	public void setReservedFor(HardwareAddress hw) {
 		this.reservedFor = hw;
 	}
 
