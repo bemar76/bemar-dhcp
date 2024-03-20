@@ -40,7 +40,7 @@ public class Address implements IAddress {
 			this.maxLeaseTime = 604800 * 1000;
 
 	}
-	
+
 	void setReservedFor(HardwareAddress hw) {
 		this.reservedFor = hw;
 	}
@@ -83,10 +83,37 @@ public class Address implements IAddress {
 	public String toString() {
 		return "Address [ip=" + ip + ", subnet=" + subnet + ", defaultLeaseTime=" + defaultLeaseTime + ", maxLeaseTime="
 				+ maxLeaseTime + ", reservedFor=" + reservedFor + ", leasedTo=" + leasedTo + ", lastContact="
-				+ lastContact + ", conflict=" + conflict + ", arp=" + arp + ", leasedUntil()=" + getLeasedUntil()
-				+ "]";
+				+ lastContact + ", conflict=" + conflict + ", arp=" + arp + ", leasedUntil()=" + getLeasedUntil() + "]";
 	}
 
-	
+	@Override
+	public int compareTo(IAddress o) {
+
+		if (this.getAddress().equals(o.getAddress())) {
+			return 0;
+		}
+
+		boolean isIPv4First = getAddress().getAddress().length == 4;
+		boolean isIPv4Second = o.getAddress().getAddress().length == 4;
+
+		if (isIPv4First && !isIPv4Second) {
+			return -1;
+		} else if (!isIPv4First && isIPv4Second) {
+			return 1;
+		}
+
+		byte[] bytes1 = getAddress().getAddress();
+		byte[] bytes2 = o.getAddress().getAddress();
+
+		for (int i = 0; i < bytes1.length; i++) {
+			int b1 = bytes1[i] & 0xFF;
+			int b2 = bytes2[i] & 0xFF;
+			if (b1 != b2) {
+				return b1 - b2;
+			}
+		}
+
+		return 0;
+	}
 
 }

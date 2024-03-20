@@ -4,7 +4,7 @@ import java.net.InetAddress;
 
 import org.dhcp4java.HardwareAddress;
 
-public interface IAddress {
+public interface IAddress extends Comparable<IAddress>{
 
 	public InetAddress getAddress();
 

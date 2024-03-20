@@ -2,13 +2,12 @@ package ch.bemar.dhcp.config.mgmt;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import org.dhcp4java.HardwareAddress;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.Lists;
 
 import ch.bemar.dhcp.config.DhcpHostConfig;
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
@@ -23,12 +22,12 @@ public class AddressManagement {
 
 	private DhcpSubnetConfig subnetConfig;
 
-	private Set<Address> addresses;
+	private List<Address> addresses;
 
 	public AddressManagement(DhcpSubnetConfig subnet) throws IOException, NoAddressFoundException {
 
 		this.subnetConfig = subnet;
-		this.addresses = Sets.newHashSet();
+		this.addresses = Lists.newArrayList();
 
 		this.leaseManager = new LeaseManager();
 
@@ -60,13 +59,23 @@ public class AddressManagement {
 			log.trace("adding ip {} to db", a);
 		}
 
+		Collections.sort(addresses);
+
 		log.info("{} addresses calculated for range {}", addresses.size(), subnetConfig.getRange());
 
 	}
 
 	public synchronized IAddress getAddress(HardwareAddress mac) throws Exception {
+		return getAddress(mac, null);
+	}
+
+	public synchronized IAddress getAddress(HardwareAddress mac, InetAddress requestAddress) throws Exception {
 
 		IAddress address = checkReservationsOrLeasesForMac(mac);
+
+		if (address == null) {
+			address = getNextAddress(mac, requestAddress);
+		}
 
 		if (address == null) {
 			address = getNextAddress(mac);
@@ -103,17 +112,29 @@ public class AddressManagement {
 
 	synchronized IAddress getNextAddress(HardwareAddress mac) throws Exception {
 
+		return getNextAddress(mac, null);
+	}
+
+	synchronized IAddress getNextAddress(HardwareAddress mac, InetAddress requestAddress) throws Exception {
+
 		for (Address address : addresses) {
 
-			IAddress addr = leaseManager.handleNextFreeLeasing(address, mac);
+			if (requestAddress == null || address.getAddress().equals(requestAddress)) {
 
-			if (addr != null) {
-				return addr;
+				IAddress addr = leaseManager.handleNextFreeLeasing(address, mac);
+
+				if (addr != null) {
+					return addr;
+				}
+
 			}
 
 		}
 
-		log.error("No free address was found for mac: {}", mac);
+		if (requestAddress != null)
+			log.warn("Requested address {} for mac {} is not free", requestAddress, mac);
+		else
+			log.warn("No free address found for mac {}", mac);
 
 		return null;
 	}
