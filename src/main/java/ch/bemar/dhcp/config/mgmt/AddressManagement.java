@@ -65,27 +65,28 @@ public class AddressManagement {
 
 	}
 
-	public synchronized IAddress getAddress(HardwareAddress mac) throws Exception {
-		return getAddress(mac, null);
+	public synchronized IAddress getAddress(HardwareAddress mac, String hostname) throws Exception {
+		return getAddress(mac, hostname, null);
 	}
 
-	public synchronized IAddress getAddress(HardwareAddress mac, InetAddress requestAddress) throws Exception {
+	public synchronized IAddress getAddress(HardwareAddress mac, String hostname, InetAddress requestAddress)
+			throws Exception {
 
-		IAddress address = checkReservationsOrLeasesForMac(mac);
+		IAddress address = checkReservationsOrLeasesForMac(mac, hostname);
 
 		if (address == null) {
-			address = getNextAddress(mac, requestAddress);
+			address = getNextAddress(mac, hostname, requestAddress);
 		}
 
 		if (address == null) {
-			address = getNextAddress(mac);
+			address = getNextAddress(mac, hostname);
 		}
 
 		return address;
 
 	}
 
-	synchronized IAddress checkReservationsOrLeasesForMac(HardwareAddress mac) throws Exception {
+	synchronized IAddress checkReservationsOrLeasesForMac(HardwareAddress mac, String hostname) throws Exception {
 
 		for (Address address : addresses) {
 
@@ -94,7 +95,7 @@ public class AddressManagement {
 
 				log.info("Found reservation or leasing for {}", mac);
 
-				IAddress addr = leaseManager.handleReservedLeasing(address, mac);
+				IAddress addr = leaseManager.handleReservedLeasing(address, hostname, mac);
 
 				if (addr != null) {
 					return addr;
@@ -110,18 +111,19 @@ public class AddressManagement {
 
 	}
 
-	synchronized IAddress getNextAddress(HardwareAddress mac) throws Exception {
+	synchronized IAddress getNextAddress(HardwareAddress mac, String hostname) throws Exception {
 
-		return getNextAddress(mac, null);
+		return getNextAddress(mac, hostname, null);
 	}
 
-	synchronized IAddress getNextAddress(HardwareAddress mac, InetAddress requestAddress) throws Exception {
+	synchronized IAddress getNextAddress(HardwareAddress mac, String hostname, InetAddress requestAddress)
+			throws Exception {
 
 		for (Address address : addresses) {
 
 			if (requestAddress == null || address.getAddress().equals(requestAddress)) {
 
-				IAddress addr = leaseManager.handleNextFreeLeasing(address, mac);
+				IAddress addr = leaseManager.handleNextFreeLeasing(address, hostname, mac);
 
 				if (addr != null) {
 					return addr;

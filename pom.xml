@@ -31,6 +31,8 @@
 
 		<junit-jupiter.version>5.10.2</junit-jupiter.version>
 
+		<h2.version>2.2.224</h2.version>
+
 		<auto-service.version>1.1.1</auto-service.version>
 
 		<reflections.version>0.10.2</reflections.version>
@@ -41,26 +43,44 @@
 		<maven-shade-plugin.version>3.5.2</maven-shade-plugin.version>
 		<versions-maven-plugin.version>2.16.2</versions-maven-plugin.version>
 
+		<hibernate-core.version>5.6.15.Final</hibernate-core.version>
+		<hibernate-entitymanager.version>5.6.15.Final</hibernate-entitymanager.version>
 	</properties>
 
 	<dependencies>
+
+		<!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core -->
+
+		
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate-entitymanager.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>${logback-classic.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-cli</groupId>
 			<artifactId>commons-cli</artifactId>
 			<version>${commons-cli.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>${h2.version}</version>
 		</dependency>
 
 		<dependency>

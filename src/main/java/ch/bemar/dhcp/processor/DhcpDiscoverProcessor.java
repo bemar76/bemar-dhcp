@@ -6,6 +6,7 @@ import static org.dhcp4java.DHCPConstants.DHCPOFFER;
 
 import java.io.IOException;
 import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import org.dhcp4java.DHCPConstants;
@@ -37,7 +38,12 @@ public class DhcpDiscoverProcessor extends AProcessor {
 
 		try {
 
-			IAddress offered = addressManagement.getAddress(request.getHardwareAddress());
+			InetAddress requestedAddress = getRequestedAddress(request);
+			String hostname = getClientHostname(request);
+
+			IAddress offered = addressManagement.getAddress(request.getHardwareAddress(), hostname,
+					(requestedAddress != null ? requestedAddress : null));
+
 			if (offered == null) {
 				throw new NoAddressFoundException("There was no free ip address found to offer");
 			}

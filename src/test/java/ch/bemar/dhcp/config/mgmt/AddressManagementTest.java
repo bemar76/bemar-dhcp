@@ -28,7 +28,7 @@ public class AddressManagementTest {
 	private static InetAddress address;
 
 	private static String mac = "00:20:9A:1B:AE:C8";
-	
+
 	private static String requestMac = "01:21:9A:1B:AE:C8";
 
 	private static String reservedMac = "04:20:9E:1A:AE:C9";
@@ -58,7 +58,7 @@ public class AddressManagementTest {
 
 		HardwareAddress hwAdress = new HardwareAddress("hardware ethernet " + mac);
 
-		IAddress addr = addressMgmt.getAddress(hwAdress);
+		IAddress addr = addressMgmt.getAddress(hwAdress, "dummy");
 
 		System.out.println(addr);
 
@@ -79,7 +79,7 @@ public class AddressManagementTest {
 
 		HardwareAddress hwAdress = new HardwareAddress("hardware ethernet " + mac);
 
-		IAddress addr = addressMgmt.getAddress(hwAdress);
+		IAddress addr = addressMgmt.getAddress(hwAdress, "dummy");
 
 		System.out.println(addr);
 
@@ -98,7 +98,7 @@ public class AddressManagementTest {
 
 		HardwareAddress hwAdress = new HardwareAddress("hardware ethernet " + reservedMac);
 
-		IAddress addr = addressMgmt.getAddress(hwAdress);
+		IAddress addr = addressMgmt.getAddress(hwAdress, "dummy2");
 
 		System.out.println(addr);
 
@@ -110,16 +110,16 @@ public class AddressManagementTest {
 		Assertions.assertEquals(InetAddress.getByName(reservedIp), addr.getAddress());
 
 	}
-	
+
 	@Test
 	@Order(4)
 	void testAddressRequestSpecificWithReservation() throws Exception {
 
 		HardwareAddress hwAdress = new HardwareAddress("hardware ethernet " + reservedMac);
-		
+
 		InetAddress requestedAddress = InetAddress.getByName("172.16.8.12");
 
-		IAddress addr = addressMgmt.getAddress(hwAdress, requestedAddress);
+		IAddress addr = addressMgmt.getAddress(hwAdress, "dummy2", requestedAddress);
 
 		System.out.println(addr);
 
@@ -127,21 +127,20 @@ public class AddressManagementTest {
 
 		System.out.println("Last contact: " + new Date(addr.getLastContact()));
 
-		Assertions.assertEquals(reservedMac, addr.getLeasedTo().getAsMac().toUpperCase()); 
+		Assertions.assertEquals(reservedMac, addr.getLeasedTo().getAsMac().toUpperCase());
 		Assertions.assertEquals(InetAddress.getByName(reservedIp), addr.getAddress()); // reservation tops request
 
-
 	}
-	
+
 	@Test
 	@Order(5)
 	void testAddressRequestSpecific() throws Exception {
 
 		HardwareAddress hwAdress = new HardwareAddress("hardware ethernet " + requestMac);
-		
+
 		InetAddress requestedAddress = InetAddress.getByName("172.16.8.12");
 
-		IAddress addr = addressMgmt.getAddress(hwAdress, requestedAddress);
+		IAddress addr = addressMgmt.getAddress(hwAdress, "dummy3", requestedAddress);
 
 		System.out.println(addr);
 

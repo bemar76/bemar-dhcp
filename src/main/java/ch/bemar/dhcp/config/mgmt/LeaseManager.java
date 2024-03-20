@@ -18,7 +18,7 @@ public class LeaseManager {
 		this.arpTableProvider = new ArpTableProvider();
 	}
 
-	public IAddress handleReservedLeasing(Address address, HardwareAddress mac) {
+	public IAddress handleReservedLeasing(Address address, String hostname, HardwareAddress mac) {
 
 		log.debug("address in conflict: {}", address.isConflict());
 		if (address.isConflict()) {
@@ -32,7 +32,7 @@ public class LeaseManager {
 
 			if (getOkFromArp(address, mac)) { // arp table check was OK
 
-				return setMacAndGetIp(address, mac);
+				return setMacAndGetIp(address, hostname, mac);
 
 			}
 
@@ -42,7 +42,7 @@ public class LeaseManager {
 
 				if (getOkFromArp(address, mac)) { // arp table check was OK
 
-					return setMacAndGetIp(address, mac);
+					return setMacAndGetIp(address, hostname, mac);
 
 				}
 
@@ -60,7 +60,7 @@ public class LeaseManager {
 
 	}
 
-	public IAddress handleNextFreeLeasing(Address address, HardwareAddress mac) {
+	public IAddress handleNextFreeLeasing(Address address, String hostname, HardwareAddress mac) {
 
 		if (address.isConflict()
 				|| (address.getReservedFor() != null && address.getLeasedUntil() > System.currentTimeMillis())) {
@@ -77,7 +77,7 @@ public class LeaseManager {
 
 			if (getOkFromArp(address, mac)) { // arp table check was OK
 
-				return setMacAndGetIp(address, mac);
+				return setMacAndGetIp(address, hostname, mac);
 
 			}
 
@@ -122,8 +122,9 @@ public class LeaseManager {
 
 	}
 
-	private IAddress setMacAndGetIp(Address address, HardwareAddress mac) {
+	private IAddress setMacAndGetIp(Address address, String hostname, HardwareAddress mac) {
 		address.setLeasedTo(mac);
+		address.setHostname(hostname);
 		return address;
 	}
 

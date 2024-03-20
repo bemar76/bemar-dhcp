@@ -2,25 +2,34 @@ package ch.bemar.dhcp.config.mgmt;
 
 import java.net.InetAddress;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 import org.dhcp4java.HardwareAddress;
 
 import ch.bemar.dhcp.config.element.DefaultLeaseTime;
 import ch.bemar.dhcp.config.element.MaxLeaseTime;
 import ch.bemar.dhcp.config.element.Subnet;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
+@Data
+@Entity
 public class Address implements IAddress {
 
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+	
 	private InetAddress ip;
 	private Subnet subnet;
 	private int defaultLeaseTime;
 	private int maxLeaseTime;
+	private String hostname;
 	private HardwareAddress reservedFor;
 	private HardwareAddress leasedTo;
 	long lastContact;
-	@Setter
 	boolean conflict;
 	boolean arp;
 
@@ -83,7 +92,8 @@ public class Address implements IAddress {
 	public String toString() {
 		return "Address [ip=" + ip + ", subnet=" + subnet + ", defaultLeaseTime=" + defaultLeaseTime + ", maxLeaseTime="
 				+ maxLeaseTime + ", reservedFor=" + reservedFor + ", leasedTo=" + leasedTo + ", lastContact="
-				+ lastContact + ", conflict=" + conflict + ", arp=" + arp + ", leasedUntil()=" + getLeasedUntil() + "]";
+				+ lastContact + ", conflict=" + conflict + ", arp=" + arp + ", leasedUntil()=" + getLeasedUntil()
+				+ ", hostname=" + hostname + "]";
 	}
 
 	@Override

@@ -1,9 +1,11 @@
 package ch.bemar.dhcp.processor;
 
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 
 import org.dhcp4java.DHCPConstants;
+import org.dhcp4java.DHCPOption;
 import org.dhcp4java.DHCPPacket;
 
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
@@ -56,4 +58,26 @@ public abstract class AProcessor implements IProcessor {
 		response.setAddrPort(new InetSocketAddress(getSubnetConfig().getBroadcastAddress().getHostAddress(), 68));
 	}
 
+	protected InetAddress getRequestedAddress(DHCPPacket request) {
+
+		DHCPOption requestedAddress = DhcpOptionUtils.findOption(request.getOptionsCollection(),
+				DHCPConstants.DHO_DHCP_REQUESTED_ADDRESS);
+
+		if (requestedAddress != null)
+			requestedAddress.getValueAsInetAddr();
+
+		return null;
+
+	}
+
+	protected String getClientHostname(DHCPPacket request) {
+
+		DHCPOption hostName = DhcpOptionUtils.findOption(request.getOptionsCollection(), DHCPConstants.DHO_HOST_NAME);
+
+		if (hostName != null)
+			return hostName.getValueAsString();
+
+		return null;
+
+	}
 }

@@ -11,11 +11,11 @@ import static org.dhcp4java.DHCPConstants.DHO_DHCP_SERVER_IDENTIFIER;
 
 import java.io.IOException;
 import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 
 import org.dhcp4java.DHCPConstants;
-import org.dhcp4java.DHCPOption;
 import org.dhcp4java.DHCPPacket;
 
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
@@ -44,10 +44,11 @@ public class DhcpRequestProcessor extends AProcessor {
 
 		try {
 
-			DHCPOption requestedAddress = request.getOption(DHCPConstants.DHO_DHCP_REQUESTED_ADDRESS);
+			InetAddress requestedAddress = getRequestedAddress(request);
+			String hostname = getClientHostname(request);
 
-			IAddress offered = addressManagement.getAddress(request.getHardwareAddress(),
-					(requestedAddress != null ? requestedAddress.getValueAsInetAddr() : null));
+			IAddress offered = addressManagement.getAddress(request.getHardwareAddress(), hostname,
+					(requestedAddress != null ? requestedAddress : null));
 
 			if (offered == null) {
 				throw new NoAddressFoundException("There was no free ip address found to offer");
