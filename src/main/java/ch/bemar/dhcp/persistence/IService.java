@@ -4,10 +4,8 @@ import java.net.InetAddress;
 
 import org.dhcp4java.HardwareAddress;
 
-import ch.bemar.dhcp.config.mgmt.IAddress;
+import ch.bemar.dhcp.config.mgmt.Address;
 
-public interface IService  extends IDao<IAddress, HardwareAddress, InetAddress>{
-
-	
+public interface IService extends IDao<Address, HardwareAddress, InetAddress> {
 
 }

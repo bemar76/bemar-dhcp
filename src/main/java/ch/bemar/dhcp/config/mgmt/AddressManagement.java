@@ -44,7 +44,7 @@ public class AddressManagement {
 
 		for (InetAddress ip : ips) {
 
-			Address a = new Address(ip, subnet.getSubnetAddress(), subnet.getDefaultLeaseTime(),
+			Address a = new Address(ip, subnet.getSubnetAddress(), (subnet.getDefaultLeaseTime() * 1000),
 					subnet.getMaxLeaseTime());
 
 			for (DhcpHostConfig host : subnet.getHosts()) {

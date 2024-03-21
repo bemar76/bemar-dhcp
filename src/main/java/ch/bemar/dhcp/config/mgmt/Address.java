@@ -15,12 +15,7 @@ import ch.bemar.dhcp.config.element.Subnet;
 import lombok.Data;
 
 @Data
-@Entity
 public class Address implements IAddress {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
 
 	private InetAddress ip;
 	private Subnet subnet;

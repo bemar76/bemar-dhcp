@@ -1,56 +1,77 @@
 package ch.bemar.dhcp.persistence;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Collection;
 
 import org.dhcp4java.HardwareAddress;
 
-import ch.bemar.dhcp.config.mgmt.IAddress;
+import ch.bemar.dhcp.config.mgmt.Address;
+import ch.bemar.dhcp.config.mgmt.EntityMapper;
 
-public class AddressService implements IService{
-	
+public class AddressService implements IService {
+
 	private AddressDao dao;
 
-	@Override
-	public void update(IAddress address) {
-		// TODO Auto-generated method stub
-		
+	public AddressService() {
+		this.dao = new AddressDao();
 	}
 
 	@Override
-	public Collection<IAddress> readAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public void update(Address address) {
+
+		DbAddress conv = EntityMapper.convert((Address) address);
+
+		DbAddress fromDb = dao.findByAddress(conv.getIp());
+
+		if (fromDb != null) {
+			fromDb.setArp(conv.isArp());
+			fromDb.setConflict(conv.isConflict());
+			fromDb.setDefaultLeaseTime(conv.getDefaultLeaseTime());
+			fromDb.setHostname(conv.getHostname());
+			fromDb.setLastContact(conv.getLastContact());
+			fromDb.setLeasedTo(conv.getLeasedTo());
+			fromDb.setLeasedUntil(conv.getLeasedUntil());
+			fromDb.setMaxLeaseTime(conv.getMaxLeaseTime());
+			fromDb.setReservedFor(conv.getReservedFor());
+			fromDb.setSubnet(conv.getSubnet());
+
+		} else {
+			fromDb = conv;
+		}
+
+		dao.update(fromDb);
+
 	}
 
 	@Override
-	public IAddress findByAddress(InetAddress address) {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<Address> readAll() throws UnknownHostException {
+		return EntityMapper.convert2Address(dao.readAll());
 	}
 
 	@Override
-	public Collection<IAddress> findByReservedMac(HardwareAddress hw) {
-		// TODO Auto-generated method stub
-		return null;
+	public Address findByAddress(InetAddress address) throws UnknownHostException {
+		return EntityMapper.convert(dao.findByAddress(address.getHostAddress()));
 	}
 
 	@Override
-	public Collection<IAddress> findByLeasedMac(HardwareAddress hw) {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<Address> findByReservedMac(HardwareAddress hw) throws UnknownHostException {
+		return EntityMapper.convert2Address(dao.findByReservedMac(hw.getAsMac()));
 	}
 
 	@Override
-	public Collection<IAddress> findAllWithValidLease() {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<Address> findByLeasedMac(HardwareAddress hw) throws UnknownHostException {
+		return EntityMapper.convert2Address(dao.findByLeasedMac(hw.getAsMac()));
 	}
 
 	@Override
-	public Collection<IAddress> findAllWithInvalidLease() {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<Address> findAllWithValidLease() throws UnknownHostException {
+		return EntityMapper.convert2Address(dao.findAllWithValidLease());
+	}
+
+	@Override
+	public Collection<Address> findAllWithInvalidLease() throws UnknownHostException {
+		return EntityMapper.convert2Address(dao.findAllWithInvalidLease());
 	}
 
 }
