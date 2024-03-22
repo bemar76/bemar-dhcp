@@ -19,18 +19,24 @@ public class EntityMapper {
 
 	public static DbAddress convert(Address address) {
 
-		DbAddress db = new DbAddress();
-		db.setArp(address.isArp());
-		db.setConflict(address.isConflict());
-		db.setDefaultLeaseTime(address.getDefaultLeaseTime());
-		db.setHostname(address.getHostname());
-		db.setIp(address.getIp().getHostAddress());
-		db.setLastContact(address.getLastContact());
-		db.setLeasedUntil(address.getLeasedUntil());
-		db.setMaxLeaseTime(address.getMaxLeaseTime());
-		db.setReservedFor(address.getReservedFor() != null ? address.getReservedFor().getAsMac() : null);
-		db.setSubnet(address.getSubnet() != null ? address.getSubnet().getHostAddress() : null);
+		DbAddress db = null;
 
+		if (address != null) {
+
+			db = new DbAddress();
+			db.setArp(address.isArp());
+			db.setConflict(address.isConflict());
+			db.setDefaultLeaseTime(address.getDefaultLeaseTime());
+			db.setHostname(address.getHostname());
+			db.setIp(address.getIp().getHostAddress());
+			db.setLastContact(address.getLastContact());
+			db.setLeasedUntil(address.getLeasedUntil());
+			db.setMaxLeaseTime(address.getMaxLeaseTime());
+			db.setReservedFor(address.getReservedFor() != null ? address.getReservedFor().getAsMac() : null);
+			db.setSubnet(address.getSubnet() != null ? address.getSubnet().getHostAddress() : null);
+
+		}
+		
 		return db;
 	}
 
@@ -49,25 +55,29 @@ public class EntityMapper {
 
 	public static Address convert(DbAddress dbAddress) throws UnknownHostException {
 
-		Address address = new Address();
-		address.setArp(dbAddress.isArp());
-		address.setConflict(dbAddress.isConflict());
-		address.setDefaultLeaseTime(dbAddress.getDefaultLeaseTime());
-		address.setHostname(dbAddress.getHostname());
-		address.setIp(InetAddress.getByName(dbAddress.getIp()));
-		address.setLastContact(dbAddress.getLastContact());
-		address.setMaxLeaseTime(dbAddress.getMaxLeaseTime());
+		Address address = null;
 
-		if (dbAddress.getReservedFor() != null)
-			address.setReservedFor(
-					new HardwareAddress(HardwareAddress.getHardwareAddressByString(dbAddress.getReservedFor())));
-		else
-			address.setReservedFor(null);
+		if (dbAddress != null) {
+			address = new Address();
+			address.setArp(dbAddress.isArp());
+			address.setConflict(dbAddress.isConflict());
+			address.setDefaultLeaseTime(dbAddress.getDefaultLeaseTime());
+			address.setHostname(dbAddress.getHostname());
+			address.setIp(InetAddress.getByName(dbAddress.getIp()));
+			address.setLastContact(dbAddress.getLastContact());
+			address.setMaxLeaseTime(dbAddress.getMaxLeaseTime());
 
-		if (dbAddress.getSubnet() != null)
-			address.setSubnet(new Subnet(InetAddress.getByName(dbAddress.getSubnet())));
-		else
-			address.setSubnet(null);
+			if (dbAddress.getReservedFor() != null)
+				address.setReservedFor(
+						new HardwareAddress(HardwareAddress.getHardwareAddressByString(dbAddress.getReservedFor())));
+			else
+				address.setReservedFor(null);
+
+			if (dbAddress.getSubnet() != null)
+				address.setSubnet(new Subnet(InetAddress.getByName(dbAddress.getSubnet())));
+			else
+				address.setSubnet(null);
+		}
 
 		return address;
 

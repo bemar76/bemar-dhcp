@@ -2,31 +2,26 @@ package ch.bemar.dhcp.persistence;
 
 import java.util.Collection;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.query.NativeQuery;
 
-public class AddressDao implements IDao<DbAddress, String, String> {
-
-	private static final SessionFactory sessionFactory;
-	private static Session session;
-
-	static {
-		sessionFactory = new Configuration().configure().buildSessionFactory();
-	}
-
-	public Session getSession() {
-		if (session == null || !session.isOpen()) {
-			session = sessionFactory.openSession();
-		}
-
-		return session;
-	}
+public class AddressDao extends ADoa {
 
 	@Override
 	public void update(DbAddress address) {
-		getSession().update(address);
+
+		if (findByAddress(address.getIp()) != null) {
+			updateInTransaction(address);
+		}
+
+	}
+
+	@Override
+	public void save(DbAddress address) {
+
+		if (findByAddress(address.getIp()) == null) {
+			saveInTransaction(address);
+		}
+
 	}
 
 	@Override
@@ -79,7 +74,7 @@ public class AddressDao implements IDao<DbAddress, String, String> {
 
 		return query.list();
 	}
-	
+
 	@Override
 	public Collection<DbAddress> findAllWithInvalidLease() {
 		String sql = "Select * from DbAddress where leasedUntil <= :now";
@@ -89,6 +84,11 @@ public class AddressDao implements IDao<DbAddress, String, String> {
 		query.setParameter("now", System.currentTimeMillis());
 
 		return query.list();
+	}
+
+	@Override
+	public void delete(DbAddress address) {
+		deleteInTransaction(address);		
 	}
 
 }

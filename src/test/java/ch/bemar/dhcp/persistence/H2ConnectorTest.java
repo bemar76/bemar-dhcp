@@ -2,7 +2,6 @@ package ch.bemar.dhcp.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.File;
 import java.util.List;
 
 import org.hibernate.Session;

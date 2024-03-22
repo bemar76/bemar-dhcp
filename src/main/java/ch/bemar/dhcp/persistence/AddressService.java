@@ -9,7 +9,7 @@ import org.dhcp4java.HardwareAddress;
 import ch.bemar.dhcp.config.mgmt.Address;
 import ch.bemar.dhcp.config.mgmt.EntityMapper;
 
-public class AddressService implements IService {
+public class AddressService implements IService<Address, HardwareAddress, InetAddress> {
 
 	private AddressDao dao;
 
@@ -18,7 +18,7 @@ public class AddressService implements IService {
 	}
 
 	@Override
-	public void update(Address address) {
+	public void saveOrUpdate(Address address) {
 
 		DbAddress conv = EntityMapper.convert((Address) address);
 
@@ -36,11 +36,12 @@ public class AddressService implements IService {
 			fromDb.setReservedFor(conv.getReservedFor());
 			fromDb.setSubnet(conv.getSubnet());
 
-		} else {
-			fromDb = conv;
-		}
+			dao.update(fromDb);
 
-		dao.update(fromDb);
+		} else {
+
+			dao.save(conv);
+		}
 
 	}
 
@@ -72,6 +73,13 @@ public class AddressService implements IService {
 	@Override
 	public Collection<Address> findAllWithInvalidLease() throws UnknownHostException {
 		return EntityMapper.convert2Address(dao.findAllWithInvalidLease());
+	}
+
+	@Override
+	public void delete(Address address) {
+
+		dao.delete(EntityMapper.convert(address));
+
 	}
 
 }
