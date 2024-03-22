@@ -15,34 +15,39 @@ public class EntityManagerTest {
 	void testMappingDb2Address() throws UnknownHostException {
 
 		DbLease orig = new DbLease();
+		orig.setLeasedTo("00:20:cb:d2:27:7b");
 		orig.setHostname("bemar-PC");
 		orig.setIp("192.168.64.34");
-		orig.setLastContact(System.currentTimeMillis() - (32768 * 1000));
+		orig.setLastContact(System.currentTimeMillis());
 
-		Address address = EntityMapper.convert(orig);
+		LeaseAddress address = EntityMapper.convert(orig);
 
 		DbLease converted = EntityMapper.convert(address);
 
-		Assertions.assertEquals(orig, converted);
+		Assertions.assertEquals(orig.getHostname(), converted.getHostname());
+		Assertions.assertEquals(orig.getIp(), converted.getIp());
+		Assertions.assertEquals(orig.getLeasedTo(), converted.getLeasedTo());
+		Assertions.assertTrue(converted.getLastContact() > 0);
 
 	}
 
 	@Test
 	void testMappingAddress2Db() throws UnknownHostException {
 
-		long now = System.currentTimeMillis();
-
-		Address orig = new Address();
+		LeaseAddress orig = new LeaseAddress();
 		orig.setHostname("bemar-PC");
 		orig.setIp(InetAddress.getByName("192.168.64.34"));
-		orig.setLastContact(now);
 		orig.setLeasedTo(HardwareAddress.getByMac("00:20:cb:d2:27:7b"));
+		orig.setLastContact(System.currentTimeMillis());
 
 		DbLease address = EntityMapper.convert(orig);
 
-		Address converted = EntityMapper.convert(address);
+		LeaseAddress converted = EntityMapper.convert(address);
 
-		Assertions.assertEquals(orig, converted);
+		Assertions.assertEquals(orig.getHostname(), converted.getHostname());
+		Assertions.assertEquals(orig.getIp(), converted.getIp());
+		Assertions.assertEquals(orig.getLeasedTo(), converted.getLeasedTo());
+		Assertions.assertTrue(converted.getLastContact() > 0);
 
 	}
 

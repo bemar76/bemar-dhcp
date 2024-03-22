@@ -7,10 +7,10 @@ import java.util.Collection;
 
 import org.dhcp4java.HardwareAddress;
 
-import ch.bemar.dhcp.config.mgmt.Address;
+import ch.bemar.dhcp.config.mgmt.LeaseAddress;
 import ch.bemar.dhcp.config.mgmt.EntityMapper;
 
-public class LeaseDbService implements IService<Address, HardwareAddress, InetAddress> {
+public class LeaseDbService implements IService<LeaseAddress, HardwareAddress, InetAddress> {
 
 	private LeaseDbDao dao;
 
@@ -27,9 +27,9 @@ public class LeaseDbService implements IService<Address, HardwareAddress, InetAd
 	}
 
 	@Override
-	public void saveOrUpdate(Address address) {
+	public void saveOrUpdate(LeaseAddress address) {
 
-		DbLease conv = EntityMapper.convert((Address) address);
+		DbLease conv = EntityMapper.convert((LeaseAddress) address);
 
 		DbLease fromDb = dao.findByAddress(conv.getIp());
 
@@ -47,27 +47,27 @@ public class LeaseDbService implements IService<Address, HardwareAddress, InetAd
 	}
 
 	@Override
-	public Collection<Address> readAll() throws UnknownHostException {
+	public Collection<LeaseAddress> readAll() throws UnknownHostException {
 		return EntityMapper.convert2Address(dao.readAll());
 	}
 
 	@Override
-	public Address findByAddress(InetAddress address) throws UnknownHostException {
+	public LeaseAddress findByAddress(InetAddress address) throws UnknownHostException {
 		return EntityMapper.convert(dao.findByAddress(address.getHostAddress()));
 	}
 
 	@Override
-	public Collection<Address> findByReservedMac(HardwareAddress hw) throws UnknownHostException {
+	public Collection<LeaseAddress> findByReservedMac(HardwareAddress hw) throws UnknownHostException {
 		return EntityMapper.convert2Address(dao.findByReservedMac(hw.getAsMac()));
 	}
 
 	@Override
-	public Collection<Address> findByLeasedMac(HardwareAddress hw) throws UnknownHostException {
+	public Collection<LeaseAddress> findByLeasedMac(HardwareAddress hw) throws UnknownHostException {
 		return EntityMapper.convert2Address(dao.findByLeasedMac(hw.getAsMac()));
 	}
 
 	@Override
-	public void delete(Address address) {
+	public void delete(LeaseAddress address) {
 
 		dao.delete(EntityMapper.convert(address));
 

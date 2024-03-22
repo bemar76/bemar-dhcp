@@ -5,6 +5,7 @@ public class ArpPropertiesConstants {
 	public static final String CMD = "arp.cmd";
 	public static final String TYPE_DYNAMIC = "arp.type_dynamic";
 	public static final String TYPE_FIXED = "arp.type_fix";
+	public static final String TYPE_INVALID = "arp.type_invalid";
 
 	public static final String COL_LINE_ARP_HEADER_START = "arp.line_arp_header_start";
 	public static final String COL_IP = "arp.col_address_ip";

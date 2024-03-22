@@ -5,8 +5,9 @@ import java.util.Date;
 
 import org.dhcp4java.HardwareAddress;
 
-import ch.bemar.dhcp.net.arp.Arp;
+import ch.bemar.dhcp.net.arp.ArpEntry;
 import ch.bemar.dhcp.net.arp.ArpTableProvider;
+import ch.bemar.dhcp.net.arp.ArpType;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -18,7 +19,11 @@ public class LeaseManager {
 		this.arpTableProvider = new ArpTableProvider();
 	}
 
-	public IAddress handleReservedLeasing(Address address, String hostname, HardwareAddress mac) {
+	public LeaseManager(ArpTableProvider provider) {
+		this.arpTableProvider = provider;
+	}
+
+	public IAddress handleReservedLeasing(LeaseAddress address, String hostname, HardwareAddress mac) {
 
 		log.debug("address in conflict: {}", address.isConflict());
 		if (address.isConflict()) {
@@ -60,7 +65,7 @@ public class LeaseManager {
 
 	}
 
-	public IAddress handleNextFreeLeasing(Address address, String hostname, HardwareAddress mac) {
+	public IAddress handleNextFreeLeasing(LeaseAddress address, String hostname, HardwareAddress mac) {
 
 		if (address.isConflict()
 				|| (address.getReservedFor() != null && address.getLeasedUntil() > System.currentTimeMillis())) {
@@ -86,43 +91,23 @@ public class LeaseManager {
 		return null;
 	}
 
-	public boolean getOkFromArp(Address address, HardwareAddress mac) {
-		if (!isAddressActive(address)) { // address was found in arp table
+	public boolean getOkFromArp(LeaseAddress address, HardwareAddress mac) {
+		ArpEntry arpEntry = arpTableProvider.searchInArpTable(address.getAddress());
 
-			return true;
+		if (arpEntry != null && !ArpType.INVALID.equals(arpEntry.getType())) {
 
-		} else if (isAddressActiveByMe(address, mac)) { // address is active be me
+			if (ArpType.FIXED.equals(arpEntry.getType())
+					|| (ArpType.DYNAMIC.equals(arpEntry.getType()) && !arpEntry.getMac().equals(mac))) {
 
-			log.info("address {} was found in arp table but its only me", address.getIp());
-			return true;
+				return false;
+			}
+
 		}
 
-		return false;
+		return true;
 	}
 
-	public boolean isAddressActiveByMe(Address address, HardwareAddress mac) {
-
-		Arp arp = arpTableProvider.foundInArp(address.getIp());
-		log.debug("arp entry found: {}", arp);
-
-		if (arp != null && !arp.getMac().equals(mac)) {
-			return true;
-		}
-
-		return false;
-
-	}
-
-	public boolean isAddressActive(Address address) {
-
-		Arp arp = arpTableProvider.foundInArp(address.getIp());
-		log.debug("arp entry found: {}", arp);
-
-		return arp != null;
-
-	}
-
-	private IAddress setMacAndGetIp(Address address, String hostname, HardwareAddress mac) {
+	private IAddress setMacAndGetIp(LeaseAddress address, String hostname, HardwareAddress mac) {
 		address.setLeasedTo(mac);
 		address.setHostname(hostname);
 		return address;

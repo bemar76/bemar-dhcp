@@ -8,7 +8,7 @@ import org.dhcp4java.DHCPPacket;
 import com.google.common.collect.Maps;
 
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
-import ch.bemar.dhcp.config.mgmt.AddressManagement;
+import ch.bemar.dhcp.config.mgmt.LeaseAddressManagement;
 import ch.bemar.dhcp.exception.TypeNotFoundException;
 import ch.bemar.dhcp.util.ReflectionUtils;
 
@@ -16,7 +16,7 @@ public class ProcessorLookup {
 
 	private static Map<Byte, IProcessor> processorSet;
 
-	private static AddressManagement addressManagement;
+	private static LeaseAddressManagement addressManagement;
 
 	private static DhcpSubnetConfig config;
 	
@@ -29,7 +29,7 @@ public class ProcessorLookup {
 		synchronized (this) {
 
 			if (addressManagement == null) {
-				addressManagement = new AddressManagement(cfg);
+				addressManagement = new LeaseAddressManagement(cfg);
 			}
 
 			if (config == null) {

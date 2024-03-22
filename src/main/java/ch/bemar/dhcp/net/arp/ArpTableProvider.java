@@ -18,10 +18,10 @@ public class ArpTableProvider {
 		refresh();
 	}
 
-	public synchronized Arp foundInArp(InetAddress address) {
+	public synchronized ArpEntry searchInArpTable(InetAddress address) {
 
 		if (EnvironmentManager.getInstance().getEnvAsBoolean(ArpPropertiesConstants.COL_ARP_ACTIVE))
-			return table.hasArp(address);
+			return table.search(address);
 
 		return null;
 	}
@@ -30,7 +30,7 @@ public class ArpTableProvider {
 		try {
 
 			if (EnvironmentManager.getInstance().getEnvAsBoolean(ArpPropertiesConstants.COL_ARP_ACTIVE))
-				table = tool.getTable();
+				table = tool.buildTable();
 
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);

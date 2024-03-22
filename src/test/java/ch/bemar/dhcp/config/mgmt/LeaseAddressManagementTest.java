@@ -22,9 +22,9 @@ import ch.bemar.dhcp.exception.NoAddressFoundException;
 import ch.bemar.dhcp.persistence.LeaseDbDao;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class AddressManagementTest {
+public class LeaseAddressManagementTest {
 
-	private static AddressManagement addressMgmt;
+	private static LeaseAddressManagement addressMgmt;
 
 	private static InetAddress address;
 
@@ -55,7 +55,7 @@ public class AddressManagementTest {
 
 		subnet.getHosts().add(host);
 
-		addressMgmt = new AddressManagement(subnet);
+		addressMgmt = new LeaseAddressManagement(subnet);
 	}
 
 	@Test

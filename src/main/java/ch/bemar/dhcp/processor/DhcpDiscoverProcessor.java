@@ -13,7 +13,7 @@ import org.dhcp4java.DHCPConstants;
 import org.dhcp4java.DHCPPacket;
 
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
-import ch.bemar.dhcp.config.mgmt.AddressManagement;
+import ch.bemar.dhcp.config.mgmt.LeaseAddressManagement;
 import ch.bemar.dhcp.config.mgmt.IAddress;
 import ch.bemar.dhcp.exception.DHCPBadPacketException;
 import ch.bemar.dhcp.exception.NoAddressFoundException;
@@ -24,9 +24,9 @@ public class DhcpDiscoverProcessor extends AProcessor {
 
 	private final DhcpSubnetConfig subnetConfig;
 
-	private final AddressManagement addressManagement;
+	private final LeaseAddressManagement addressManagement;
 
-	public DhcpDiscoverProcessor(DhcpSubnetConfig subnetConfig, AddressManagement addressManagement)
+	public DhcpDiscoverProcessor(DhcpSubnetConfig subnetConfig, LeaseAddressManagement addressManagement)
 			throws IOException {
 		this.subnetConfig = subnetConfig;
 		this.addressManagement = addressManagement;

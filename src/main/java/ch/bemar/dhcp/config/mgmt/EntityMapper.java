@@ -17,7 +17,7 @@ public class EntityMapper {
 	private EntityMapper() {
 	}
 
-	public static DbLease convert(Address address) {
+	public static DbLease convert(LeaseAddress address) {
 
 		DbLease db = null;
 
@@ -37,11 +37,11 @@ public class EntityMapper {
 		return db;
 	}
 
-	public static Collection<DbLease> convert2Db(Collection<Address> list) {
+	public static Collection<DbLease> convert2Db(Collection<LeaseAddress> list) {
 
 		List<DbLease> dbs = Lists.newArrayList();
 
-		for (Address a : list) {
+		for (LeaseAddress a : list) {
 
 			dbs.add(convert(a));
 		}
@@ -50,12 +50,12 @@ public class EntityMapper {
 
 	}
 
-	public static Address convert(DbLease dbAddress) throws UnknownHostException {
+	public static LeaseAddress convert(DbLease dbAddress) throws UnknownHostException {
 
-		Address address = null;
+		LeaseAddress address = null;
 
 		if (dbAddress != null) {
-			address = new Address();
+			address = new LeaseAddress();
 			address.setHostname(dbAddress.getHostname());
 			address.setLastContact(dbAddress.getLastContact());
 
@@ -70,9 +70,9 @@ public class EntityMapper {
 
 	}
 
-	public static Collection<Address> convert2Address(Collection<DbLease> list) throws UnknownHostException {
+	public static Collection<LeaseAddress> convert2Address(Collection<DbLease> list) throws UnknownHostException {
 
-		List<Address> addresses = Lists.newArrayList();
+		List<LeaseAddress> addresses = Lists.newArrayList();
 
 		for (DbLease a : list) {
 

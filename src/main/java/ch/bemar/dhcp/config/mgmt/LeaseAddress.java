@@ -15,7 +15,7 @@ import ch.bemar.dhcp.config.element.Subnet;
 import lombok.Data;
 
 @Data
-public class Address implements IAddress {
+public class LeaseAddress implements IAddress {
 
 	private InetAddress ip;
 	private Subnet subnet;
@@ -28,11 +28,11 @@ public class Address implements IAddress {
 	boolean conflict;
 	boolean arp;
 
-	public Address() {
+	public LeaseAddress() {
 
 	}
 
-	public Address(InetAddress ip, Subnet subnet, DefaultLeaseTime defaultLeaseTime, MaxLeaseTime maxLeaseTime) {
+	public LeaseAddress(InetAddress ip, Subnet subnet, DefaultLeaseTime defaultLeaseTime, MaxLeaseTime maxLeaseTime) {
 		super();
 		this.ip = ip;
 		this.subnet = subnet;

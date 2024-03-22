@@ -2,7 +2,6 @@ package ch.bemar.dhcp.net.arp;
 
 import java.net.InetAddress;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,13 +14,13 @@ import com.google.common.collect.Sets;
 
 public class ArpTable {
 
-	private Map<Interface, Set<Arp>> arpTable;
+	private Map<Interface, Set<ArpEntry>> arpTable;
 
 	public ArpTable() {
 		this.arpTable = Maps.newHashMap();
 	}
 
-	void addEntry(Interface iface, Arp arp) {
+	void addEntry(Interface iface, ArpEntry arp) {
 
 		if (!arpTable.containsKey(iface)) {
 			arpTable.put(iface, Sets.newHashSet());
@@ -31,9 +30,9 @@ public class ArpTable {
 
 	}
 
-	public Arp hasArp(Interface iface, InetAddress ip) {
+	public ArpEntry hasEntry(Interface iface, InetAddress ip) {
 
-		for (Arp a : arpTable.get(iface)) {
+		for (ArpEntry a : arpTable.get(iface)) {
 
 			if (a.getIp().equals(ip)) {
 				return a;
@@ -45,11 +44,11 @@ public class ArpTable {
 
 	}
 
-	public Arp hasArp(InetAddress ip) {
+	public ArpEntry search(InetAddress ip) {
 
 		for (Interface iface : arpTable.keySet()) {
 
-			Arp found = hasArp(iface, ip);
+			ArpEntry found = hasEntry(iface, ip);
 
 			if (found != null) {
 				return found;
@@ -69,7 +68,7 @@ public class ArpTable {
 		for (Interface iface : ifaces) {
 			sb.append(iface).append("=");
 
-			List<Arp> arps = Lists.newArrayList(arpTable.get(iface));
+			List<ArpEntry> arps = Lists.newArrayList(arpTable.get(iface));
 			Collections.sort(arps);
 
 			sb.append(StringUtils.join(arps));
