@@ -18,9 +18,6 @@ public interface IDao<T, M, A> {
 	public Collection<T> findByReservedMac(M hw) throws UnknownHostException;
 
 	public Collection<T> findByLeasedMac(M hw) throws UnknownHostException;
-
-	public Collection<T> findAllWithValidLease() throws UnknownHostException;
-
-	public Collection<T> findAllWithInvalidLease() throws UnknownHostException;
+	
 
 }

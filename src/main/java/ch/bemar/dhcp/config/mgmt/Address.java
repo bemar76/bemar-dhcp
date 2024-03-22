@@ -70,7 +70,10 @@ public class Address implements IAddress {
 
 	@Override
 	public InetAddress getSubnet() {
-		return subnet.getValue();
+		if (subnet != null)
+			return subnet.getValue();
+		
+		return null;
 	}
 
 	@Override

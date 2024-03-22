@@ -27,14 +27,14 @@ public class H2ConnectorTest {
 
 	@BeforeAll
 	static void init() {
-		sessionFactory = new Configuration().configure().buildSessionFactory();
+		sessionFactory = new Configuration().configure("hibernate.cfg3.xml").buildSessionFactory();
 		session = sessionFactory.openSession();
 	}
 
 	@AfterAll
 	static void shutdown() {
 		session.close();
-		sessionFactory.close();		
+		sessionFactory.close();
 	}
 
 	@Order(1)
@@ -43,9 +43,8 @@ public class H2ConnectorTest {
 
 		Transaction transaction = session.beginTransaction();
 
-		DbAddress address = new DbAddress();
+		DbLease address = new DbLease();
 		address.setHostname("bemar-pc");
-		address.setSubnet("255.255.255.0");
 		address.setIp("192.168.64.5");
 
 		session.save(address);
@@ -60,21 +59,20 @@ public class H2ConnectorTest {
 	@Test
 	void testReadAll() {
 
-		String sql = "Select * from DbAddress";
+		String sql = "Select * from " + DbLease.class.getSimpleName();
 
-		NativeQuery<DbAddress> query = session.createNativeQuery(sql, DbAddress.class);
+		NativeQuery<DbLease> query = session.createNativeQuery(sql, DbLease.class);
 
-		List<DbAddress> found = query.list();
+		List<DbLease> found = query.list();
 
 		log.info("Address found: {}", found);
 
 		Assertions.assertNotNull(found);
 		Assertions.assertEquals(1, found.size());
 
-		DbAddress item = found.get(0);
+		DbLease item = found.get(0);
 
 		Assertions.assertEquals("bemar-pc", item.getHostname());
-		Assertions.assertEquals("255.255.255.0", item.getSubnet());
 		Assertions.assertEquals("192.168.64.5", item.getIp());
 
 	}
@@ -83,14 +81,13 @@ public class H2ConnectorTest {
 	@Test
 	void testRead() {
 
-		DbAddress found = session.find(DbAddress.class, "192.168.64.5");
+		DbLease found = session.find(DbLease.class, "192.168.64.5");
 
 		log.info("Address found: {}", found);
 
 		Assertions.assertNotNull(found);
 
 		Assertions.assertEquals("bemar-pc", found.getHostname());
-		Assertions.assertEquals("255.255.255.0", found.getSubnet());
 		Assertions.assertEquals("192.168.64.5", found.getIp());
 
 	}
@@ -101,16 +98,14 @@ public class H2ConnectorTest {
 
 		Transaction transaction = session.beginTransaction();
 
-		DbAddress address = new DbAddress();
+		DbLease address = new DbLease();
 		address.setHostname("bemar-pc");
-		address.setSubnet("255.255.255.0");
 		address.setIp("192.168.64.5");
 
 		Exception exception = assertThrows(org.hibernate.NonUniqueObjectException.class, () -> {
 			session.save(address);
 		});
 
-	
 		transaction.commit();
 
 	}
@@ -121,7 +116,7 @@ public class H2ConnectorTest {
 
 		Transaction transaction = session.beginTransaction();
 
-		DbAddress found = session.find(DbAddress.class, "192.168.64.5");
+		DbLease found = session.find(DbLease.class, "192.168.64.5");
 
 		session.delete(found);
 
@@ -135,11 +130,11 @@ public class H2ConnectorTest {
 	@Test
 	void testReadAllAfterDelete() {
 
-		String sql = "Select * from DbAddress";
+		String sql = "Select * from " + DbLease.class.getSimpleName();
 
-		NativeQuery<DbAddress> query = session.createNativeQuery(sql, DbAddress.class);
+		NativeQuery<DbLease> query = session.createNativeQuery(sql, DbLease.class);
 
-		List<DbAddress> found = query.list();
+		List<DbLease> found = query.list();
 
 		log.info("Address found: {}", found);
 

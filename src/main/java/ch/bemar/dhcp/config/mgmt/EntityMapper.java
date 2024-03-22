@@ -7,42 +7,39 @@ import java.util.List;
 
 import org.dhcp4java.HardwareAddress;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
-import ch.bemar.dhcp.config.element.Subnet;
-import ch.bemar.dhcp.persistence.DbAddress;
+import ch.bemar.dhcp.persistence.DbLease;
 
 public class EntityMapper {
 
 	private EntityMapper() {
 	}
 
-	public static DbAddress convert(Address address) {
+	public static DbLease convert(Address address) {
 
-		DbAddress db = null;
+		DbLease db = null;
 
 		if (address != null) {
 
-			db = new DbAddress();
-			db.setArp(address.isArp());
-			db.setConflict(address.isConflict());
-			db.setDefaultLeaseTime(address.getDefaultLeaseTime());
+			db = new DbLease();
 			db.setHostname(address.getHostname());
-			db.setIp(address.getIp().getHostAddress());
 			db.setLastContact(address.getLastContact());
-			db.setLeasedUntil(address.getLeasedUntil());
-			db.setMaxLeaseTime(address.getMaxLeaseTime());
-			db.setReservedFor(address.getReservedFor() != null ? address.getReservedFor().getAsMac() : null);
-			db.setSubnet(address.getSubnet() != null ? address.getSubnet().getHostAddress() : null);
 
+			if (address.getIp() != null)
+				db.setIp(address.getIp().getHostAddress());
+
+			if (address.getLeasedTo() != null)
+				db.setLeasedTo(address.getLeasedTo().getAsMac());
 		}
-		
+
 		return db;
 	}
 
-	public static Collection<DbAddress> convert2Db(Collection<Address> list) {
+	public static Collection<DbLease> convert2Db(Collection<Address> list) {
 
-		List<DbAddress> dbs = Lists.newArrayList();
+		List<DbLease> dbs = Lists.newArrayList();
 
 		for (Address a : list) {
 
@@ -53,41 +50,31 @@ public class EntityMapper {
 
 	}
 
-	public static Address convert(DbAddress dbAddress) throws UnknownHostException {
+	public static Address convert(DbLease dbAddress) throws UnknownHostException {
 
 		Address address = null;
 
 		if (dbAddress != null) {
 			address = new Address();
-			address.setArp(dbAddress.isArp());
-			address.setConflict(dbAddress.isConflict());
-			address.setDefaultLeaseTime(dbAddress.getDefaultLeaseTime());
 			address.setHostname(dbAddress.getHostname());
-			address.setIp(InetAddress.getByName(dbAddress.getIp()));
 			address.setLastContact(dbAddress.getLastContact());
-			address.setMaxLeaseTime(dbAddress.getMaxLeaseTime());
 
-			if (dbAddress.getReservedFor() != null)
-				address.setReservedFor(
-						new HardwareAddress(HardwareAddress.getHardwareAddressByString(dbAddress.getReservedFor())));
-			else
-				address.setReservedFor(null);
+			if (!Strings.isNullOrEmpty(dbAddress.getIp()))
+				address.setIp(InetAddress.getByName(dbAddress.getIp()));
 
-			if (dbAddress.getSubnet() != null)
-				address.setSubnet(new Subnet(InetAddress.getByName(dbAddress.getSubnet())));
-			else
-				address.setSubnet(null);
+			if (!Strings.isNullOrEmpty(dbAddress.getLeasedTo()))
+				address.setLeasedTo(HardwareAddress.getByMac(dbAddress.getLeasedTo()));
 		}
 
 		return address;
 
 	}
 
-	public static Collection<Address> convert2Address(Collection<DbAddress> list) throws UnknownHostException {
+	public static Collection<Address> convert2Address(Collection<DbLease> list) throws UnknownHostException {
 
 		List<Address> addresses = Lists.newArrayList();
 
-		for (DbAddress a : list) {
+		for (DbLease a : list) {
 
 			addresses.add(convert(a));
 		}

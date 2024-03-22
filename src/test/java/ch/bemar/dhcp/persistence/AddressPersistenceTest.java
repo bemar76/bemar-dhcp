@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Collection;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -19,24 +20,30 @@ import ch.bemar.dhcp.config.mgmt.Address;
 @TestMethodOrder(OrderAnnotation.class)
 public class AddressPersistenceTest {
 
-	private static AddressService addressService;
+	private static LeaseDbService addressService;
+	private static long lastContact;
 
 	@BeforeAll
 	static void init() {
-		addressService = new AddressService();
+		addressService = new LeaseDbService("hibernate.cfg2.xml");
+	}
+
+	@AfterAll
+	static void destroy() {
+		addressService.close();
 	}
 
 	@Test
 	@Order(1)
 	void testAddressWrite() throws UnknownHostException {
 
+		lastContact = System.currentTimeMillis();
+
 		Address a = new Address();
 		a.setIp(InetAddress.getByName("192.169.64.54"));
 		a.setSubnet(new Subnet(InetAddress.getByName("255.255.255.0")));
 		a.setHostname("bemar-pc");
-		a.setLastContact(0);
-		a.setDefaultLeaseTime(32500 * 1000);
-		a.setMaxLeaseTime(86500 * 1000);
+		a.setLastContact(lastContact);
 
 		addressService.saveOrUpdate(a);
 	}
@@ -59,39 +66,30 @@ public class AddressPersistenceTest {
 		a.setIp(InetAddress.getByName("192.169.64.54"));
 		a.setSubnet(new Subnet(InetAddress.getByName("255.255.255.0")));
 		a.setHostname("bemar-pc");
-		a.setLastContact(System.currentTimeMillis());
-		a.setDefaultLeaseTime(32500 * 1000);
-		a.setMaxLeaseTime(86500 * 1000);
+		a.setLastContact(lastContact);
 
 		Address found = (Address) addressService.findByAddress(InetAddress.getByName("192.169.64.54"));
 
 		assertNotNull(found);
 
 		assertEquals(a.getIp(), found.getIp(), "IP-Adressen stimmen nicht überein");
-		assertEquals(a.getSubnet(), found.getSubnet(), "Subnetze stimmen nicht überein");
-		assertEquals(a.getDefaultLeaseTime(), found.getDefaultLeaseTime(),
-				"Standard-Lease-Zeiten stimmen nicht überein");
-		assertEquals(a.getMaxLeaseTime(), found.getMaxLeaseTime(), "Maximale Lease-Zeiten stimmen nicht überein");
 		assertEquals(a.getHostname(), found.getHostname(), "Hostnamen stimmen nicht überein");
-		assertEquals(a.getReservedFor(), found.getReservedFor(), "Reservierte Hardware-Adressen stimmen nicht überein");
 		assertEquals(a.getLeasedTo(), found.getLeasedTo(), "Zugewiesene Hardware-Adressen stimmen nicht überein");
-		// assertEquals(a.getLastContact(), found.getLastContact(), "Letzter
-		// Kontaktzeitpunkt stimmt nicht überein");
-		assertEquals(a.isConflict(), found.isConflict(), "Konfliktstatus stimmt nicht überein");
-		assertEquals(a.isArp(), found.isArp(), "ARP-Status stimmt nicht überein");
+		assertEquals(a.getLastContact(), found.getLastContact(), "Letzter Kontaktzeitpunkt stimmt nicht überein");
+
 	}
 
 	@Test
 	@Order(4)
 	void testAddressUpdate() throws UnknownHostException {
 
+		lastContact = System.currentTimeMillis();
+
 		Address a = new Address();
 		a.setIp(InetAddress.getByName("192.169.64.54"));
 		a.setSubnet(new Subnet(InetAddress.getByName("255.255.255.128")));
 		a.setHostname("bemar-pc2");
-		a.setLastContact(0);
-		a.setDefaultLeaseTime(30500 * 1000);
-		a.setMaxLeaseTime(76500 * 1000);
+		a.setLastContact(lastContact);
 
 		addressService.saveOrUpdate(a);
 	}
@@ -104,26 +102,17 @@ public class AddressPersistenceTest {
 		a.setIp(InetAddress.getByName("192.169.64.54"));
 		a.setSubnet(new Subnet(InetAddress.getByName("255.255.255.128")));
 		a.setHostname("bemar-pc2");
-		a.setLastContact(0);
-		a.setDefaultLeaseTime(30500 * 1000);
-		a.setMaxLeaseTime(76500 * 1000);
+		a.setLastContact(lastContact);
 
 		Address found = (Address) addressService.findByAddress(InetAddress.getByName("192.169.64.54"));
 
 		assertNotNull(found);
 
 		assertEquals(a.getIp(), found.getIp(), "IP-Adressen stimmen nicht überein");
-		assertEquals(a.getSubnet(), found.getSubnet(), "Subnetze stimmen nicht überein");
-		assertEquals(a.getDefaultLeaseTime(), found.getDefaultLeaseTime(),
-				"Standard-Lease-Zeiten stimmen nicht überein");
-		assertEquals(a.getMaxLeaseTime(), found.getMaxLeaseTime(), "Maximale Lease-Zeiten stimmen nicht überein");
 		assertEquals(a.getHostname(), found.getHostname(), "Hostnamen stimmen nicht überein");
-		assertEquals(a.getReservedFor(), found.getReservedFor(), "Reservierte Hardware-Adressen stimmen nicht überein");
 		assertEquals(a.getLeasedTo(), found.getLeasedTo(), "Zugewiesene Hardware-Adressen stimmen nicht überein");
-		// assertEquals(a.getLastContact(), found.getLastContact(), "Letzter
-		// Kontaktzeitpunkt stimmt nicht überein");
-		assertEquals(a.isConflict(), found.isConflict(), "Konfliktstatus stimmt nicht überein");
-		assertEquals(a.isArp(), found.isArp(), "ARP-Status stimmt nicht überein");
+		assertEquals(a.getLastContact(), found.getLastContact(), "Letzter Kontakt stimmt nicht überein");
+
 	}
 
 	@Test

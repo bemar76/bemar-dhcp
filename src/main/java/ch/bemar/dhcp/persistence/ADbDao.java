@@ -1,5 +1,7 @@
 package ch.bemar.dhcp.persistence;
 
+import java.io.File;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -8,12 +10,20 @@ import org.hibernate.cfg.Configuration;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public abstract class ADoa implements IDao<DbAddress, String, String>, SqlTransactionExecutor {
+public abstract class ADbDao implements IDao<DbLease, String, String>, SqlTransactionExecutor {
 
-	private static final SessionFactory sessionFactory;
-	private static Session session;
+	private static SessionFactory sessionFactory;
+	private Session session;
 
-	static {
+	protected ADbDao(File file) {
+		sessionFactory = new Configuration().configure(file).buildSessionFactory();
+	}
+
+	protected ADbDao(String ressource) {
+		sessionFactory = new Configuration().configure(ressource).buildSessionFactory();
+	}
+
+	protected ADbDao() {
 		sessionFactory = new Configuration().configure().buildSessionFactory();
 	}
 
@@ -29,7 +39,7 @@ public abstract class ADoa implements IDao<DbAddress, String, String>, SqlTransa
 		return session.beginTransaction();
 	}
 
-	public void saveInTransaction(DbAddress address) {
+	public void saveInTransaction(DbLease address) {
 
 		Transaction tx = null;
 
@@ -48,7 +58,7 @@ public abstract class ADoa implements IDao<DbAddress, String, String>, SqlTransa
 		}
 	}
 
-	public void updateInTransaction(DbAddress address) {
+	public void updateInTransaction(DbLease address) {
 
 		Transaction tx = null;
 
@@ -67,7 +77,7 @@ public abstract class ADoa implements IDao<DbAddress, String, String>, SqlTransa
 		}
 	}
 
-	public void deleteInTransaction(DbAddress address) {
+	public void deleteInTransaction(DbLease address) {
 
 		Transaction tx = null;
 
@@ -75,8 +85,8 @@ public abstract class ADoa implements IDao<DbAddress, String, String>, SqlTransa
 
 			tx = getStartedTransaction();
 
-			DbAddress fromDb = getSession().find(DbAddress.class, address.getIp());
-			
+			DbLease fromDb = getSession().find(DbLease.class, address.getIp());
+
 			if (fromDb != null)
 				getSession().delete(fromDb);
 
@@ -89,4 +99,14 @@ public abstract class ADoa implements IDao<DbAddress, String, String>, SqlTransa
 		}
 	}
 
+	public void close() {
+
+		if (session != null && session.isOpen()) {
+			log.info("Shutting down db session");
+			session.close();
+			log.info("Shutting down db sessionfactory");
+			sessionFactory.close();
+		}
+
+	}
 }

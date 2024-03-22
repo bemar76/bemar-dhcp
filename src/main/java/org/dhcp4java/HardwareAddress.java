@@ -196,6 +196,10 @@ public class HardwareAddress implements Serializable, IConfigElement<byte[]> {
 		return macBytes;
 	}
 
+	public static HardwareAddress getByMac(String macStr) {
+		return new HardwareAddress(getHardwareAddressByString(macStr));
+	}
+
 	@Override
 	public String getKeyWord() {
 		return "hardware";

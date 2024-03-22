@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import ch.bemar.dhcp.config.DhcpHostConfig;
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
 import ch.bemar.dhcp.exception.NoAddressFoundException;
+import ch.bemar.dhcp.persistence.LeaseDbService;
 import ch.bemar.dhcp.util.IPRangeCalculatorUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,7 +25,11 @@ public class AddressManagement {
 
 	private List<Address> addresses;
 
+	private final LeaseDbService addressService;
+
 	public AddressManagement(DhcpSubnetConfig subnet) throws IOException, NoAddressFoundException {
+
+		this.addressService = new LeaseDbService();
 
 		this.subnetConfig = subnet;
 		this.addresses = Lists.newArrayList();
@@ -44,19 +49,32 @@ public class AddressManagement {
 
 		for (InetAddress ip : ips) {
 
-			Address a = new Address(ip, subnet.getSubnetAddress(), subnet.getDefaultLeaseTime(),
-					subnet.getMaxLeaseTime());
+			Address foundFromDb = addressService.findByAddress(ip);
 
-			for (DhcpHostConfig host : subnet.getHosts()) {
+			if (foundFromDb == null) {
 
-				if (host.getFixedIpAddress().getValue().equals(ip)) {
-					a.setReservedFor(host.getHardwareAddress());
+				Address created = new Address(ip, subnet.getSubnetAddress(), subnet.getDefaultLeaseTime(),
+						subnet.getMaxLeaseTime());
+
+				for (DhcpHostConfig host : subnet.getHosts()) {
+
+					if (host.getFixedIpAddress().getValue().equals(ip)) {
+						created.setReservedFor(host.getHardwareAddress());
+					}
+
 				}
+				log.debug("adding created address to map: {}", created);
+				addresses.add(created);
 
+				log.debug("saving created address to db: {}", created);
+				addressService.saveOrUpdate(created);
+
+			} else {
+
+				log.debug("adding db address: {}", foundFromDb);
+				addresses.add(foundFromDb);
 			}
 
-			addresses.add(a);
-			log.trace("adding ip {} to db", a);
 		}
 
 		Collections.sort(addresses);
@@ -82,7 +100,7 @@ public class AddressManagement {
 			address = getNextAddress(mac, hostname);
 		}
 
-		return address;
+		return persist(address);
 
 	}
 
@@ -98,7 +116,7 @@ public class AddressManagement {
 				IAddress addr = leaseManager.handleReservedLeasing(address, hostname, mac);
 
 				if (addr != null) {
-					return addr;
+					return persist(addr);
 				}
 
 			}
@@ -113,7 +131,7 @@ public class AddressManagement {
 
 	synchronized IAddress getNextAddress(HardwareAddress mac, String hostname) throws Exception {
 
-		return getNextAddress(mac, hostname, null);
+		return persist(getNextAddress(mac, hostname, null));
 	}
 
 	synchronized IAddress getNextAddress(HardwareAddress mac, String hostname, InetAddress requestAddress)
@@ -126,7 +144,7 @@ public class AddressManagement {
 				IAddress addr = leaseManager.handleNextFreeLeasing(address, hostname, mac);
 
 				if (addr != null) {
-					return addr;
+					return persist(address);
 				}
 
 			}
@@ -141,4 +159,10 @@ public class AddressManagement {
 		return null;
 	}
 
+	private IAddress persist(IAddress a) {
+		if (a != null)
+			addressService.saveOrUpdate((Address) a);
+
+		return a;
+	}
 }

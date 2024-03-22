@@ -32,7 +32,7 @@ public class ServerConfigReader extends AConfigReader {
 		return readConfigFromString(FileUtils.readFileToString(file, StandardCharsets.UTF_8));
 	}
 
-	public DhcpServerConfiguration readConfigFromString(String content) throws OptionNotFoundException, Exception {
+	public DhcpServerConfiguration readConfigFromString(String content) throws Exception {
 
 		ConfigFile confFile = new ConfigFile(content);
 

@@ -15,10 +15,8 @@ public interface IService<T, M, A> {
 
 	public Collection<T> findByLeasedMac(M hw) throws UnknownHostException;
 
-	public Collection<T> findAllWithValidLease() throws UnknownHostException;
-
-	public Collection<T> findAllWithInvalidLease() throws UnknownHostException;
-	
 	public void delete(T address);
+	
+	public void close();
 
 }

@@ -3,7 +3,6 @@ package ch.bemar.dhcp;
 import java.io.File;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Properties;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -16,13 +15,11 @@ import org.apache.commons.io.IOUtils;
 
 import ch.bemar.dhcp.config.DhcpServerConfiguration;
 import ch.bemar.dhcp.config.reader.ServerConfigReader;
-import ch.bemar.dhcp.constants.DhcpConstants;
 import ch.bemar.dhcp.core.DHCPServer;
 import ch.bemar.dhcp.env.EnvConstants;
 import ch.bemar.dhcp.env.EnvironmentManager;
 import ch.bemar.dhcp.exception.OptionNotFoundException;
 import ch.bemar.dhcp.util.NetworkInterfaceInfo;
-import ch.bemar.dhcp.util.PropertiesLoader;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -57,6 +54,12 @@ public class BemarDhcpServer {
 			System.exit(1);
 			return;
 		}
+
+		if (cmd.hasOption("p")) {
+			LogConfiguration.load("classpath:logback-prod.xml");
+		}
+
+		installShutdownHook();
 
 		ServerConfigReader scr = new ServerConfigReader();
 		DhcpServerConfiguration config = null;
@@ -109,7 +112,16 @@ public class BemarDhcpServer {
 		info.setRequired(false);
 		options.addOption(info);
 
+		Option log = new Option("p", "prod", false, "Prod mode.");
+		log.setRequired(false);
+		options.addOption(log);
+
 		return options;
+	}
+
+	private static void installShutdownHook() {
+
+		Runtime.getRuntime().addShutdownHook(new Thread(new ShutdownHook()));
 	}
 
 }

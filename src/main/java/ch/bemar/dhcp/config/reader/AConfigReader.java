@@ -50,6 +50,12 @@ public abstract class AConfigReader {
 
 		if (line.trim().toLowerCase().startsWith(DhcpConstants.OPTION)) {
 
+			if (line.contains("\"")) {
+				log.info("removing quotes: {}", line);
+				line = StringUtils.remove(line, "\"");
+				log.info("removed quotes: {}", line);
+			}
+
 			DHCPOption option = optionFactory.getFromLine(line);
 
 			config.getOptions().add(option);

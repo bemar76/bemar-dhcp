@@ -19,6 +19,7 @@ import ch.bemar.dhcp.config.element.IpRange;
 import ch.bemar.dhcp.config.element.Netmask;
 import ch.bemar.dhcp.config.element.Subnet;
 import ch.bemar.dhcp.exception.NoAddressFoundException;
+import ch.bemar.dhcp.persistence.LeaseDbDao;
 
 @TestMethodOrder(OrderAnnotation.class)
 public class AddressManagementTest {
@@ -34,6 +35,11 @@ public class AddressManagementTest {
 	private static String reservedMac = "04:20:9E:1A:AE:C9";
 
 	private static String reservedIp = "172.16.8.17";
+	
+	
+	static void close() {
+		new LeaseDbDao().close();
+	}
 
 	@BeforeAll
 	static void init() throws IOException, NoAddressFoundException {

@@ -1,5 +1,6 @@
 package ch.bemar.dhcp.persistence;
 
+import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Collection;
@@ -9,33 +10,33 @@ import org.dhcp4java.HardwareAddress;
 import ch.bemar.dhcp.config.mgmt.Address;
 import ch.bemar.dhcp.config.mgmt.EntityMapper;
 
-public class AddressService implements IService<Address, HardwareAddress, InetAddress> {
+public class LeaseDbService implements IService<Address, HardwareAddress, InetAddress> {
 
-	private AddressDao dao;
+	private LeaseDbDao dao;
 
-	public AddressService() {
-		this.dao = new AddressDao();
+	public LeaseDbService() {
+		this.dao = new LeaseDbDao();
+	}
+
+	public LeaseDbService(File file) {
+		this.dao = new LeaseDbDao(file);
+	}
+
+	public LeaseDbService(String ressource) {
+		this.dao = new LeaseDbDao(ressource);
 	}
 
 	@Override
 	public void saveOrUpdate(Address address) {
 
-		DbAddress conv = EntityMapper.convert((Address) address);
+		DbLease conv = EntityMapper.convert((Address) address);
 
-		DbAddress fromDb = dao.findByAddress(conv.getIp());
+		DbLease fromDb = dao.findByAddress(conv.getIp());
 
 		if (fromDb != null) {
-			fromDb.setArp(conv.isArp());
-			fromDb.setConflict(conv.isConflict());
-			fromDb.setDefaultLeaseTime(conv.getDefaultLeaseTime());
 			fromDb.setHostname(conv.getHostname());
 			fromDb.setLastContact(conv.getLastContact());
 			fromDb.setLeasedTo(conv.getLeasedTo());
-			fromDb.setLeasedUntil(conv.getLeasedUntil());
-			fromDb.setMaxLeaseTime(conv.getMaxLeaseTime());
-			fromDb.setReservedFor(conv.getReservedFor());
-			fromDb.setSubnet(conv.getSubnet());
-
 			dao.update(fromDb);
 
 		} else {
@@ -66,20 +67,15 @@ public class AddressService implements IService<Address, HardwareAddress, InetAd
 	}
 
 	@Override
-	public Collection<Address> findAllWithValidLease() throws UnknownHostException {
-		return EntityMapper.convert2Address(dao.findAllWithValidLease());
-	}
-
-	@Override
-	public Collection<Address> findAllWithInvalidLease() throws UnknownHostException {
-		return EntityMapper.convert2Address(dao.findAllWithInvalidLease());
-	}
-
-	@Override
 	public void delete(Address address) {
 
 		dao.delete(EntityMapper.convert(address));
 
+	}
+
+	@Override
+	public void close() {
+		dao.close();
 	}
 
 }
