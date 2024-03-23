@@ -17,6 +17,11 @@ public class ArpTableProvider {
 		this.tool = new ArpTool();
 		refresh();
 	}
+	
+	ArpTableProvider(ArpTable tbl) throws IOException {
+		this.tool = new ArpTool();
+		table = tbl;
+	}
 
 	public synchronized ArpEntry searchInArpTable(InetAddress address) {
 

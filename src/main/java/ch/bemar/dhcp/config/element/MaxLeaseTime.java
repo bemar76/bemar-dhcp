@@ -9,6 +9,10 @@ public class MaxLeaseTime extends ASingleInteger {
 	public MaxLeaseTime(String configLine) throws UnknownHostException {
 		super(configLine);
 	}
+	
+	public MaxLeaseTime(int value) throws UnknownHostException {
+		super(value);
+	}
 
 	@Override
 	public String getKeyWord() {

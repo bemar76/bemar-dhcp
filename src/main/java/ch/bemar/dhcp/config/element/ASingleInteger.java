@@ -18,6 +18,10 @@ public abstract class ASingleInteger implements IConfigElement<Integer> {
 
 	}
 
+	public ASingleInteger(int value) {
+		this.value = value;
+	}
+
 	private Integer value;
 
 	public String toString() {

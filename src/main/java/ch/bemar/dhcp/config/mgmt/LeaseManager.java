@@ -25,11 +25,6 @@ public class LeaseManager {
 
 	public IAddress handleReservedLeasing(LeaseAddress address, String hostname, HardwareAddress mac) {
 
-		log.debug("address in conflict: {}", address.isConflict());
-		if (address.isConflict()) {
-			return null;
-		}
-
 		log.debug("leased until: {}", new Date(address.getLeasedUntil()));
 		if (address.getLeasedUntil() < System.currentTimeMillis()) { // lease time expired
 
@@ -56,7 +51,6 @@ public class LeaseManager {
 				log.error("The lease for address {} is still active but its not leased to my mac {} but {}",
 						address.getIp(), mac, address.getLeasedTo());
 
-				address.setConflict(true);
 			}
 
 		}
@@ -67,10 +61,8 @@ public class LeaseManager {
 
 	public IAddress handleNextFreeLeasing(LeaseAddress address, String hostname, HardwareAddress mac) {
 
-		if (address.isConflict()
-				|| (address.getReservedFor() != null && address.getLeasedUntil() > System.currentTimeMillis())) {
+		if (address.getReservedFor() != null && address.getLeasedUntil() > System.currentTimeMillis()) {
 
-			log.debug("address in conflict: {}", address.isConflict());
 			log.debug("address reserved for: {}", address.getReservedFor());
 			return null;
 		}
