@@ -8,7 +8,6 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.IOUtils;
@@ -39,39 +38,25 @@ public class BemarDhcpServer {
 
 		EnvironmentManager.getInstance();
 
-		Options options = buildOptions();
+		ArgumentOptions.readArguments(args);
 
-		CommandLineParser parser = new DefaultParser();
-		HelpFormatter formatter = new HelpFormatter();
-		CommandLine cmd;
-
-		try {
-			cmd = parser.parse(options, args);
-		} catch (ParseException e) {
-			log.error(e.getMessage(), e);
-			formatter.printHelp("bemar-dhcp", options);
-
-			System.exit(1);
-			return;
-		}
-
-		if (cmd.hasOption("p")) {
+		if (ArgumentOptions.hasOption(OptionConstant.PROD_MODE.getShortOpt())) {
 			LogConfiguration.load("classpath:logback-prod.xml");
 		}
 
-		installShutdownHook();
+		ShutdownHook.installShutdownHook();
 
 		ServerConfigReader scr = new ServerConfigReader();
 		DhcpServerConfiguration config = null;
 
-		if (cmd.hasOption("f")) {
-			String inputFilePath = cmd.getOptionValue("fileinput");
+		if (ArgumentOptions.hasOption(OptionConstant.FILEINPUT.getShortOpt())) {
+			String inputFilePath = ArgumentOptions.getOptionValue(OptionConstant.FILEINPUT.getLongOpt());
 
 			File cfgFile = new File(inputFilePath);
 			log.info("reading config from file: {}", cfgFile);
 			config = scr.readConfigFromFile(cfgFile);
 
-		} else if (cmd.hasOption("i")) {
+		} else if (ArgumentOptions.hasOption(OptionConstant.IFACEINFO.getShortOpt())) {
 
 			NetworkInterfaceInfo.printIfaceInfo();
 			System.exit(0);
@@ -99,29 +84,6 @@ public class BemarDhcpServer {
 		mainThread.join();
 
 		System.exit(0);
-	}
-
-	private static Options buildOptions() {
-		Options options = new Options();
-
-		Option fInput = new Option("f", "fileinput", true, "Config file path");
-		fInput.setRequired(false);
-		options.addOption(fInput);
-
-		Option info = new Option("i", "info", false, "Interface info");
-		info.setRequired(false);
-		options.addOption(info);
-
-		Option log = new Option("p", "prod", false, "Prod mode.");
-		log.setRequired(false);
-		options.addOption(log);
-
-		return options;
-	}
-
-	private static void installShutdownHook() {
-
-		Runtime.getRuntime().addShutdownHook(new Thread(new ShutdownHook()));
 	}
 
 }

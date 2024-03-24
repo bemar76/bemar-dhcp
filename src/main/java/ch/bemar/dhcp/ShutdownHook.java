@@ -19,4 +19,8 @@ public class ShutdownHook implements Runnable {
 		log.info("Aufräumen abgeschlossen.");
 	}
 
+	public static void installShutdownHook() {
+
+		Runtime.getRuntime().addShutdownHook(new Thread(new ShutdownHook()));
+	}
 }
