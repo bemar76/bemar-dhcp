@@ -19,9 +19,9 @@ import org.dhcp4java.DHCPConstants;
 import org.dhcp4java.DHCPPacket;
 
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
-import ch.bemar.dhcp.config.mgmt.LeaseAddressManagement;
+import ch.bemar.dhcp.config.lease.IAddress;
+import ch.bemar.dhcp.config.lease.LeaseAddressManagement;
 import ch.bemar.dhcp.constants.DhcpConstants;
-import ch.bemar.dhcp.config.mgmt.IAddress;
 import ch.bemar.dhcp.exception.DHCPBadPacketException;
 import ch.bemar.dhcp.exception.NoAddressFoundException;
 import ch.bemar.dhcp.util.DhcpOptionUtils;
@@ -49,8 +49,7 @@ public class DhcpRequestProcessor extends AProcessor {
 			InetAddress requestedAddress = getRequestedAddress(request);
 			String hostname = getClientHostname(request);
 
-			IAddress offered = addressManagement.getAddress(request.getHardwareAddress(), hostname,
-					(requestedAddress != null ? requestedAddress : null));
+			IAddress offered = addressManagement.getAddress(request.getHardwareAddress(), hostname, requestedAddress);
 
 			if (offered == null) {
 				throw new NoAddressFoundException("There was no free ip address found to offer");
@@ -211,7 +210,8 @@ public class DhcpRequestProcessor extends AProcessor {
 		// we do not set other options for this type of message
 
 		// we set address/port according to rfc
-		response.setAddrPort(new InetSocketAddress(getSubnetConfig().getBroadcastAddress().getHostAddress(), DhcpConstants.RESPONSE_PORT));
+		response.setAddrPort(new InetSocketAddress(getSubnetConfig().getBroadcastAddress().getHostAddress(),
+				DhcpConstants.RESPONSE_PORT));
 
 		return response;
 	}

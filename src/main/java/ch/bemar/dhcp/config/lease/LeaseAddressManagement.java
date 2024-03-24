@@ -1,4 +1,4 @@
-package ch.bemar.dhcp.config.mgmt;
+package ch.bemar.dhcp.config.lease;
 
 import java.io.IOException;
 import java.net.InetAddress;

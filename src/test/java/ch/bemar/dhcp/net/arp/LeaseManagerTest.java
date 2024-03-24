@@ -12,9 +12,9 @@ import org.junit.jupiter.api.Test;
 import ch.bemar.dhcp.config.element.DefaultLeaseTime;
 import ch.bemar.dhcp.config.element.MaxLeaseTime;
 import ch.bemar.dhcp.config.element.Subnet;
-import ch.bemar.dhcp.config.mgmt.IAddress;
-import ch.bemar.dhcp.config.mgmt.LeaseAddress;
-import ch.bemar.dhcp.config.mgmt.LeaseManager;
+import ch.bemar.dhcp.config.lease.IAddress;
+import ch.bemar.dhcp.config.lease.LeaseAddress;
+import ch.bemar.dhcp.config.lease.LeaseManager;
 
 class LeaseManagerTest {
 
@@ -35,16 +35,16 @@ class LeaseManagerTest {
 
 		Interface iface = new Interface(InetAddress.getByName("192.168.64.0"), "eth6");
 
-		entry1 = new ArpEntry(InetAddress.getByName("192.168.64.13"), HardwareAddress.getByMac("04:b4:fe:c2:81:be"),
-				ArpType.FIXED);
-		entry2 = new ArpEntry(InetAddress.getByName("192.168.64.14"), HardwareAddress.getByMac("05:b5:fe:c2:82:be"),
-				ArpType.INVALID);
-		entry3 = new ArpEntry(InetAddress.getByName("192.168.64.15"), HardwareAddress.getByMac("06:b6:fe:c2:83:be"),
-				ArpType.DYNAMIC);
+		entry1 = new ArpEntry(iface, InetAddress.getByName("192.168.64.13"),
+				HardwareAddress.getByMac("04:b4:fe:c2:81:be"), ArpType.FIXED);
+		entry2 = new ArpEntry(iface, InetAddress.getByName("192.168.64.14"),
+				HardwareAddress.getByMac("05:b5:fe:c2:82:be"), ArpType.INVALID);
+		entry3 = new ArpEntry(iface, InetAddress.getByName("192.168.64.15"),
+				HardwareAddress.getByMac("06:b6:fe:c2:83:be"), ArpType.DYNAMIC);
 
-		arpTable.addEntry(iface, entry1);
-		arpTable.addEntry(iface, entry2);
-		arpTable.addEntry(iface, entry3);
+		arpTable.addEntry(entry1);
+		arpTable.addEntry(entry2);
+		arpTable.addEntry(entry3);
 
 		provider = new ArpTableProvider(arpTable);
 

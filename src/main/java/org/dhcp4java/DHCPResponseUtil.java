@@ -36,7 +36,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.logging.Logger;
 
-import ch.bemar.dhcp.config.mgmt.IAddress;
+import ch.bemar.dhcp.config.lease.IAddress;
 import ch.bemar.dhcp.constants.DhcpConstants;
 import ch.bemar.dhcp.exception.DHCPBadPacketException;
 

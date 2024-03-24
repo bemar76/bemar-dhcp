@@ -6,7 +6,7 @@ import org.dhcp4java.DHCPConstants;
 import org.dhcp4java.DHCPPacket;
 
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
-import ch.bemar.dhcp.config.mgmt.LeaseAddressManagement;
+import ch.bemar.dhcp.config.lease.LeaseAddressManagement;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

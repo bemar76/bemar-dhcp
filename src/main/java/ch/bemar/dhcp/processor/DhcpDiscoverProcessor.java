@@ -13,8 +13,8 @@ import org.dhcp4java.DHCPConstants;
 import org.dhcp4java.DHCPPacket;
 
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
-import ch.bemar.dhcp.config.mgmt.LeaseAddressManagement;
-import ch.bemar.dhcp.config.mgmt.IAddress;
+import ch.bemar.dhcp.config.lease.IAddress;
+import ch.bemar.dhcp.config.lease.LeaseAddressManagement;
 import ch.bemar.dhcp.exception.DHCPBadPacketException;
 import ch.bemar.dhcp.exception.NoAddressFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -41,8 +41,7 @@ public class DhcpDiscoverProcessor extends AProcessor {
 			InetAddress requestedAddress = getRequestedAddress(request);
 			String hostname = getClientHostname(request);
 
-			IAddress offered = addressManagement.getAddress(request.getHardwareAddress(), hostname,
-					(requestedAddress != null ? requestedAddress : null));
+			IAddress offered = addressManagement.getAddress(request.getHardwareAddress(), hostname, requestedAddress);
 
 			if (offered == null) {
 				throw new NoAddressFoundException("There was no free ip address found to offer");

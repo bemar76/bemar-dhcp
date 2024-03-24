@@ -11,6 +11,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ArpEntry implements Comparable<ArpEntry> {
 
+	private Interface iface;
 	private InetAddress ip;
 	private HardwareAddress mac;
 	private ArpType type;
@@ -22,7 +23,7 @@ public class ArpEntry implements Comparable<ArpEntry> {
 
 	@Override
 	public String toString() {
-		return "ArpEntry [ip=" + ip + ", mac=" + mac + ", type=" + type + "]";
+		return "ArpEntry [iface=" + iface + ", ip=" + ip + ", mac=" + mac + ", type=" + type + "]";
 	}
 
 }

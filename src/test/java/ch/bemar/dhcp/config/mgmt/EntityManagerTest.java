@@ -7,6 +7,8 @@ import org.dhcp4java.HardwareAddress;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import ch.bemar.dhcp.config.lease.EntityMapper;
+import ch.bemar.dhcp.config.lease.LeaseAddress;
 import ch.bemar.dhcp.persistence.DbLease;
 
 public class EntityManagerTest {

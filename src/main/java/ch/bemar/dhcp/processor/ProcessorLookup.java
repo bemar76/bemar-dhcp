@@ -8,7 +8,7 @@ import org.dhcp4java.DHCPPacket;
 import com.google.common.collect.Maps;
 
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
-import ch.bemar.dhcp.config.mgmt.LeaseAddressManagement;
+import ch.bemar.dhcp.config.lease.LeaseAddressManagement;
 import ch.bemar.dhcp.exception.TypeNotFoundException;
 import ch.bemar.dhcp.util.ReflectionUtils;
 

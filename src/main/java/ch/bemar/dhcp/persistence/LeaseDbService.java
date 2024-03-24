@@ -7,8 +7,8 @@ import java.util.Collection;
 
 import org.dhcp4java.HardwareAddress;
 
-import ch.bemar.dhcp.config.mgmt.LeaseAddress;
-import ch.bemar.dhcp.config.mgmt.EntityMapper;
+import ch.bemar.dhcp.config.lease.EntityMapper;
+import ch.bemar.dhcp.config.lease.LeaseAddress;
 
 public class LeaseDbService implements IService<LeaseAddress, HardwareAddress, InetAddress> {
 

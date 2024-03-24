@@ -12,6 +12,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class ArpTable {
 
 	private Map<Interface, Set<ArpEntry>> arpTable;
@@ -20,27 +23,19 @@ public class ArpTable {
 		this.arpTable = Maps.newHashMap();
 	}
 
-	void addEntry(Interface iface, ArpEntry arp) {
+	void addEntry(ArpEntry arp) {
 
-		if (!arpTable.containsKey(iface)) {
-			arpTable.put(iface, Sets.newHashSet());
+		if (!arpTable.containsKey(arp.getIface())) {
+			arpTable.put(arp.getIface(), Sets.newHashSet());
 		}
 
-		arpTable.get(iface).add(arp);
+		arpTable.get(arp.getIface()).add(arp);
 
 	}
 
-	public ArpEntry hasEntry(Interface iface, InetAddress ip) {
+	public boolean hasEntry(InetAddress ip) {
 
-		for (ArpEntry a : arpTable.get(iface)) {
-
-			if (a.getIp().equals(ip)) {
-				return a;
-			}
-
-		}
-
-		return null;
+		return search(ip) != null;
 
 	}
 
@@ -48,13 +43,17 @@ public class ArpTable {
 
 		for (Interface iface : arpTable.keySet()) {
 
-			ArpEntry found = hasEntry(iface, ip);
+			for (ArpEntry a : arpTable.get(iface)) {
 
-			if (found != null) {
-				return found;
+				if (a.getIp().equals(ip)) {
+					log.debug("found arp entry {} for address {}", a, ip);
+					return a;
+				}
+
 			}
-		}
 
+		}
+		log.debug("no arp entry found for {}", ip);
 		return null;
 
 	}

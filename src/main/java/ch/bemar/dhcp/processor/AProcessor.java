@@ -9,7 +9,7 @@ import org.dhcp4java.DHCPOption;
 import org.dhcp4java.DHCPPacket;
 
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
-import ch.bemar.dhcp.config.mgmt.IAddress;
+import ch.bemar.dhcp.config.lease.IAddress;
 import ch.bemar.dhcp.constants.DhcpConstants;
 import ch.bemar.dhcp.core.TransportSocket;
 import ch.bemar.dhcp.util.DhcpOptionUtils;

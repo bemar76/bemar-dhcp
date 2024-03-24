@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import ch.bemar.dhcp.config.element.Subnet;
-import ch.bemar.dhcp.config.mgmt.LeaseAddress;
+import ch.bemar.dhcp.config.lease.LeaseAddress;
 
 @TestMethodOrder(OrderAnnotation.class)
 public class AddressPersistenceTest {

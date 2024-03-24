@@ -18,6 +18,8 @@ import ch.bemar.dhcp.config.element.FixedAddress;
 import ch.bemar.dhcp.config.element.IpRange;
 import ch.bemar.dhcp.config.element.Netmask;
 import ch.bemar.dhcp.config.element.Subnet;
+import ch.bemar.dhcp.config.lease.IAddress;
+import ch.bemar.dhcp.config.lease.LeaseAddressManagement;
 import ch.bemar.dhcp.exception.NoAddressFoundException;
 import ch.bemar.dhcp.persistence.LeaseDbDao;
 

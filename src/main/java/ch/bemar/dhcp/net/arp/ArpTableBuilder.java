@@ -32,7 +32,7 @@ public class ArpTableBuilder {
 				} else if (!line.trim().isEmpty() && !line.trim().startsWith(EnvironmentManager.getInstance()
 						.getEnvAsString(ArpPropertiesConstants.COL_LINE_ARP_HEADER_START))) {
 
-					table.addEntry(iface, getArpEntry(line));
+					table.addEntry(getArpEntry(iface, line));
 
 				}
 
@@ -58,11 +58,11 @@ public class ArpTableBuilder {
 
 	}
 
-	private ArpEntry getArpEntry(String line) throws UnknownHostException {
+	private ArpEntry getArpEntry(Interface iface, String line) throws UnknownHostException {
 		String[] tokens = StringUtils.split(line.trim());
 
 		if (tokens.length == 2) {
-			return new ArpEntry(
+			return new ArpEntry(iface,
 					InetAddress.getByName(
 							tokens[EnvironmentManager.getInstance().getEnvAsInteger(ArpPropertiesConstants.COL_IP)]),
 					new HardwareAddress(new byte[6]), getArpType(
@@ -78,7 +78,7 @@ public class ArpTableBuilder {
 		}
 
 		if (tokens.length == 3) {
-			return new ArpEntry(
+			return new ArpEntry(iface,
 					InetAddress.getByName(
 							tokens[EnvironmentManager.getInstance().getEnvAsInteger(ArpPropertiesConstants.COL_IP)]),
 					new HardwareAddress(
