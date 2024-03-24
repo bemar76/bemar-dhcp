@@ -3,7 +3,10 @@ package ch.bemar.dhcp.constants;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.dhcp4java.DHCPConstants;
+
+import com.google.common.base.Strings;
 
 import ch.bemar.dhcp.exception.OptionNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -74,7 +77,7 @@ public class DhcpOptionMapper {
 		optionToByteMap.put("renewal-time", DHCPConstants.DHO_DHCP_RENEWAL_TIME);
 		optionToByteMap.put("rebinding-time", DHCPConstants.DHO_DHCP_REBINDING_TIME);
 		optionToByteMap.put("vendor-class-identifier", DHCPConstants.DHO_VENDOR_CLASS_IDENTIFIER);
-		optionToByteMap.put("dhcp-client-identifier", DHCPConstants.DHO_DHCP_CLIENT_IDENTIFIER);
+		optionToByteMap.put("client-identifier", DHCPConstants.DHO_DHCP_CLIENT_IDENTIFIER);
 		optionToByteMap.put("nwip-domain", DHCPConstants.DHO_NWIP_DOMAIN_NAME);
 		optionToByteMap.put("nwip-suboptions", DHCPConstants.DHO_NWIP_SUBOPTIONS);
 		optionToByteMap.put("nisplus-domain", DHCPConstants.DHO_NISPLUS_DOMAIN);
@@ -92,7 +95,7 @@ public class DhcpOptionMapper {
 		optionToByteMap.put("stda-server", DHCPConstants.DHO_STDA_SERVER);
 		optionToByteMap.put("user-class", DHCPConstants.DHO_USER_CLASS);
 		optionToByteMap.put("fqdn", DHCPConstants.DHO_FQDN);
-		optionToByteMap.put("dhcp-agent-options", DHCPConstants.DHO_DHCP_AGENT_OPTIONS);
+		optionToByteMap.put("agent-options", DHCPConstants.DHO_DHCP_AGENT_OPTIONS);
 		optionToByteMap.put("nds-servers", DHCPConstants.DHO_NDS_SERVERS);
 		optionToByteMap.put("nds-tree-name", DHCPConstants.DHO_NDS_TREE_NAME);
 		optionToByteMap.put("nds-context", DHCPConstants.DHO_NDS_CONTEXT);
@@ -125,9 +128,24 @@ public class DhcpOptionMapper {
 
 	public static Byte getOptionByteByName(String name) throws OptionNotFoundException {
 		log.debug("search option: {}", name);
-		Byte b = optionToByteMap.get(name);
-		if (b == null) {
-			throw new OptionNotFoundException("No option type for '" + name + "' found");
+		Byte b = null;
+
+		if (!Strings.isNullOrEmpty(name)) {
+			b = optionToByteMap.get(name.trim());
+
+			if (b == null && !name.trim().toLowerCase().startsWith("dhcp-")) // maybe we can find it with "dhcp-" suffix
+				b = optionToByteMap.get("dhcp-" + name.trim());
+
+			if (b == null && name.trim().toLowerCase().startsWith("dhcp-")) // maybe we can find it without "dhcp-"
+																			// suffix
+				b = optionToByteMap.get(StringUtils.remove("dhcp-", name));
+
+			if (b == null) {
+				throw new OptionNotFoundException("No option type for '" + name + "' found");
+			}
+
+		} else {
+			throw new OptionNotFoundException("The name of the option my not null");
 		}
 		return b;
 	}

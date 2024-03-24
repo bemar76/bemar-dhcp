@@ -20,6 +20,7 @@ import org.dhcp4java.DHCPPacket;
 
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
 import ch.bemar.dhcp.config.mgmt.LeaseAddressManagement;
+import ch.bemar.dhcp.constants.DhcpConstants;
 import ch.bemar.dhcp.config.mgmt.IAddress;
 import ch.bemar.dhcp.exception.DHCPBadPacketException;
 import ch.bemar.dhcp.exception.NoAddressFoundException;
@@ -33,7 +34,8 @@ public class DhcpRequestProcessor extends AProcessor {
 
 	private final LeaseAddressManagement addressManagement;
 
-	public DhcpRequestProcessor(DhcpSubnetConfig subnetConfig, LeaseAddressManagement addressManagement) throws IOException {
+	public DhcpRequestProcessor(DhcpSubnetConfig subnetConfig, LeaseAddressManagement addressManagement)
+			throws IOException {
 		this.subnetConfig = subnetConfig;
 		this.addressManagement = addressManagement;
 	}
@@ -209,15 +211,15 @@ public class DhcpRequestProcessor extends AProcessor {
 		// we do not set other options for this type of message
 
 		// we set address/port according to rfc
-		response.setAddrPort(new InetSocketAddress(getSubnetConfig().getBroadcastAddress().getHostAddress(), 68));
+		response.setAddrPort(new InetSocketAddress(getSubnetConfig().getBroadcastAddress().getHostAddress(), DhcpConstants.RESPONSE_PORT));
 
 		return response;
 	}
 
 	@Override
-	public byte processType() {
+	public byte[] processTypes() {
 
-		return DHCPConstants.DHCPREQUEST;
+		return new byte[] { DHCPConstants.DHCPREQUEST };
 	}
 
 	@Override

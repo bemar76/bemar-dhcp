@@ -55,7 +55,7 @@ public abstract class AProcessor implements IProcessor {
 		}
 
 		// we set address/port according to rfc
-		response.setAddrPort(new InetSocketAddress(getSubnetConfig().getBroadcastAddress().getHostAddress(), 68));
+		response.setAddrPort(new InetSocketAddress(getSubnetConfig().getBroadcastAddress().getHostAddress(), DhcpConstants.RESPONSE_PORT));
 	}
 
 	protected InetAddress getRequestedAddress(DHCPPacket request) {

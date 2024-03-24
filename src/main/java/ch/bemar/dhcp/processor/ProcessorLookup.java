@@ -19,9 +19,9 @@ public class ProcessorLookup {
 	private static LeaseAddressManagement addressManagement;
 
 	private static DhcpSubnetConfig config;
-	
+
 	public void close() {
-		
+
 	}
 
 	public ProcessorLookup(DhcpSubnetConfig cfg) throws Exception {
@@ -47,7 +47,9 @@ public class ProcessorLookup {
 
 					IProcessor p = constr.newInstance(cfg, addressManagement);
 
-					processorSet.put(p.processType(), p);
+					for (byte b : p.processTypes()) {
+						processorSet.put(b, p);
+					}
 
 				}
 

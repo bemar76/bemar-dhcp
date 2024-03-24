@@ -110,9 +110,9 @@ public class DhcpDiscoverProcessor extends AProcessor {
 	}
 
 	@Override
-	public byte processType() {
+	public byte[] processTypes() {
 
-		return DHCPConstants.DHCPDISCOVER;
+		return new byte[] { DHCPConstants.DHCPDISCOVER };
 
 	}
 

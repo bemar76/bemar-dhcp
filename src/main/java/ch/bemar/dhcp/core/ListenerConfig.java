@@ -34,6 +34,14 @@ public class ListenerConfig {
 
 	}
 
+	public ListenerConfig(InetAddress address, String ifaceName, int port, String name) {
+		super();
+		this.address = address;
+		this.ifaceName = ifaceName;
+		this.port = port;
+		this.name = name;
+	}
+
 	private InetAddress address;
 	private String ifaceName;
 	private final int port;

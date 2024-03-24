@@ -12,6 +12,9 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import ch.bemar.dhcp.ArgumentOptions;
+import ch.bemar.dhcp.OptionConstant;
+import ch.bemar.dhcp.constants.DhcpConstants;
 import ch.bemar.dhcp.env.EnvConstants;
 import ch.bemar.dhcp.env.EnvironmentManager;
 import ch.bemar.dhcp.exception.DHCPServerInitException;
@@ -46,14 +49,9 @@ public class SocketManager {
 
 			if (cfg.getName().equalsIgnoreCase(handler.getSubnetConfig().getDomainName())) {
 
-				DatagramSocket socket = bindToInterface(cfg);
+				socketHandlerAssignments.add(createSocketHandler(handler, cfg));
 
-				TransportSocket ts = new TransportSocket(socket, cfg.getName());
-
-				socketHandlerAssignments.add(new SocketHandlerHolder(ts, handler));
-
-				log.info("Handler '{}' was successfully bound to listener '{}' with subnet config {}",
-						handler.getSubnetConfig().getDomainName(), ts.getId(), handler.getSubnetConfig().getRange());
+				handleInfoSocket(handler, cfg);
 
 				return;
 			}
@@ -61,6 +59,39 @@ public class SocketManager {
 		}
 
 		log.warn("For handler no valid socket was found");
+
+	}
+
+	/**
+	 * creates an socket which is listening on port 68 for info purposes. Only
+	 * executed in simulation mode
+	 * 
+	 * @param handler
+	 * @param cfg
+	 * @throws InterfaceException
+	 */
+	private void handleInfoSocket(IDatagramHandler handler, ListenerConfig cfg) throws InterfaceException {
+		if (ArgumentOptions.hasOption(OptionConstant.SIMULATION)) {
+
+			ListenerConfig responseConfig = new ListenerConfig(cfg.getAddress(), cfg.getIfaceName(),
+					DhcpConstants.RESPONSE_PORT, cfg.getName());
+
+			socketHandlerAssignments.add(createSocketHandler(handler, responseConfig));
+			log.info("added info socket handler");
+		}
+	}
+
+	private SocketHandlerHolder createSocketHandler(IDatagramHandler handler, ListenerConfig cfg)
+			throws InterfaceException {
+
+		DatagramSocket socket = bindToInterface(cfg);
+
+		TransportSocket ts = new TransportSocket(socket, cfg.getName());
+
+		log.info("Handler '{}' was successfully related to listener '{}' with subnet config {}",
+				handler.getSubnetConfig().getDomainName(), ts.getId(), handler.getSubnetConfig().getRange());
+
+		return new SocketHandlerHolder(ts, handler);
 
 	}
 

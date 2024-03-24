@@ -37,6 +37,7 @@ import java.net.InetSocketAddress;
 import java.util.logging.Logger;
 
 import ch.bemar.dhcp.config.mgmt.IAddress;
+import ch.bemar.dhcp.constants.DhcpConstants;
 import ch.bemar.dhcp.exception.DHCPBadPacketException;
 
 /**
@@ -117,19 +118,19 @@ public final class DHCPResponseUtil {
 		case DHCPACK:
 			if (INADDR_ANY.equals(giaddr)) {
 				if (INADDR_ANY.equals(ciaddr)) { // broadcast to LAN
-					sockAdr = new InetSocketAddress(INADDR_BROADCAST, 68);
+					sockAdr = new InetSocketAddress(INADDR_BROADCAST, DhcpConstants.RESPONSE_PORT);
 				} else {
-					sockAdr = new InetSocketAddress(ciaddr, 68);
+					sockAdr = new InetSocketAddress(ciaddr, DhcpConstants.RESPONSE_PORT);
 				}
 			} else { // unicast to relay
-				sockAdr = new InetSocketAddress(giaddr, 67);
+				sockAdr = new InetSocketAddress(giaddr, DhcpConstants.REQUEST_PORT);
 			}
 			break;
 		case DHCPNAK:
 			if (INADDR_ANY.equals(giaddr)) { // always broadcast
-				sockAdr = new InetSocketAddress(INADDR_BROADCAST, 68);
+				sockAdr = new InetSocketAddress(INADDR_BROADCAST, DhcpConstants.RESPONSE_PORT);
 			} else { // unicast to relay
-				sockAdr = new InetSocketAddress(giaddr, 67);
+				sockAdr = new InetSocketAddress(giaddr, DhcpConstants.REQUEST_PORT);
 			}
 			break;
 		default:

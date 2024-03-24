@@ -6,6 +6,6 @@ public interface IProcessor {
 
 	public DHCPPacket processPacket(DHCPPacket request);
 
-	public byte processType();
+	public byte[] processTypes();
 
 }

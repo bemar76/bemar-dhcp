@@ -80,14 +80,14 @@ public class DatagramHandler implements IDatagramHandler {
 			// we have something to send back
 			byte[] responseBuf = response.serialize();
 
-			log.debug("Buffer is " + responseBuf.length + " bytes long");
+			log.debug("Buffer is {} bytes long", responseBuf.length);
 
 			log.info("response: " + response.toString());
 
 			responseDatagram = new DatagramPacket(responseBuf, responseBuf.length, address, port,
 					requestDatagram.getId());
 
-			log.debug("Sending back to" + address.getHostAddress() + '(' + port + ')');
+			log.debug("Sending back to {}", address.getHostAddress() + '(' + port + ')');
 
 			// this.postProcess(requestDatagram, responseDatagram);
 

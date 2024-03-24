@@ -3,6 +3,8 @@ package ch.bemar.dhcp.core;
 import java.io.IOException;
 import java.net.DatagramSocket;
 
+import ch.bemar.dhcp.ArgumentOptions;
+import ch.bemar.dhcp.OptionConstant;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,9 +22,12 @@ public class TransportSocket {
 
 		java.net.DatagramPacket packet = new java.net.DatagramPacket(new byte[PACKET_SIZE], PACKET_SIZE);
 
-		log.info("Waiting for UDP packet");
+		log.info("Waiting for UDP packet on iface {} at port {}", serverSocket.getLocalAddress(),
+				serverSocket.getLocalPort());
+		
 		serverSocket.receive(packet);
-		log.info("Got packet");
+		
+		log.info("Got packet on on iface {} at port {}", serverSocket.getLocalAddress(), serverSocket.getLocalPort());
 
 		return new DatagramPacket(packet, id);
 	}
@@ -45,7 +50,13 @@ public class TransportSocket {
 	public void send(DatagramPacket responseDatagram) throws IOException {
 
 		if (responseDatagram != null)
-			serverSocket.send(responseDatagram.getPacket());
+
+			if (ArgumentOptions.hasOption(OptionConstant.SIMULATION)) {
+				log.warn("Simulation mode. Not sending the answer");
+			} else {
+				serverSocket.send(responseDatagram.getPacket());
+			}
+
 		else {
 			log.warn("response datagramm is null. nothing to send");
 		}

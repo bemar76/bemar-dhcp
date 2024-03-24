@@ -4,12 +4,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.IOUtils;
 
 import ch.bemar.dhcp.config.DhcpServerConfiguration;
@@ -17,7 +11,6 @@ import ch.bemar.dhcp.config.reader.ServerConfigReader;
 import ch.bemar.dhcp.core.DHCPServer;
 import ch.bemar.dhcp.env.EnvConstants;
 import ch.bemar.dhcp.env.EnvironmentManager;
-import ch.bemar.dhcp.exception.OptionNotFoundException;
 import ch.bemar.dhcp.util.NetworkInterfaceInfo;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,11 +21,10 @@ public class BemarDhcpServer {
 	 * Launcher for the server.
 	 * 
 	 * <p>
-	 * args[0] = path to config file
+	 * args[0] = configured options in {@link OptionConstant}
 	 * 
 	 * @param args
 	 * @throws Exception
-	 * @throws OptionNotFoundException
 	 */
 	public static void main(String[] args) throws Exception {
 
@@ -40,8 +32,12 @@ public class BemarDhcpServer {
 
 		ArgumentOptions.readArguments(args);
 
-		if (ArgumentOptions.hasOption(OptionConstant.PROD_MODE.getShortOpt())) {
+		if (ArgumentOptions.hasOption(OptionConstant.PROD_MODE)) {
 			LogConfiguration.load("classpath:logback-prod.xml");
+		}
+
+		if (ArgumentOptions.hasOption(OptionConstant.SIMULATION)) {
+			log.warn("############################# SIMULATION MODE ######################################");
 		}
 
 		ShutdownHook.installShutdownHook();
@@ -49,14 +45,14 @@ public class BemarDhcpServer {
 		ServerConfigReader scr = new ServerConfigReader();
 		DhcpServerConfiguration config = null;
 
-		if (ArgumentOptions.hasOption(OptionConstant.FILEINPUT.getShortOpt())) {
-			String inputFilePath = ArgumentOptions.getOptionValue(OptionConstant.FILEINPUT.getLongOpt());
+		if (ArgumentOptions.hasOption(OptionConstant.FILEINPUT)) {
+			String inputFilePath = ArgumentOptions.getOptionValue(OptionConstant.FILEINPUT);
 
 			File cfgFile = new File(inputFilePath);
 			log.info("reading config from file: {}", cfgFile);
 			config = scr.readConfigFromFile(cfgFile);
 
-		} else if (ArgumentOptions.hasOption(OptionConstant.IFACEINFO.getShortOpt())) {
+		} else if (ArgumentOptions.hasOption(OptionConstant.IFACEINFO)) {
 
 			NetworkInterfaceInfo.printIfaceInfo();
 			System.exit(0);

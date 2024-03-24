@@ -59,12 +59,12 @@ public class ArgumentOptions {
 		return options;
 	}
 
-	public static boolean hasOption(String opt) {
-		return cmd.hasOption(opt);
+	public static String getOptionValue(OptionConstant oc) {
+		return cmd.getOptionValue(oc.getLongOpt());
 	}
 
-	public static String getOptionValue(String opt) {
-		return cmd.getOptionValue(opt);
+	public static boolean hasOption(OptionConstant oc) {
+		return cmd.hasOption(oc.getShortOpt());
 	}
 
 }
