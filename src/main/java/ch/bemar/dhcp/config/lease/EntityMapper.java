@@ -10,7 +10,7 @@ import org.dhcp4java.HardwareAddress;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
-import ch.bemar.dhcp.persistence.DbLease;
+import ch.bemar.dhcp.persistence.model.DbLease;
 
 public class EntityMapper {
 

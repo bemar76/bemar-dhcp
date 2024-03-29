@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.bemar.dhcp.config.lease.EntityMapper;
 import ch.bemar.dhcp.config.lease.LeaseAddress;
-import ch.bemar.dhcp.persistence.DbLease;
+import ch.bemar.dhcp.persistence.model.DbLease;
 
 public class EntityManagerTest {
 

@@ -16,6 +16,8 @@
 		<java.version>17</java.version>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
+		<imageName>bDHCP</imageName>
+		<mainClass>ch.bemar.dhcp.BemarDhcpServer</mainClass>
 
 		<guava-version>33.1.0-jre</guava-version>
 
@@ -43,20 +45,35 @@
 		<maven-shade-plugin.version>3.5.2</maven-shade-plugin.version>
 		<versions-maven-plugin.version>2.16.2</versions-maven-plugin.version>
 
-		<hibernate-core.version>5.6.15.Final</hibernate-core.version>
-		<hibernate-entitymanager.version>5.6.15.Final</hibernate-entitymanager.version>
+		<native.maven.plugin.version>0.9.12</native.maven.plugin.version>
+
+		<jakarta.xml.bind-api.version>3.0.1</jakarta.xml.bind-api.version>
+		<jaxb-runtime.version>3.0.2</jaxb-runtime.version>
+		<jakarta.activation-api.version>2.0.1</jakarta.activation-api.version>
 	</properties>
 
 	<dependencies>
 
 		<!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core -->
 
-		
-
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>${hibernate-entitymanager.version}</version>
+			<groupId>jakarta.xml.bind</groupId>
+			<artifactId>jakarta.xml.bind-api</artifactId>
+			<version>${jakarta.xml.bind-api.version}</version>
+		</dependency>
+
+		<!-- JAXB Runtime -->
+		<dependency>
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-runtime</artifactId>
+			<version>${jaxb-runtime.version}</version>
+		</dependency>
+
+		<!-- Activation API (needed with JAXB API) -->
+		<dependency>
+			<groupId>jakarta.activation</groupId>
+			<artifactId>jakarta.activation-api</artifactId>
+			<version>${jakarta.activation-api.version}</version>
 		</dependency>
 
 		<dependency>
@@ -159,95 +176,142 @@
 			<version>${lombok.version}</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.codehaus.plexus/plexus-utils -->
+		<dependency>
+			<groupId>org.codehaus.plexus</groupId>
+			<artifactId>plexus-utils</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+
+
 	</dependencies>
 
 
 	<build>
 
 		<plugins>
-
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven-compiler-plugin.version}</version>
-				<configuration>
-					<annotationProcessorPaths>
-						<path>
-							<groupId>com.google.auto.service</groupId>
-							<artifactId>auto-service</artifactId>
-							<version>${auto-service.version}</version>
-						</path>
-						<path>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-							<version>${lombok.version}</version>
-						</path>
-					</annotationProcessorPaths>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>${maven-dependency-plugin.version}</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>analyze</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>versions-maven-plugin</artifactId>
-				<version>${versions-maven-plugin.version}</version>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.0.0</version>
 				<executions>
 					<execution>
-						<phase>validate</phase>
+						<id>java-agent</id>
 						<goals>
-							<goal>display-dependency-updates</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>${maven-shade-plugin.version}</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
+							<goal>exec</goal>
 						</goals>
 						<configuration>
-							<transformers>
-								<transformer
-									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>ch.bemar.dhcp.BemarDhcpServer</mainClass>
-								</transformer>
-							</transformers>
+							<executable>java</executable>
+							<workingDirectory>${project.build.directory}</workingDirectory>
+							<arguments>
+								<argument>-classpath</argument>
+								<classpath />
+								<argument>${mainClass}</argument>
+							</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>native</id>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>${project.build.directory}/${imageName}</executable>
+							<workingDirectory>${project.build.directory}</workingDirectory>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.source}</target>
+				</configuration>
+			</plugin>
 
 			<plugin>
-				<groupId>org.owasp</groupId>
-				<artifactId>dependency-check-maven</artifactId>
-				<version>${dependency-check-maven.version}</version>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.2</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>${mainClass}</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
 					<execution>
+						<phase>package</phase>
 						<goals>
-							<goal>check</goal>
+							<goal>single</goal>
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>${mainClass}</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
 			</plugin>
+
 		</plugins>
 
 	</build>
+
+	<profiles>
+		<profile>
+			<id>native</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.graalvm.buildtools</groupId>
+						<artifactId>native-maven-plugin</artifactId>
+						<version>${native.maven.plugin.version}</version>
+						<extensions>true</extensions>
+						<dependencies>
+							<dependency>
+								<groupId>org.codehaus.plexus</groupId>
+								<artifactId>plexus-utils</artifactId>
+								<version>3.5.1</version>
+							</dependency>
+						</dependencies>
+						<executions>
+							<execution>
+								<id>build-native</id>
+								<goals>
+									<goal>build</goal>
+								</goals>
+								<phase>package</phase>
+							</execution>
+							<execution>
+								<id>test-native</id>
+								<goals>
+									<goal>test</goal>
+								</goals>
+								<phase>test</phase>
+							</execution>
+						</executions>
+
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.sql.SQLException;
 import java.util.Collection;
 
 import org.junit.jupiter.api.AfterAll;
@@ -16,16 +17,17 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import ch.bemar.dhcp.config.element.Subnet;
 import ch.bemar.dhcp.config.lease.LeaseAddress;
+import ch.bemar.dhcp.persistence.service.LeaseDbService;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class AddressPersistenceTest {
+public class LeaseServiceTest {
 
 	private static LeaseDbService addressService;
 	private static long lastContact;
 
 	@BeforeAll
-	static void init() {
-		addressService = new LeaseDbService("hibernate.cfg2.xml");
+	static void init() throws Exception {
+		addressService = new LeaseDbService(LeaseServiceTest.class.getResourceAsStream("/persistence.cfg2.xml"));
 	}
 
 	@AfterAll
@@ -35,7 +37,8 @@ public class AddressPersistenceTest {
 
 	@Test
 	@Order(1)
-	void testAddressWrite() throws UnknownHostException {
+	void testAddressWrite()
+			throws UnknownHostException, IllegalArgumentException, IllegalAccessException, SQLException {
 
 		lastContact = System.currentTimeMillis();
 
@@ -50,7 +53,8 @@ public class AddressPersistenceTest {
 
 	@Test
 	@Order(2)
-	void testAddressReadAll1() throws UnknownHostException {
+	void testAddressReadAll1()
+			throws UnknownHostException, IllegalArgumentException, IllegalAccessException, SQLException {
 
 		Collection<LeaseAddress> found = addressService.readAll();
 
@@ -60,7 +64,8 @@ public class AddressPersistenceTest {
 
 	@Test
 	@Order(3)
-	void testAddressRead1() throws UnknownHostException {
+	void testAddressRead1()
+			throws UnknownHostException, IllegalArgumentException, IllegalAccessException, SQLException {
 
 		LeaseAddress a = new LeaseAddress();
 		a.setIp(InetAddress.getByName("192.169.64.54"));
@@ -81,7 +86,8 @@ public class AddressPersistenceTest {
 
 	@Test
 	@Order(4)
-	void testAddressUpdate() throws UnknownHostException {
+	void testAddressUpdate()
+			throws UnknownHostException, IllegalArgumentException, IllegalAccessException, SQLException {
 
 		lastContact = System.currentTimeMillis();
 
@@ -96,7 +102,8 @@ public class AddressPersistenceTest {
 
 	@Test
 	@Order(5)
-	void testAddressRead2() throws UnknownHostException {
+	void testAddressRead2()
+			throws UnknownHostException, IllegalArgumentException, IllegalAccessException, SQLException {
 
 		LeaseAddress a = new LeaseAddress();
 		a.setIp(InetAddress.getByName("192.169.64.54"));
@@ -117,7 +124,8 @@ public class AddressPersistenceTest {
 
 	@Test
 	@Order(6)
-	void testAddressDelete() throws UnknownHostException {
+	void testAddressDelete()
+			throws UnknownHostException, IllegalArgumentException, IllegalAccessException, SQLException {
 
 		LeaseAddress found = (LeaseAddress) addressService.findByAddress(InetAddress.getByName("192.169.64.54"));
 
@@ -126,7 +134,8 @@ public class AddressPersistenceTest {
 
 	@Test
 	@Order(7)
-	void testAddressReadAll2() throws UnknownHostException {
+	void testAddressReadAll2()
+			throws UnknownHostException, IllegalArgumentException, IllegalAccessException, SQLException {
 
 		Collection<LeaseAddress> found = addressService.readAll();
 

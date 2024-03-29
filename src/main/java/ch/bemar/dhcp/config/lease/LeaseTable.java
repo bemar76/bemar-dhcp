@@ -1,7 +1,10 @@
 package ch.bemar.dhcp.config.lease;
 
+import java.io.File;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -11,7 +14,7 @@ import com.google.common.collect.Lists;
 import ch.bemar.dhcp.config.DhcpHostConfig;
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
 import ch.bemar.dhcp.exception.NoAddressFoundException;
-import ch.bemar.dhcp.persistence.LeaseDbService;
+import ch.bemar.dhcp.persistence.service.LeaseDbService;
 import ch.bemar.dhcp.util.IPRangeCalculatorUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,7 +27,19 @@ public class LeaseTable {
 
 	private final LeaseDbService addressService;
 
-	public LeaseTable(DhcpSubnetConfig subnet) throws UnknownHostException, NoAddressFoundException {
+	public LeaseTable(DhcpSubnetConfig subnet) throws Exception {
+		this(subnet, new LeaseDbService());
+	}
+
+	public LeaseTable(DhcpSubnetConfig subnet, File file) throws Exception {
+		this(subnet, new LeaseDbService(file));
+	}
+
+	public LeaseTable(DhcpSubnetConfig subnet, InputStream is) throws Exception {
+		this(subnet, new LeaseDbService(is));
+	}
+
+	private LeaseTable(DhcpSubnetConfig subnet, LeaseDbService dbService) throws Exception {
 
 		this.addressService = new LeaseDbService();
 
@@ -82,9 +97,14 @@ public class LeaseTable {
 		return addresses;
 	}
 
-	public void persist(LeaseAddress a) {
+	public void persist(LeaseAddress a)
+			throws UnknownHostException, IllegalArgumentException, IllegalAccessException, SQLException {
 		addressService.saveOrUpdate(a);
 
+	}
+
+	public void close() {
+		addressService.close();
 	}
 
 }

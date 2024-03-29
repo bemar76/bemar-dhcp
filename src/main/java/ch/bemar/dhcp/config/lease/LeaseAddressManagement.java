@@ -1,12 +1,14 @@
 package ch.bemar.dhcp.config.lease;
 
-import java.io.IOException;
+import java.io.File;
+import java.io.InputStream;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.sql.SQLException;
 
 import org.dhcp4java.HardwareAddress;
 
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
-import ch.bemar.dhcp.exception.NoAddressFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -16,7 +18,19 @@ public class LeaseAddressManagement {
 
 	private LeaseTable leaseTable;
 
-	public LeaseAddressManagement(DhcpSubnetConfig subnet) throws NoAddressFoundException, IOException {
+	public LeaseAddressManagement(DhcpSubnetConfig subnet) throws Exception {
+		this.leaseTable = new LeaseTable(subnet);
+		this.leaseManager = new LeaseManager();
+
+	}
+	
+	public LeaseAddressManagement(DhcpSubnetConfig subnet, File file) throws Exception {
+		this.leaseTable = new LeaseTable(subnet);
+		this.leaseManager = new LeaseManager();
+
+	}
+	
+	public LeaseAddressManagement(DhcpSubnetConfig subnet, InputStream is) throws Exception {
 		this.leaseTable = new LeaseTable(subnet);
 		this.leaseManager = new LeaseManager();
 
@@ -98,10 +112,16 @@ public class LeaseAddressManagement {
 		return null;
 	}
 
-	private IAddress persist(IAddress a) {
+	private IAddress persist(IAddress a)
+			throws UnknownHostException, IllegalArgumentException, IllegalAccessException, SQLException {
 		if (a != null)
 			leaseTable.persist((LeaseAddress) a);
 
 		return a;
+	}
+
+	public void close() {
+		leaseTable.close();
+
 	}
 }

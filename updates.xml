@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updateDescriptor baseUrl="">
+  <entry targetMediaFileId="27" updatableVersionMin="" updatableVersionMax="" fileName="bDHCP_windows-x64_0_1.exe" newVersion="0.1" newMediaFileId="27" fileSize="75350016" md5Sum="e8bc84195b1dc07b36429a4e07d95023" sha256Sum="bd4817b91c30018c4e76a6791174dba6875a5efc24639a3a0bbaf8110a1134cd" bundledJre="windows-amd64-17.0.10.tar.gz" archive="false" singleBundle="false">
+    <comment language="de" />
+  </entry>
+</updateDescriptor>

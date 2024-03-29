@@ -2,7 +2,7 @@ package ch.bemar.dhcp.config.element;
 
 import java.util.Arrays;
 
-import org.codehaus.plexus.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -25,7 +25,7 @@ class ConfigElementFactoryTest {
 			"algorithm hmac-md5,ch.bemar.dhcp.config.element.Algorithm,hmac-md5",
 			"secret \"geheim\",ch.bemar.dhcp.config.element.Secret,\"geheim\"",
 			"primary 192.168.1.1,ch.bemar.dhcp.config.element.Primary,/192.168.1.1",
-			"key dhcp-update,ch.bemar.dhcp.config.element.Key,dhcp-update"})
+			"key dhcp-update,ch.bemar.dhcp.config.element.Key,dhcp-update" })
 	void testAllElements(String line, String expectedClazzname, String expectedValueString) throws Exception {
 
 		IConfigElement instance = new ConfigElementFactory().getElementByConfigLine(line);

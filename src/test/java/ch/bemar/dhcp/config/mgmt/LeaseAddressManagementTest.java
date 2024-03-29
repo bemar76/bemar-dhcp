@@ -1,6 +1,5 @@
 package ch.bemar.dhcp.config.mgmt;
 
-import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Date;
 
@@ -20,8 +19,6 @@ import ch.bemar.dhcp.config.element.Netmask;
 import ch.bemar.dhcp.config.element.Subnet;
 import ch.bemar.dhcp.config.lease.IAddress;
 import ch.bemar.dhcp.config.lease.LeaseAddressManagement;
-import ch.bemar.dhcp.exception.NoAddressFoundException;
-import ch.bemar.dhcp.persistence.LeaseDbDao;
 
 @TestMethodOrder(OrderAnnotation.class)
 public class LeaseAddressManagementTest {
@@ -39,12 +36,12 @@ public class LeaseAddressManagementTest {
 	private static String reservedIp = "172.16.8.17";
 	
 	
-	static void close() {
-		new LeaseDbDao().close();
+	static void close() throws Exception {
+		addressMgmt.close();
 	}
 
 	@BeforeAll
-	static void init() throws IOException, NoAddressFoundException {
+	static void init() throws Exception {
 
 		DhcpSubnetConfig subnet = new DhcpSubnetConfig();
 		subnet.setNetmask(new Netmask(InetAddress.getByName("255.255.255.0")));
@@ -57,7 +54,7 @@ public class LeaseAddressManagementTest {
 
 		subnet.getHosts().add(host);
 
-		addressMgmt = new LeaseAddressManagement(subnet);
+		addressMgmt = new LeaseAddressManagement(subnet, LeaseAddressManagementTest.class.getResourceAsStream("/persistence.cfg3.xml"));
 	}
 
 	@Test
