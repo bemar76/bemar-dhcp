@@ -1,16 +1,16 @@
 package ch.bemar.dhcp.persistence.cfg;
 
-import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlAttribute;
 
 public class Mapping {
-	private String clazz;
+	private String className;
 
-	@XmlElement(name = "class")
-	public String getClazz() {
-		return clazz;
+	@XmlAttribute(name = "class")
+	public String getClassName() {
+		return className;
 	}
 
-	public void setClazz(String clazz) {
-		this.clazz = clazz;
+	public void setClassName(String className) {
+		this.className = className;
 	}
 }

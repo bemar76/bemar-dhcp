@@ -47,12 +47,12 @@ public abstract class DbDao<T> implements SqlBaseMethods<T> {
 
 		try {
 
-			Class.forName(dbCfg.getJdbcConnection().getPropertyByName(Configuration.PROP_DRIVER_CLASS).toString());
+			Class.forName(dbCfg.getConnection().getPropertyValueByName(Configuration.PROP_DRIVER_CLASS).toString());
 
 			connection = DriverManager.getConnection(
-					dbCfg.getJdbcConnection().getPropertyByName(Configuration.PROP_CON_URL).toString(),
-					dbCfg.getJdbcConnection().getPropertyByName(Configuration.PROP_USERNAME).toString(),
-					dbCfg.getJdbcConnection().getPropertyByName(Configuration.PROP_PASSWORD).toString());
+					dbCfg.getConnection().getPropertyValueByName(Configuration.PROP_CON_URL).toString(),
+					dbCfg.getConnection().getPropertyValueByName(Configuration.PROP_USERNAME).toString(),
+					dbCfg.getConnection().getPropertyValueByName(Configuration.PROP_PASSWORD).toString());
 
 		} catch (ClassNotFoundException | SQLException e) {
 			log.error(e.getMessage(), e);
@@ -80,8 +80,8 @@ public abstract class DbDao<T> implements SqlBaseMethods<T> {
 	}
 
 	private void checkEntityMapping(T entity) throws SQLException {
-		for (Mapping mapping : dbCfg.getJdbcConnection().getMappings()) {
-			if (mapping.getClazz().equals(entity.getClass().getName())) {
+		for (Mapping mapping : dbCfg.getConnection().getMappings().getMappingList()) {
+			if (mapping.getClassName().equals(entity.getClass().getName())) {
 				return;
 			}
 		}
