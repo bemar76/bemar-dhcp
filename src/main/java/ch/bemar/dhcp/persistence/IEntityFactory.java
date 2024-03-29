@@ -6,5 +6,9 @@ import java.sql.SQLException;
 public interface IEntityFactory<T> {
 	
 	public T getFromResultSet(ResultSet rs) throws SQLException;
+	
+	public Class<T> getClazz();
+	
+	public T getEmptyEntity();
 
 }

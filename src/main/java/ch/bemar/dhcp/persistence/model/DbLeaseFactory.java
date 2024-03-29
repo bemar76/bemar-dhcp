@@ -26,4 +26,14 @@ public class DbLeaseFactory implements IEntityFactory<DbLease>{
         return lease;
     }
 
+	@Override
+	public Class<DbLease> getClazz() {
+		return DbLease.class;
+	}
+
+	@Override
+	public DbLease getEmptyEntity() {
+		return new DbLease();
+	}
+
 }

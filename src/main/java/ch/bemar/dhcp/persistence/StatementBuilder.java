@@ -35,8 +35,8 @@ public class StatementBuilder<T> {
 
 			} else {
 
-				update.append(commaTag).append(field.getName())
-						.append(comparatorWithValue(getFieldValueForStatement(entity, field)));
+				update.append(commaTag).append(field.getName()).append(" = ")
+						.append(getFieldValueForStatement(entity, field));
 			}
 
 		}

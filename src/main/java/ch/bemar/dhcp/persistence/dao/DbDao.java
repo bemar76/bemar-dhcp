@@ -1,5 +1,8 @@
 package ch.bemar.dhcp.persistence.dao;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -8,6 +11,8 @@ import java.sql.Statement;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
+
 import com.google.common.collect.Lists;
 
 import ch.bemar.dhcp.persistence.IEntityFactory;
@@ -15,6 +20,7 @@ import ch.bemar.dhcp.persistence.SqlBaseMethods;
 import ch.bemar.dhcp.persistence.StatementBuilder;
 import ch.bemar.dhcp.persistence.cfg.Configuration;
 import ch.bemar.dhcp.persistence.cfg.Mapping;
+import ch.bemar.dhcp.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -40,6 +46,25 @@ public abstract class DbDao<T> implements SqlBaseMethods<T> {
 		this.factory = factory;
 		this.stmtBuilder = new StatementBuilder<>();
 		setConfig(dbCfg);
+		prepareDatabase();
+	}
+
+	private void prepareDatabase() throws IllegalArgumentException, IllegalAccessException, SQLException, IOException {
+
+		try {
+			findByExample(factory.getEmptyEntity());
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			log.error(e.getMessage(), e);
+		} catch (org.h2.jdbc.JdbcSQLSyntaxErrorException e) {
+			if (StringUtils.containsRegex(e.getMessage(), "Table .* not found")) {
+				create(factory.getEmptyEntity());
+			} else {
+				log.error(e.getMessage(), e);
+			}
+		} catch (SQLException e) {
+			log.error(e.getMessage(), e);
+		}
+
 	}
 
 	private void setConfig(Configuration config) throws Exception {
@@ -134,6 +159,17 @@ public abstract class DbDao<T> implements SqlBaseMethods<T> {
 		String query = stmtBuilder.delete(entity);
 
 		stmt.execute(query);
+	}
+
+	public void create(T entity) throws SQLException, IllegalArgumentException, IllegalAccessException, IOException {
+		checkEntityMapping(entity);
+
+		Statement stmt = connection.createStatement();
+
+		InputStream is = this.getClass().getResourceAsStream("/" + entity.getClass().getSimpleName() + ".sql");
+		String create = IOUtils.toString(is, StandardCharsets.UTF_8);
+
+		stmt.execute(create);
 	}
 
 	public List<T> getEntitiesFromResultSet(ResultSet rs) throws SQLException {

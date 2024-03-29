@@ -1,9 +1,15 @@
 <configuration>
-    <jdbc-connection>
-        <property name="connection.driver_class">org.h2.Driver</property>
-        <property name="connection.url">jdbc:h2:mem:testdb2;DB_CLOSE_DELAY=-1</property>
-        <property name="connection.username">sa</property>
-        <property name="connection.password"></property>
-        <mapping class="ch.bemar.dhcp.persistence.DbLease"/>
-    </jdbc-connection>
+	<connection>
+		<properties>
+			<property name="connection.driver_class">org.h2.Driver</property>
+			<property name="connection.url">jdbc:h2:mem:testdb2;DB_CLOSE_DELAY=-1
+			</property>
+			<property name="connection.username">sa</property>
+			<property name="connection.password"></property>
+		</properties>
+		<mappings>
+			<mapping class="ch.bemar.dhcp.persistence.DbLease" />
+			<mapping class="ch.bemar.dhcp.persistence.Dingens" />
+		</mappings>
+	</connection>
 </configuration>

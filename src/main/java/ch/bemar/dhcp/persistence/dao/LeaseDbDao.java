@@ -31,6 +31,8 @@ public class LeaseDbDao extends DbDao<DbLease> implements ILeaseDao<DbLease, Har
 		super(XmlLoader.loadConfiguration(is), new DbLeaseFactory());
 
 	}
+	
+	
 
 	@Override
 	public Collection<DbLease> readAll()

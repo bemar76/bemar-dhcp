@@ -90,6 +90,7 @@ public class LeaseDaoTest {
 		lastContact = System.currentTimeMillis();
 
 		DbLease a = new DbLease();
+		a.setIp("192.169.64.54");
 		a.setHostname("bemar-pc2");
 		a.setLastContact(lastContact);
 
@@ -102,6 +103,7 @@ public class LeaseDaoTest {
 			throws UnknownHostException, IllegalArgumentException, IllegalAccessException, SQLException {
 
 		DbLease a = new DbLease();
+		a.setIp("192.169.64.54");
 		a.setHostname("bemar-pc2");
 		a.setLastContact(lastContact);
 
