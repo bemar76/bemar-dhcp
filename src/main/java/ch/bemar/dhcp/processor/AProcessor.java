@@ -80,4 +80,8 @@ public abstract class AProcessor implements IProcessor {
 		return null;
 
 	}
+	
+	protected DHCPPacket updateDns(DHCPPacket packet) {
+		
+	}
 }

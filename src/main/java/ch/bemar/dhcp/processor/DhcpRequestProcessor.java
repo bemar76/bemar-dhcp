@@ -60,7 +60,7 @@ public class DhcpRequestProcessor extends AProcessor {
 				log.info("got ip {} for mac {}", offered.getAddress().getHostAddress(),
 						request.getHardwareAddress().getHardwareAddressHex());
 
-				return makeDHCPAck(request, offered);
+				return updateDns(makeDHCPAck(request, offered));
 
 			} else {
 

@@ -50,7 +50,8 @@ public class DhcpDiscoverProcessor extends AProcessor {
 			log.info("got ip {} for mac {}", offered.getAddress().getHostAddress(),
 					request.getHardwareAddress().getHardwareAddressHex());
 
-			return createOfferPacket(request, offered);
+			return updateDns(createOfferPacket(request, offered));
+			
 		} catch (Exception ex) {
 			log.error(ex.getMessage(), ex);
 		}

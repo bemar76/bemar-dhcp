@@ -39,6 +39,8 @@
 
 		<reflections.version>0.10.2</reflections.version>
 
+		<dnsjava.version>3.5.3</dnsjava.version>
+
 		<maven-dependency-plugin.version>3.6.1</maven-dependency-plugin.version>
 		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
 		<dependency-check-maven.version>8.3.1</dependency-check-maven.version>
@@ -54,7 +56,11 @@
 
 	<dependencies>
 
-		<!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core -->
+		<dependency>
+			<groupId>dnsjava</groupId>
+			<artifactId>dnsjava</artifactId>
+			<version>${dnsjava.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>jakarta.xml.bind</groupId>
