@@ -22,6 +22,7 @@ import ch.bemar.dhcp.config.DhcpSubnetConfig;
 import ch.bemar.dhcp.config.lease.IAddress;
 import ch.bemar.dhcp.config.lease.LeaseAddressManagement;
 import ch.bemar.dhcp.constants.DhcpConstants;
+import ch.bemar.dhcp.dns.DnsUpdateManager;
 import ch.bemar.dhcp.exception.DHCPBadPacketException;
 import ch.bemar.dhcp.exception.NoAddressFoundException;
 import ch.bemar.dhcp.util.DhcpOptionUtils;
@@ -34,8 +35,9 @@ public class DhcpRequestProcessor extends AProcessor {
 
 	private final LeaseAddressManagement addressManagement;
 
-	public DhcpRequestProcessor(DhcpSubnetConfig subnetConfig, LeaseAddressManagement addressManagement)
-			throws IOException {
+	public DhcpRequestProcessor(DhcpSubnetConfig subnetConfig, LeaseAddressManagement addressManagement,
+			DnsUpdateManager updateManager) throws IOException {
+		super(updateManager);
 		this.subnetConfig = subnetConfig;
 		this.addressManagement = addressManagement;
 	}

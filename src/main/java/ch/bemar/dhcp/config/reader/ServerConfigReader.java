@@ -7,8 +7,10 @@ import org.apache.commons.io.FileUtils;
 import org.dhcp4java.DHCPOption;
 
 import ch.bemar.dhcp.config.BaseConfiguration;
+import ch.bemar.dhcp.config.DhcpKeyConfig;
 import ch.bemar.dhcp.config.DhcpServerConfiguration;
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
+import ch.bemar.dhcp.config.DhcpZoneConfig;
 import ch.bemar.dhcp.exception.OptionNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,10 +24,13 @@ import lombok.extern.slf4j.Slf4j;
 public class ServerConfigReader extends AConfigReader {
 
 	private SubnetReader subnetReader;
+	private ZoneConfigReader zoneReader;
+	private KeyConfigReader keyConfigReader;
 
 	public ServerConfigReader() {
 		this.subnetReader = new SubnetReader();
-
+		this.zoneReader = new ZoneConfigReader();
+		this.keyConfigReader = new KeyConfigReader();
 	}
 
 	public DhcpServerConfiguration readConfigFromFile(File file) throws OptionNotFoundException, Exception {
@@ -46,6 +51,18 @@ public class ServerConfigReader extends AConfigReader {
 			if (line.startsWith("subnet")) {
 
 				serverConfig.getSubnets().add(subnetReader.readSubnet(confFile));
+
+			} else if (line.startsWith("key")) {
+
+				DhcpKeyConfig key = keyConfigReader.readKey(confFile);
+
+				serverConfig.getKeys().put(key.getKey().getValue(), key);
+
+			} else if (line.startsWith("zone")) {
+
+				DhcpZoneConfig zone = zoneReader.readZone(confFile);
+
+				serverConfig.getZones().put(zone.getZoneName(), zone);
 
 			} else {
 

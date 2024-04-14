@@ -6,24 +6,27 @@ import ch.bemar.dhcp.util.StringUtils;
 import lombok.Data;
 
 @Data
-public abstract class ASingleInteger implements IConfigElement<Integer> {
+public abstract class ABoolean implements IConfigElement<Boolean> {
 
-	protected ASingleInteger(String configLine) {
+	protected ABoolean(String configLine) {
 
 		String[] tokens = StringUtils.splitRespectsQuotes(configLine);
 		if (tokens.length != 2) {
 			throw new IllegalArgumentException(getClass().getSimpleName() + " needs 1 parameter");
 		}
 
-		this.value = Integer.valueOf(tokens[1]);
+		if ("on".equalsIgnoreCase(tokens[1].trim()) || "true".equalsIgnoreCase(tokens[1].trim())) {
+
+			value = true;
+
+		} else {
+
+			value = false;
+		}
 
 	}
 
-	public ASingleInteger(int value) {
-		this.value = value;
-	}
-
-	private Integer value;
+	private Boolean value;
 
 	public String toString() {
 		return this.getKeyWord() + " = " + this.value;

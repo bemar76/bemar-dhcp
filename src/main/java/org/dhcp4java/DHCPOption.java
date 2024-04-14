@@ -121,6 +121,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -218,31 +219,25 @@ public class DHCPOption implements Serializable {
 		return this.code;
 	}
 
-	/**
-	 * returns true if two <tt>DHCPOption</tt> objects are equal, i.e. have same
-	 * <tt>code</tt> and same <tt>value</tt>.
-	 */
 	@Override
-	public boolean equals(Object o) {
-		if (o == this) {
+	public boolean equals(Object obj) {
+		if (this == obj)
 			return true;
-		}
-		if (!(o instanceof DHCPOption)) {
+		if (obj == null)
 			return false;
-		}
-		DHCPOption opt = (DHCPOption) o;
-		return ((opt.code == this.code) && (opt.mirror == this.mirror) && Arrays.equals(opt.value, this.value));
-
+		if (getClass() != obj.getClass())
+			return false;
+		DHCPOption other = (DHCPOption) obj;
+		return code == other.code && mirror == other.mirror && Arrays.equals(value, other.value);
 	}
 
-	/**
-	 * Returns hashcode.
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
-		return this.code ^ Arrays.hashCode(this.value) ^ (this.mirror ? 0x80000000 : 0);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.hashCode(value);
+		result = prime * result + Objects.hash(code, mirror);
+		return result;
 	}
 
 	/**
@@ -1317,6 +1312,8 @@ public class DHCPOption implements Serializable {
 			return null;
 		}
 	}
+	
+	
 
 	/**
 	 * Simple method for converting from string to supported class format.

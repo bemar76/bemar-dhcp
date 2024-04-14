@@ -86,7 +86,7 @@ public class TestDNSServer {
 
 		if (!(request.isSigned() && request.isVerified())) {
 			response = new Message(request.getHeader().getID());
-			response.getHeader().setRcode(Rcode.NOTAUTH);
+			response.getHeader().setRcode(Rcode.BADKEY);
 		}
 
 		if (response != null) {

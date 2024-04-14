@@ -2,11 +2,11 @@ package ch.bemar.dhcp.config.element;
 
 import java.util.Arrays;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import ch.bemar.dhcp.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

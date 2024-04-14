@@ -9,6 +9,7 @@ import com.google.common.collect.Maps;
 
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
 import ch.bemar.dhcp.config.lease.LeaseAddressManagement;
+import ch.bemar.dhcp.dns.DnsUpdateManager;
 import ch.bemar.dhcp.exception.TypeNotFoundException;
 import ch.bemar.dhcp.util.ReflectionUtils;
 
@@ -17,6 +18,8 @@ public class ProcessorLookup {
 	private static Map<Byte, IProcessor> processorSet;
 
 	private static LeaseAddressManagement addressManagement;
+
+	private static DnsUpdateManager dnsUpdateManager;
 
 	private static DhcpSubnetConfig config;
 
@@ -27,6 +30,10 @@ public class ProcessorLookup {
 	public ProcessorLookup(DhcpSubnetConfig cfg) throws Exception {
 
 		synchronized (this) {
+
+			if (dnsUpdateManager == null) {
+				dnsUpdateManager = new DnsUpdateManager(cfg);
+			}
 
 			if (addressManagement == null) {
 				addressManagement = new LeaseAddressManagement(cfg);
@@ -43,9 +50,9 @@ public class ProcessorLookup {
 				for (Class<? extends IProcessor> proc : ReflectionUtils.findImplementations(IProcessor.class)) {
 
 					Constructor<? extends IProcessor> constr = proc.getConstructor(cfg.getClass(),
-							addressManagement.getClass());
+							addressManagement.getClass(), dnsUpdateManager.getClass());
 
-					IProcessor p = constr.newInstance(cfg, addressManagement);
+					IProcessor p = constr.newInstance(cfg, addressManagement, dnsUpdateManager);
 
 					for (byte b : p.processTypes()) {
 						processorSet.put(b, p);

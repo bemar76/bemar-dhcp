@@ -8,12 +8,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import ch.bemar.dhcp.constants.DhcpConstants;
+import ch.bemar.dhcp.util.StringUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -98,11 +98,11 @@ public class ConfigFile {
 
 		return lines.get(cursor);
 	}
-	
+
 	private String cleanUpLine(String line) {
 		return filterSemicolon(removeComment(line));
 	}
-	
+
 	private String[] cleanUpLines(String[] lines) {
 		for (int i = 0; i < lines.length; i++) {
 			lines[i] = filterSemicolon(removeComment(lines[i]));
@@ -123,13 +123,13 @@ public class ConfigFile {
 		}
 		return lines;
 	}
-	
+
 	private String removeComment(String line) {
-		if(line.contains("#")) {
-		
+		if (line.contains("#")) {
+
 			return StringUtils.substringBefore(line, "#");
 		}
-		
+
 		return line;
 	}
 }

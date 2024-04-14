@@ -5,10 +5,10 @@ import java.io.StringReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.dhcp4java.HardwareAddress;
 
 import ch.bemar.dhcp.env.EnvironmentManager;
+import ch.bemar.dhcp.util.StringUtils;
 
 public class ArpTableBuilder {
 

@@ -9,6 +9,10 @@ import org.dhcp4java.DHCPOption;
 
 import com.google.common.collect.Sets;
 
+import ch.bemar.dhcp.config.element.DdnsDomainName;
+import ch.bemar.dhcp.config.element.DdnsRevDomainName;
+import ch.bemar.dhcp.config.element.DdnsUpdateStyle;
+import ch.bemar.dhcp.config.element.DdnsUpdates;
 import ch.bemar.dhcp.config.element.IpRange;
 import ch.bemar.dhcp.config.element.Netmask;
 import ch.bemar.dhcp.config.element.Subnet;

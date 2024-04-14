@@ -2,7 +2,6 @@ package ch.bemar.dhcp.config.reader;
 
 import java.lang.reflect.Field;
 
-import org.apache.commons.lang3.StringUtils;
 import org.dhcp4java.DHCPOption;
 
 import ch.bemar.dhcp.config.BaseConfiguration;
@@ -11,6 +10,7 @@ import ch.bemar.dhcp.config.element.IConfigElement;
 import ch.bemar.dhcp.constants.DHCPOptionFactory;
 import ch.bemar.dhcp.constants.DhcpConstants;
 import ch.bemar.dhcp.util.ReflectionUtils;
+import ch.bemar.dhcp.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -49,12 +49,6 @@ public abstract class AConfigReader {
 	protected boolean handleOption(String line, BaseConfiguration config) throws Exception {
 
 		if (line.trim().toLowerCase().startsWith(DhcpConstants.OPTION)) {
-
-			if (line.contains("\"")) {
-				log.info("removing quotes: {}", line);
-				line = StringUtils.remove(line, "\"");
-				log.info("removed quotes: {}", line);
-			}
 
 			DHCPOption option = optionFactory.getFromLine(line);
 

@@ -4,11 +4,10 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.common.collect.Lists;
 
 import ch.bemar.dhcp.config.ConfigName;
+import ch.bemar.dhcp.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -19,7 +18,7 @@ public class IpRange implements IConfigElement<List<InetAddress>> {
 
 	public IpRange(String configLine) throws UnknownHostException {
 
-		String[] tokens = StringUtils.split(configLine);
+		String[] tokens = StringUtils.splitRespectsQuotes(configLine);
 		if (tokens.length != 3) {
 			throw new IllegalArgumentException("IpRange needs 2 parameters");
 		}

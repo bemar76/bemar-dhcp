@@ -15,6 +15,7 @@ import org.dhcp4java.DHCPPacket;
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
 import ch.bemar.dhcp.config.lease.IAddress;
 import ch.bemar.dhcp.config.lease.LeaseAddressManagement;
+import ch.bemar.dhcp.dns.DnsUpdateManager;
 import ch.bemar.dhcp.exception.DHCPBadPacketException;
 import ch.bemar.dhcp.exception.NoAddressFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -26,8 +27,9 @@ public class DhcpDiscoverProcessor extends AProcessor {
 
 	private final LeaseAddressManagement addressManagement;
 
-	public DhcpDiscoverProcessor(DhcpSubnetConfig subnetConfig, LeaseAddressManagement addressManagement)
-			throws IOException {
+	public DhcpDiscoverProcessor(DhcpSubnetConfig subnetConfig, LeaseAddressManagement addressManagement,
+			DnsUpdateManager updateManager) throws IOException {
+		super(updateManager);
 		this.subnetConfig = subnetConfig;
 		this.addressManagement = addressManagement;
 	}
@@ -51,7 +53,7 @@ public class DhcpDiscoverProcessor extends AProcessor {
 					request.getHardwareAddress().getHardwareAddressHex());
 
 			return updateDns(createOfferPacket(request, offered));
-			
+
 		} catch (Exception ex) {
 			log.error(ex.getMessage(), ex);
 		}

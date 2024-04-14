@@ -6,7 +6,7 @@ import ch.bemar.dhcp.config.element.Secret;
 import lombok.Data;
 
 @Data
-public class DhcpKeyConfig {
+public class DhcpKeyConfig extends BaseConfiguration{
 	
 	private Key key;
 	
@@ -14,5 +14,7 @@ public class DhcpKeyConfig {
 	
 	private Secret secret;
 	
-
+	public String toString() {
+		return machMalString(this);
+	}
 }

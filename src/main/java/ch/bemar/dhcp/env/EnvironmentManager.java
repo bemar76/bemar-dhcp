@@ -6,12 +6,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import ch.bemar.dhcp.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

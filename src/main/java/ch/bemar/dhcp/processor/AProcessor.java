@@ -1,5 +1,6 @@
 package ch.bemar.dhcp.processor;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
@@ -12,11 +13,20 @@ import ch.bemar.dhcp.config.DhcpSubnetConfig;
 import ch.bemar.dhcp.config.lease.IAddress;
 import ch.bemar.dhcp.constants.DhcpConstants;
 import ch.bemar.dhcp.core.TransportSocket;
+import ch.bemar.dhcp.dns.DnsUpdateManager;
 import ch.bemar.dhcp.util.DhcpOptionUtils;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public abstract class AProcessor implements IProcessor {
 
 	protected abstract DhcpSubnetConfig getSubnetConfig();
+
+	private final DnsUpdateManager dnsUpdateManager;
+
+	AProcessor(DnsUpdateManager dnsUpdateManager) {
+		this.dnsUpdateManager = dnsUpdateManager;
+	}
 
 	protected void handleStandardOptions(DHCPPacket request, DHCPPacket response, IAddress offeredAddress)
 			throws UnknownHostException {
@@ -55,7 +65,8 @@ public abstract class AProcessor implements IProcessor {
 		}
 
 		// we set address/port according to rfc
-		response.setAddrPort(new InetSocketAddress(getSubnetConfig().getBroadcastAddress().getHostAddress(), DhcpConstants.RESPONSE_PORT));
+		response.setAddrPort(new InetSocketAddress(getSubnetConfig().getBroadcastAddress().getHostAddress(),
+				DhcpConstants.RESPONSE_PORT));
 	}
 
 	protected InetAddress getRequestedAddress(DHCPPacket request) {
@@ -80,8 +91,17 @@ public abstract class AProcessor implements IProcessor {
 		return null;
 
 	}
-	
-	protected DHCPPacket updateDns(DHCPPacket packet) {
-		
+
+	protected DHCPPacket updateDns(DHCPPacket packet) throws IllegalArgumentException, IOException {
+		log.info("sending ddns update");
+
+		DHCPOption name = packet.getOption(DHCPConstants.DHO_HOST_NAME);
+		log.info("host name: {}", name);
+
+		dnsUpdateManager.updateDnsRecord(packet.getYiaddr(), name.getValueAsString());
+		log.info("update request sent");
+
+		return packet;
+
 	}
 }

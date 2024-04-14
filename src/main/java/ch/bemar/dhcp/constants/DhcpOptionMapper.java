@@ -3,12 +3,12 @@ package ch.bemar.dhcp.constants;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.dhcp4java.DHCPConstants;
 
 import com.google.common.base.Strings;
 
 import ch.bemar.dhcp.exception.OptionNotFoundException;
+import ch.bemar.dhcp.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

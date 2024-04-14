@@ -3,8 +3,7 @@ package ch.bemar.dhcp.config.element;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import org.apache.commons.lang3.StringUtils;
-
+import ch.bemar.dhcp.util.StringUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,7 +13,7 @@ public abstract class ASingleInetAddress implements IConfigElement<InetAddress> 
 
 	protected ASingleInetAddress(String configLine) throws UnknownHostException {
 
-		String[] tokens = StringUtils.split(configLine);
+		String[] tokens =StringUtils.splitRespectsQuotes(configLine);
 		if (tokens.length != 2) {
 			throw new IllegalArgumentException(getClass().getSimpleName() + " needs 1 parameter");
 		}

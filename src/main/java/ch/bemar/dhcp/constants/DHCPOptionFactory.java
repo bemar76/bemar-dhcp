@@ -4,12 +4,12 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.dhcp4java.DHCPOption;
 import org.dhcp4java.DHCPOption.OptionFormat;
 
 import com.google.common.collect.Lists;
 
+import ch.bemar.dhcp.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -28,7 +28,7 @@ public class DHCPOptionFactory {
 
 	private String removeQuotes(String value) {
 		if (value.contains("\"")) {
-			return StringUtils.remove(value, "\"");
+			return StringUtils.removeLeadingAndEndingQuotes(value);
 		}
 
 		return value;

@@ -3,13 +3,12 @@ package ch.bemar.dhcp.config.reader;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 
 import ch.bemar.dhcp.constants.DhcpConstants;
 import ch.bemar.dhcp.exception.OptionNotFoundException;
+import ch.bemar.dhcp.util.StringUtils;
 import lombok.Data;
 
 @Data

@@ -2,7 +2,6 @@ package ch.bemar.dhcp.util;
 
 import java.util.Arrays;
 
-import org.apache.commons.lang3.StringUtils;
 import org.dhcp4java.DHCPOption;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,7 +19,7 @@ public class DHCPOptionTest {
 			"option domain-name-servers 8.8.8.8; 8.8.4.4,6,[8; 8; 8; 8; 8; 8; 4; 4]", //
 			"option domain-name \"example.org\",15,[101; 120; 97; 109; 112; 108; 101; 46; 111; 114; 103]", //
 			"option subnet-mask 255.255.255.0,1,[-1; -1; -1; 0]", //
-			"option broadcast-address 10.0.0.255,28,[10; 0; 0; -1]"})
+			"option broadcast-address 10.0.0.255,28,[10; 0; 0; -1]" })
 	void testAllElements(String line, int b, String result) throws Exception {
 
 		line = StringUtils.replace(line, ";", ",");

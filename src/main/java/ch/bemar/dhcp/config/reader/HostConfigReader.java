@@ -2,11 +2,8 @@ package ch.bemar.dhcp.config.reader;
 
 import java.net.UnknownHostException;
 
-import org.apache.commons.lang3.StringUtils;
-import org.dhcp4java.HardwareAddress;
-
 import ch.bemar.dhcp.config.DhcpHostConfig;
-import ch.bemar.dhcp.config.element.FixedAddress;
+import ch.bemar.dhcp.util.StringUtils;
 
 public class HostConfigReader extends AConfigReader {
 

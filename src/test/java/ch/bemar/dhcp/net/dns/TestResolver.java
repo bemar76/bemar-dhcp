@@ -25,6 +25,7 @@ import org.xbill.DNS.Resolver;
 import org.xbill.DNS.SimpleResolver;
 import org.xbill.DNS.Type;
 
+import ch.bemar.dhcp.config.DhcpSubnetConfig;
 import ch.bemar.dhcp.dns.DnsUpdateManager;
 
 @TestMethodOrder(OrderAnnotation.class)
@@ -39,8 +40,8 @@ public class TestResolver {
 
 	@BeforeAll
 	static void setup() throws UnknownHostException {
-		mockDnsServer = new TestDNSServer(port);
-		mockDnsServer.start();
+//		mockDnsServer = new TestDNSServer(port);
+//		mockDnsServer.start();
 		SimpleResolver resolver = new SimpleResolver(InetAddress.getLocalHost());
 		resolver.setTimeout(Duration.ofSeconds(1));
 		resolver.setPort(port);
@@ -55,16 +56,15 @@ public class TestResolver {
 	@Order(1)
 	public void testSimpleUpdate() throws IOException {
 
-		Properties props = new Properties();
-		props.load(this.getClass().getResourceAsStream("/dns.properties"));
+		DhcpSubnetConfig subnetConfig = new DhcpSubnetConfig();
 
-		DnsUpdateManager updater = new DnsUpdateManager(props);
+		DnsUpdateManager updater = new DnsUpdateManager(subnetConfig);
 
 		try {
 			InetAddress ip = InetAddress.getByName("192.168.64.38");
 			String zoneName = "bemar.local.";
 
-			Message response = updater.updateDnsRecord(ip, dnsName, zoneName, 600);
+			Message response = updater.updateDnsRecord(ip, dnsName);
 
 			Assertions.assertEquals(0, response.getHeader().getRcode());
 		} catch (Exception e) {
@@ -80,6 +80,7 @@ public class TestResolver {
 		SimpleResolver resolver = new SimpleResolver(InetAddress.getLocalHost());
 		resolver.setTimeout(Duration.ofSeconds(1));
 		resolver.setPort(port);
+		resolver.setAddress(InetAddress.getByName("192.168.64.61"));
 
 		Lookup lookup = new Lookup(dnsName, Type.A);
 		lookup.setResolver(resolver);

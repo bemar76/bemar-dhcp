@@ -2,12 +2,11 @@ package ch.bemar.dhcp.config.reader;
 
 import java.net.UnknownHostException;
 
-import org.apache.commons.lang3.StringUtils;
-
 import ch.bemar.dhcp.config.DhcpHostConfig;
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
 import ch.bemar.dhcp.config.element.Netmask;
 import ch.bemar.dhcp.config.element.Subnet;
+import ch.bemar.dhcp.util.StringUtils;
 
 public class SubnetReader extends AConfigReader {
 
@@ -68,7 +67,7 @@ public class SubnetReader extends AConfigReader {
 	private void handleFirstLine(String line, DhcpSubnetConfig subnetConfig) throws UnknownHostException {
 		line = StringUtils.substringBeforeLast(line, "{");
 
-		String[] tokens = StringUtils.split(line);
+		String[] tokens = StringUtils.splitRespectsQuotes(line);
 
 		Subnet subnet = new Subnet(tokens[0] + " " + tokens[1]);
 		Netmask netmask = new Netmask(tokens[2] + " " + tokens[3]);

@@ -21,10 +21,9 @@ package org.dhcp4java;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.apache.commons.lang3.StringUtils;
-
 import ch.bemar.dhcp.config.ConfigName;
 import ch.bemar.dhcp.config.element.IConfigElement;
+import ch.bemar.dhcp.util.StringUtils;
 
 /**
  * Class is immutable.
@@ -48,7 +47,7 @@ public class HardwareAddress implements Serializable, IConfigElement<byte[]> {
 
 	public HardwareAddress(String configLine) {
 
-		String[] tokens = StringUtils.split(configLine.trim());
+		String[] tokens = StringUtils.splitRespectsQuotes(configLine);
 		if (tokens.length == 1) {
 
 			this.hardwareType = HTYPE_ETHER;
