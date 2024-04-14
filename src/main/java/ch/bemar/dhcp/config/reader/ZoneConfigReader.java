@@ -6,6 +6,7 @@ import org.apache.maven.shared.utils.StringUtils;
 
 import ch.bemar.dhcp.config.DhcpZoneConfig;
 import ch.bemar.dhcp.config.element.Key;
+import ch.bemar.dhcp.config.element.Port;
 import ch.bemar.dhcp.config.element.Primary;
 
 public class ZoneConfigReader {
@@ -43,6 +44,10 @@ public class ZoneConfigReader {
 			} else if (line.trim().startsWith("key")) {
 
 				zoneConfig.setKey(new Key(line));
+
+			} else if (line.trim().startsWith("port")) {
+
+				zoneConfig.setPort(new Port(line));
 
 			}
 

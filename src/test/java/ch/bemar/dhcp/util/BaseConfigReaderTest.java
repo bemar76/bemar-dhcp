@@ -72,17 +72,21 @@ public class BaseConfigReaderTest {
 
 		Assertions.assertNotNull(zoneCfg);
 
-		Assertions.assertEquals("/192.168.64.5", zoneCfg.getPrimary().getValue().toString());
+		Assertions.assertEquals("/192.168.64.61", zoneCfg.getPrimary().getValue().toString());
 
 		Assertions.assertEquals("dhcpupdate.bemar.local", zoneCfg.getKey().getValue());
+		
+		Assertions.assertEquals(54, zoneCfg.getPort().getValue());
 
 		zoneCfg = zones.get("64.168.192.in-addr.arpa.");
 
 		Assertions.assertNotNull(zoneCfg);
 
-		Assertions.assertEquals("/192.168.64.5", zoneCfg.getPrimary().getValue().toString());
+		Assertions.assertEquals("/192.168.64.61", zoneCfg.getPrimary().getValue().toString());
 
 		Assertions.assertEquals("dhcpupdate.bemar.local", zoneCfg.getKey().getValue());
+		
+		Assertions.assertEquals(54, zoneCfg.getPort().getValue());
 
 		Assertions.assertEquals(1, config.getKeys().size());
 

@@ -17,9 +17,7 @@ import ch.bemar.dhcp.persistence.model.DbLeaseFactory;
 public class LeaseDbDao extends DbDao<DbLease> implements ILeaseDao<DbLease, HardwareAddress, InetAddress> {
 
 	public LeaseDbDao() throws Exception {
-		super(XmlLoader.loadConfiguration(LeaseDbDao.class.getResourceAsStream("/persistence.cfg.xml")),
-				new DbLeaseFactory());
-
+		super(null, new DbLeaseFactory());
 	}
 
 	public LeaseDbDao(File file) throws Exception {
@@ -31,8 +29,6 @@ public class LeaseDbDao extends DbDao<DbLease> implements ILeaseDao<DbLease, Har
 		super(XmlLoader.loadConfiguration(is), new DbLeaseFactory());
 
 	}
-	
-	
 
 	@Override
 	public Collection<DbLease> readAll()

@@ -1,12 +1,16 @@
 package ch.bemar.dhcp.config.element;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
+import java.lang.reflect.Array;
 import java.util.Arrays;
 
+import org.apache.maven.shared.utils.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import ch.bemar.dhcp.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -20,10 +24,11 @@ class ConfigElementFactoryTest {
 			"authoritative,ch.bemar.dhcp.config.element.Authoritative,true", //
 			"allow booting,ch.bemar.dhcp.config.element.Allow,booting", //
 			"ddns-update-style none,ch.bemar.dhcp.config.element.DdnsUpdateStyle,none",
-			"ddns-updates off,ch.bemar.dhcp.config.element.DdnsUpdates,off", //
+			"ddns-updates on,ch.bemar.dhcp.config.element.DdnsUpdates,true", //
+			"ddns-updates off,ch.bemar.dhcp.config.element.DdnsUpdates,false", //
 			"update-static-leases on,ch.bemar.dhcp.config.element.UpdateStaticLeases,on",
 			"algorithm hmac-md5,ch.bemar.dhcp.config.element.Algorithm,hmac-md5",
-			"secret \"geheim\",ch.bemar.dhcp.config.element.Secret,\"geheim\"",
+			"secret \"geheim\",ch.bemar.dhcp.config.element.Secret,geheim",
 			"primary 192.168.1.1,ch.bemar.dhcp.config.element.Primary,/192.168.1.1",
 			"key dhcp-update,ch.bemar.dhcp.config.element.Key,dhcp-update" })
 	void testAllElements(String line, String expectedClazzname, String expectedValueString) throws Exception {
@@ -39,19 +44,38 @@ class ConfigElementFactoryTest {
 		Object result = instance.getValue();
 		log.debug("got result value from instance: '{}'", result);
 
-		Assertions.assertTrue(assertTrue(expectedValueString, instance.getValue()));
+		assertThat(toString(instance.getValue()), is(replaceSemicolon(expectedValueString)));
 
 	}
 
-	private boolean assertTrue(String expected, Object result) {
+	private static String replaceSemicolon(String expectedValue) {
+		return StringUtils.replace(expectedValue, ";", ",");
+	}
 
-		if (result.getClass().isArray() && result instanceof byte[]) {
-			log.debug("'{}' == '{}'", StringUtils.replace(expected, ";", ","), Arrays.toString((byte[]) result));
-			return StringUtils.replace(expected, ";", ",").equals(Arrays.toString((byte[]) result));
+	private String toString(Object value) {
+
+		if (value != null && value.getClass().isArray()) {
+
+			return Arrays.deepToString((Object[]) convertToArrayOfObject(value));
+		}
+		if (value != null) {
+			return value.toString();
 		}
 
-		log.debug("'{}' == '{}'", expected, result);
-		return expected.equals(result.toString());
+		return "null";
+	}
+
+	private static Object[] convertToArrayOfObject(Object array) {
+		if (array instanceof Object[]) {
+			return (Object[]) array; // Kein Cast notwendig für nicht-primitive Arrays
+		}
+
+		int length = Array.getLength(array);
+		Object[] objectArray = new Object[length];
+		for (int i = 0; i < length; i++) {
+			objectArray[i] = Array.get(array, i); // Holen der Elemente als Object
+		}
+		return objectArray;
 	}
 
 }

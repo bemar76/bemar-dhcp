@@ -32,7 +32,7 @@ public class ComplexConfigReaderTest {
 		System.out.println(config);
 
 		Assertions.assertEquals(
-				"[DHO_DOMAIN_NAME(15)=\"example.org\", DHO_DOMAIN_NAME_SERVERS(6)=192.168.64.1 192.168.64.1 , DHO_SUBNET_MASK(1)=255.255.255.0]",
+				"[DHO_SUBNET_MASK(1)=255.255.255.0, DHO_DOMAIN_NAME_SERVERS(6)=192.168.64.1 192.168.64.1 , DHO_DOMAIN_NAME(15)=\"example.org\"]",
 				config.getOptions().toString());
 
 		Assertions.assertEquals("max-lease-time = 7200", config.getMaxLeaseTime().toString());
@@ -41,7 +41,7 @@ public class ComplexConfigReaderTest {
 
 		Assertions.assertEquals("log-facility = local7", config.getLogFacility().toString());
 
-		Assertions.assertEquals("ddns-updates = off", config.getDdnsUpdates().toString());
+		Assertions.assertEquals("ddns-updates = false", config.getDdnsUpdates().toString());
 
 		Assertions.assertEquals("ddns-update-style = none", config.getDdnsUpdateStyle().toString());
 
@@ -53,7 +53,8 @@ public class ComplexConfigReaderTest {
 
 		Assertions.assertEquals("IpRange(start=/10.0.0.100, end=/10.0.0.220)", subnet.getRange().toString());
 
-		Assertions.assertEquals("[DHO_SUBNET_MASK(1)=255.255.255.0, DHO_BROADCAST_ADDRESS(28)=10.0.0.255, DHO_DOMAIN_NAME(15)=\"example.org\", DHO_DOMAIN_NAME_SERVERS(6)=192.168.64.1 192.168.64.1 ]",
+		Assertions.assertEquals(
+				"[DHO_SUBNET_MASK(1)=255.255.255.0, DHO_DOMAIN_NAME_SERVERS(6)=192.168.64.1 192.168.64.1 , DHO_BROADCAST_ADDRESS(28)=10.0.0.255, DHO_DOMAIN_NAME(15)=\"example.org\"]",
 				subnet.getOptions().toString());
 
 		Assertions.assertEquals("max-lease-time = 6000", subnet.getMaxLeaseTime().toString());
@@ -74,27 +75,53 @@ public class ComplexConfigReaderTest {
 
 		});
 
-		Assertions.assertEquals("[ibmpseries\n"
-				+ "00:09:6b:ab:0e:f2\n"
-				+ "fixed-address = /10.0.0.141\n"
-				+ "next-server = /10.0.0.20\n"
-				+ "Logger[ch.bemar.dhcp.config.BaseConfiguration]\n"
-				+ ", ibmx3655\n"
-				+ "00:14:5e:5a:31:57\n"
-				+ "fixed-address = /10.0.0.200\n"
-				+ "Logger[ch.bemar.dhcp.config.BaseConfiguration]\n"
-				+ "[DHO_SUBNET_MASK(1)=255.255.255.0, DHO_DOMAIN_NAME_SERVERS(6)=10.0.0.20 , DHO_DOMAIN_NAME(15)=\"site\", DHO_VENDOR_CLASS_IDENTIFIER(60)=\"PXEClient\"]\n"
-				+ ", sunTarget1\n"
-				+ "00:03:ba:92:92:f0\n"
-				+ "fixed-address = /10.0.0.142\n"
-				+ "next-server = /10.0.0.20\n"
-				+ "Logger[ch.bemar.dhcp.config.BaseConfiguration]\n"
-				+ "[DHO_ROUTERS(3)=10.0.0.15 ]\n"
-				+ ", x41\n"
-				+ "00:0a:e4:2f:66:38\n"
-				+ "fixed-address = /10.0.0.201\n"
-				+ "Logger[ch.bemar.dhcp.config.BaseConfiguration]\n"
-				+ "[DHO_SUBNET_MASK(1)=255.255.255.0, DHO_DOMAIN_NAME_SERVERS(6)=10.0.0.20 , DHO_DOMAIN_NAME(15)=\"site\"]\n"
+		Assertions.assertEquals("[DhcpHostConfig\n" //
+				+ "\n" //
+				+ "ibmpseries\n" //
+				+ "00:09:6b:ab:0e:f2\n" //
+				+ "fixed-address = /10.0.0.141\n" //
+				+ "next-server = /10.0.0.20\n" //
+				+ "\n" //
+				+ "\n" //
+				+ ", DhcpHostConfig\n" //
+				+ "\n" //
+				+ "ibmx3655\n" //
+				+ "00:14:5e:5a:31:57\n" //
+				+ "fixed-address = /10.0.0.200\n" //
+				+ "[\n" //
+				+ "DHCPOption\n" //
+				+ "DHO_SUBNET_MASK(1)=255.255.255.0DHCPOption\n" //
+				+ "DHO_DOMAIN_NAME_SERVERS(6)=10.0.0.20 DHCPOption\n" //
+				+ "DHO_VENDOR_CLASS_IDENTIFIER(60)=\"PXEClient\"DHCPOption\n" //
+				+ "DHO_DOMAIN_NAME(15)=\"site\"\n" //
+				+ "\n" //
+				+ "\n" //
+				+ "\n" //
+				+ ", DhcpHostConfig\n" //
+				+ "\n" //
+				+ "sunTarget1\n" //
+				+ "00:03:ba:92:92:f0\n" //
+				+ "fixed-address = /10.0.0.142\n" //
+				+ "next-server = /10.0.0.20\n" //
+				+ "[\n" //
+				+ "DHCPOption\n" //
+				+ "DHO_ROUTERS(3)=10.0.0.15 \n" //
+				+ "\n" //
+				+ "\n" //
+				+ "\n" //
+				+ ", DhcpHostConfig\n" //
+				+ "\n" //
+				+ "x41\n" //
+				+ "00:0a:e4:2f:66:38\n" //
+				+ "fixed-address = /10.0.0.201\n" //
+				+ "[\n" //
+				+ "DHCPOption\n" //
+				+ "DHO_SUBNET_MASK(1)=255.255.255.0DHCPOption\n" //
+				+ "DHO_DOMAIN_NAME_SERVERS(6)=10.0.0.20 DHCPOption\n" //
+				+ "DHO_DOMAIN_NAME(15)=\"site\"\n" //
+				+ "\n" //
+				+ "\n" //
+				+ "\n" //
 				+ "]", hosts.toString());
 
 	}

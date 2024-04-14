@@ -12,6 +12,10 @@ public class Port extends ASingleInteger {
 	public Port(String configLine) throws UnknownHostException {
 		super(configLine);
 	}
+	
+	public Port(int port) {
+		super(port);
+	}
 
 	@Override
 	public String getKeyWord() {

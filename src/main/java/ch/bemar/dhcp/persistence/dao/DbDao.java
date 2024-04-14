@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
 import ch.bemar.dhcp.persistence.IEntityFactory;
@@ -43,6 +44,9 @@ public abstract class DbDao<T> implements SqlBaseMethods<T> {
 	private IEntityFactory<T> factory;
 
 	protected DbDao(Configuration dbCfg, IEntityFactory<T> factory) throws Exception {
+
+		Preconditions.checkNotNull(dbCfg, "DB config may not null. Please define a path to the db config");
+
 		this.factory = factory;
 		this.stmtBuilder = new StatementBuilder<>();
 		setConfig(dbCfg);

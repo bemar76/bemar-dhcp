@@ -12,7 +12,7 @@ public class DhcpZoneConfig extends BaseConfiguration {
 	
 	private Primary primary;
 	
-	private Port port;
+	private Port port = new Port(53);
 	
 	private Key key;
 	

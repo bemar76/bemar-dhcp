@@ -23,15 +23,15 @@ public class LeaseAddressManagement {
 		this.leaseManager = new LeaseManager();
 
 	}
-	
+
 	public LeaseAddressManagement(DhcpSubnetConfig subnet, File file) throws Exception {
-		this.leaseTable = new LeaseTable(subnet);
+		this.leaseTable = new LeaseTable(subnet, file);
 		this.leaseManager = new LeaseManager();
 
 	}
-	
+
 	public LeaseAddressManagement(DhcpSubnetConfig subnet, InputStream is) throws Exception {
-		this.leaseTable = new LeaseTable(subnet);
+		this.leaseTable = new LeaseTable(subnet, is);
 		this.leaseManager = new LeaseManager();
 
 	}

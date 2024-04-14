@@ -32,6 +32,7 @@
 		<commons-cli.version>1.6.0</commons-cli.version>
 
 		<junit-jupiter.version>5.10.2</junit-jupiter.version>
+		<hamcrest-junit.version>2.0.0.0</hamcrest-junit.version>
 
 		<h2.version>2.2.224</h2.version>
 
@@ -156,6 +157,12 @@
 			<artifactId>junit-jupiter-params</artifactId>
 			<version>${junit-jupiter.version}</version>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-junit</artifactId>
+			<version>${hamcrest-junit.version}</version>
 		</dependency>
 
 		<dependency>

@@ -36,7 +36,7 @@ public class TestResolver {
 
 	private String dnsName = "bemar-PC.bemar.local.";
 
-	private static TestDNSServer mockDnsServer;
+
 
 	@BeforeAll
 	static void setup() throws UnknownHostException {
@@ -47,10 +47,7 @@ public class TestResolver {
 		resolver.setPort(port);
 	}
 
-	@AfterAll
-	static void shutdown() {
-		mockDnsServer.stop();
-	}
+
 
 	@Test
 	@Order(1)

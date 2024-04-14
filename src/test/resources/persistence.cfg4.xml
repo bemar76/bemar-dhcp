@@ -8,7 +8,7 @@
 			<property name="connection.password"></property>
 		</properties>
 		<mappings>
-			<mapping class="ch.bemar.dhcp.persistence.DbLease" />
+			<mapping class="ch.bemar.dhcp.persistence.model.DbLease" />
 			<mapping class="ch.bemar.dhcp.persistence.Dingens" />
 		</mappings>
 	</connection>

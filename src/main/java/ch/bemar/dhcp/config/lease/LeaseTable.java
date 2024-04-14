@@ -41,7 +41,7 @@ public class LeaseTable {
 
 	private LeaseTable(DhcpSubnetConfig subnet, LeaseDbService dbService) throws Exception {
 
-		this.addressService = new LeaseDbService();
+		this.addressService = dbService;
 
 		this.subnetConfig = subnet;
 		this.addresses = Lists.newArrayList();
