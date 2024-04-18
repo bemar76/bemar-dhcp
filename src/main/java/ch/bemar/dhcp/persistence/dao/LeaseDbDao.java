@@ -1,7 +1,5 @@
 package ch.bemar.dhcp.persistence.dao;
 
-import java.io.File;
-import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
@@ -10,23 +8,14 @@ import java.util.Collection;
 import org.dhcp4java.HardwareAddress;
 
 import ch.bemar.dhcp.persistence.ILeaseDao;
-import ch.bemar.dhcp.persistence.cfg.XmlLoader;
+import ch.bemar.dhcp.persistence.cfg.Configuration;
 import ch.bemar.dhcp.persistence.model.DbLease;
 import ch.bemar.dhcp.persistence.model.DbLeaseFactory;
 
 public class LeaseDbDao extends DbDao<DbLease> implements ILeaseDao<DbLease, HardwareAddress, InetAddress> {
 
-	public LeaseDbDao() throws Exception {
-		super(null, new DbLeaseFactory());
-	}
-
-	public LeaseDbDao(File file) throws Exception {
-		super(XmlLoader.loadConfiguration(file), new DbLeaseFactory());
-
-	}
-
-	public LeaseDbDao(InputStream is) throws Exception {
-		super(XmlLoader.loadConfiguration(is), new DbLeaseFactory());
+	public LeaseDbDao(Configuration dbCfg) throws Exception {
+		super(dbCfg, new DbLeaseFactory());
 
 	}
 

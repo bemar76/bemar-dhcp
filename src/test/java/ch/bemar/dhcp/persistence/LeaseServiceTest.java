@@ -17,6 +17,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import ch.bemar.dhcp.config.element.Subnet;
 import ch.bemar.dhcp.config.lease.LeaseAddress;
+import ch.bemar.dhcp.persistence.cfg.XmlLoader;
 import ch.bemar.dhcp.persistence.service.LeaseDbService;
 
 @TestMethodOrder(OrderAnnotation.class)
@@ -27,7 +28,7 @@ public class LeaseServiceTest {
 
 	@BeforeAll
 	static void init() throws Exception {
-		addressService = new LeaseDbService(LeaseServiceTest.class.getResourceAsStream("/persistence.cfg2.xml"));
+		addressService = new LeaseDbService(XmlLoader.loadConfiguration(LeaseServiceTest.class.getResourceAsStream("/persistence.cfg2.xml")));
 	}
 
 	@AfterAll

@@ -1,7 +1,5 @@
 package ch.bemar.dhcp.persistence.service;
 
-import java.io.File;
-import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
@@ -12,6 +10,7 @@ import org.dhcp4java.HardwareAddress;
 import ch.bemar.dhcp.config.lease.EntityMapper;
 import ch.bemar.dhcp.config.lease.LeaseAddress;
 import ch.bemar.dhcp.persistence.IService;
+import ch.bemar.dhcp.persistence.cfg.Configuration;
 import ch.bemar.dhcp.persistence.dao.LeaseDbDao;
 import ch.bemar.dhcp.persistence.model.DbLease;
 import lombok.extern.slf4j.Slf4j;
@@ -21,16 +20,8 @@ public class LeaseDbService implements IService<LeaseAddress, HardwareAddress, I
 
 	private LeaseDbDao dao;
 
-	public LeaseDbService() throws Exception {
-		this.dao = new LeaseDbDao();
-	}
-
-	public LeaseDbService(File file) throws Exception {
-		this.dao = new LeaseDbDao(file);
-	}
-
-	public LeaseDbService(InputStream is) throws Exception {
-		this.dao = new LeaseDbDao(is);
+	public LeaseDbService(Configuration dbCfg) throws Exception {
+		this.dao = new LeaseDbDao(dbCfg);
 	}
 
 	@Override

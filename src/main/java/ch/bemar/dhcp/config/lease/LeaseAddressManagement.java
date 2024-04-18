@@ -1,7 +1,5 @@
 package ch.bemar.dhcp.config.lease;
 
-import java.io.File;
-import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
@@ -9,6 +7,7 @@ import java.sql.SQLException;
 import org.dhcp4java.HardwareAddress;
 
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
+import ch.bemar.dhcp.persistence.cfg.Configuration;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -18,20 +17,8 @@ public class LeaseAddressManagement {
 
 	private LeaseTable leaseTable;
 
-	public LeaseAddressManagement(DhcpSubnetConfig subnet) throws Exception {
-		this.leaseTable = new LeaseTable(subnet);
-		this.leaseManager = new LeaseManager();
-
-	}
-
-	public LeaseAddressManagement(DhcpSubnetConfig subnet, File file) throws Exception {
-		this.leaseTable = new LeaseTable(subnet, file);
-		this.leaseManager = new LeaseManager();
-
-	}
-
-	public LeaseAddressManagement(DhcpSubnetConfig subnet, InputStream is) throws Exception {
-		this.leaseTable = new LeaseTable(subnet, is);
+	public LeaseAddressManagement(DhcpSubnetConfig subnet, Configuration dbCfg) throws Exception {
+		this.leaseTable = new LeaseTable(subnet, dbCfg);
 		this.leaseManager = new LeaseManager();
 
 	}

@@ -74,8 +74,18 @@ public abstract class AProcessor implements IProcessor {
 		DHCPOption requestedAddress = DhcpOptionUtils.findOption(request.getOptionsCollection(),
 				DHCPConstants.DHO_DHCP_REQUESTED_ADDRESS);
 
-		if (requestedAddress != null)
-			requestedAddress.getValueAsInetAddr();
+		if (requestedAddress != null) {
+			return requestedAddress.getValueAsInetAddr();
+		}
+
+		try {
+			if (request.getCiaddr() != null
+					&& !request.getCiaddr().equals(InetAddress.getByAddress(new byte[] { 0, 0, 0, 0 }))) {
+				return request.getCiaddr();
+			}
+		} catch (Exception ex) {
+			log.error(ex.getMessage(), ex);
+		}
 
 		return null;
 
@@ -92,14 +102,19 @@ public abstract class AProcessor implements IProcessor {
 
 	}
 
-	protected DHCPPacket updateDns(DHCPPacket packet) throws IllegalArgumentException, IOException {
+	protected DHCPPacket updateDns(DHCPPacket packet, String name) throws IllegalArgumentException, IOException {
 		log.info("sending ddns update");
 
-		DHCPOption name = packet.getOption(DHCPConstants.DHO_HOST_NAME);
-		log.info("host name: {}", name);
+		log.debug("host name: {}", name);
 
-		dnsUpdateManager.updateDnsRecord(packet.getYiaddr(), name.getValueAsString());
-		log.info("update request sent");
+		if (name != null) {
+
+			dnsUpdateManager.updateDnsRecord(packet.getYiaddr(), name);
+			log.info("update request sent");
+
+		} else {
+			log.warn("no dns update sent because no name present");
+		}
 
 		return packet;
 

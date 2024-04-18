@@ -1,5 +1,6 @@
 package ch.bemar.dhcp.core;
 
+import java.io.InputStream;
 import java.net.InetAddress;
 
 import org.dhcp4java.DHCPPacket;
@@ -8,6 +9,7 @@ import ch.bemar.dhcp.config.DhcpServerConfiguration;
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
 import ch.bemar.dhcp.exception.DHCPBadPacketException;
 import ch.bemar.dhcp.exception.TypeNotFoundException;
+import ch.bemar.dhcp.persistence.cfg.Configuration;
 import ch.bemar.dhcp.processor.ProcessorLookup;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,8 +21,9 @@ public class DatagramHandler implements IDatagramHandler {
 	private final DhcpServerConfiguration serverConfig;
 	private final DhcpSubnetConfig subnetConfig;
 
-	public DatagramHandler(DhcpServerConfiguration serverConfig, DhcpSubnetConfig subnetConfig) throws Exception {
-		this.lookup = new ProcessorLookup(subnetConfig);
+	public DatagramHandler(DhcpServerConfiguration serverConfig, DhcpSubnetConfig subnetConfig, Configuration dbCfg)
+			throws Exception {
+		this.lookup = new ProcessorLookup(subnetConfig, dbCfg);
 		this.serverConfig = serverConfig;
 		this.subnetConfig = subnetConfig;
 	}

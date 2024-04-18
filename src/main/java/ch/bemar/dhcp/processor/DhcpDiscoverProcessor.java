@@ -41,7 +41,10 @@ public class DhcpDiscoverProcessor extends AProcessor {
 		try {
 
 			InetAddress requestedAddress = getRequestedAddress(request);
+			log.info("requested address: {}", requestedAddress);
+
 			String hostname = getClientHostname(request);
+			log.info("hostname: {}", hostname);
 
 			IAddress offered = addressManagement.getAddress(request.getHardwareAddress(), hostname, requestedAddress);
 
@@ -52,7 +55,7 @@ public class DhcpDiscoverProcessor extends AProcessor {
 			log.info("got ip {} for mac {}", offered.getAddress().getHostAddress(),
 					request.getHardwareAddress().getHardwareAddressHex());
 
-			return updateDns(createOfferPacket(request, offered));
+			return updateDns(createOfferPacket(request, offered), hostname);
 
 		} catch (Exception ex) {
 			log.error(ex.getMessage(), ex);

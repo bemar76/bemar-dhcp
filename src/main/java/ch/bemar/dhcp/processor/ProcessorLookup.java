@@ -1,5 +1,6 @@
 package ch.bemar.dhcp.processor;
 
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import ch.bemar.dhcp.config.DhcpSubnetConfig;
 import ch.bemar.dhcp.config.lease.LeaseAddressManagement;
 import ch.bemar.dhcp.dns.DnsUpdateManager;
 import ch.bemar.dhcp.exception.TypeNotFoundException;
+import ch.bemar.dhcp.persistence.cfg.Configuration;
 import ch.bemar.dhcp.util.ReflectionUtils;
 
 public class ProcessorLookup {
@@ -27,7 +29,7 @@ public class ProcessorLookup {
 
 	}
 
-	public ProcessorLookup(DhcpSubnetConfig cfg) throws Exception {
+	public ProcessorLookup(DhcpSubnetConfig cfg, Configuration dbCfg) throws Exception {
 
 		synchronized (this) {
 
@@ -36,7 +38,7 @@ public class ProcessorLookup {
 			}
 
 			if (addressManagement == null) {
-				addressManagement = new LeaseAddressManagement(cfg);
+				addressManagement = new LeaseAddressManagement(cfg, dbCfg);
 			}
 
 			if (config == null) {

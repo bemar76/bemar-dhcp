@@ -32,12 +32,16 @@ public class ArgumentOptions {
 			cmd = parser.parse(buildOptions(), args);
 		} catch (ParseException e) {
 			log.error(e.getMessage(), e);
-			formatter.printHelp("bemar-dhcp", buildOptions());
 
+			printHelpMenu();
 			System.exit(1);
 			return;
 		}
 
+	}
+
+	public static void printHelpMenu() {
+		formatter.printHelp("bemar-dhcp", buildOptions());
 	}
 
 	public static Options buildOptions() {

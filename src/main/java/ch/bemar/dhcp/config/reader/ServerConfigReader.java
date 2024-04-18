@@ -72,6 +72,13 @@ public class ServerConfigReader extends AConfigReader {
 
 		}
 
+		copyJob(serverConfig);
+
+		return serverConfig;
+
+	}
+
+	private void copyJob(DhcpServerConfiguration serverConfig) {
 		log.info("copying options from global config to subnet config");
 		for (DHCPOption option : serverConfig.getOptions()) {
 
@@ -82,11 +89,13 @@ public class ServerConfigReader extends AConfigReader {
 					subnet.getOptions().add(option);
 				}
 
+				subnet.getZones().putAll(serverConfig.getZones());
+
+				subnet.getKeys().putAll(serverConfig.getKeys());
+
 			}
 
 		}
-
-		return serverConfig;
 
 	}
 

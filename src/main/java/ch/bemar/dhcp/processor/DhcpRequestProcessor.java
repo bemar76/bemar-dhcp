@@ -49,7 +49,10 @@ public class DhcpRequestProcessor extends AProcessor {
 		try {
 
 			InetAddress requestedAddress = getRequestedAddress(request);
+			log.info("requested address: {}", requestedAddress);
+
 			String hostname = getClientHostname(request);
+			log.info("hostname: {}", hostname);
 
 			IAddress offered = addressManagement.getAddress(request.getHardwareAddress(), hostname, requestedAddress);
 
@@ -62,7 +65,7 @@ public class DhcpRequestProcessor extends AProcessor {
 				log.info("got ip {} for mac {}", offered.getAddress().getHostAddress(),
 						request.getHardwareAddress().getHardwareAddressHex());
 
-				return updateDns(makeDHCPAck(request, offered));
+				return updateDns(makeDHCPAck(request, offered), hostname);
 
 			} else {
 

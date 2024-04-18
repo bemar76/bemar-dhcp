@@ -19,6 +19,7 @@ import ch.bemar.dhcp.config.element.Netmask;
 import ch.bemar.dhcp.config.element.Subnet;
 import ch.bemar.dhcp.config.lease.IAddress;
 import ch.bemar.dhcp.config.lease.LeaseAddressManagement;
+import ch.bemar.dhcp.persistence.cfg.XmlLoader;
 
 @TestMethodOrder(OrderAnnotation.class)
 public class LeaseAddressManagementTest {
@@ -54,7 +55,7 @@ public class LeaseAddressManagementTest {
 
 		subnet.getHosts().add(host);
 
-		addressMgmt = new LeaseAddressManagement(subnet, LeaseAddressManagementTest.class.getResourceAsStream("/persistence.cfg3.xml"));
+		addressMgmt = new LeaseAddressManagement(subnet, XmlLoader.loadConfiguration(LeaseAddressManagementTest.class.getResourceAsStream("/persistence.cfg3.xml")));
 	}
 
 	@Test

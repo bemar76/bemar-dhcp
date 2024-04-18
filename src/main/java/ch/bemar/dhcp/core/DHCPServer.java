@@ -7,6 +7,7 @@ import org.apache.commons.lang3.ThreadUtils;
 
 import ch.bemar.dhcp.config.DhcpServerConfiguration;
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
+import ch.bemar.dhcp.persistence.cfg.Configuration;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -16,12 +17,12 @@ public class DHCPServer implements Runnable {
 
 	private SocketManager socketManager;
 
-	public DHCPServer(DhcpServerConfiguration serverConfig) throws Exception {
+	public DHCPServer(DhcpServerConfiguration serverConfig, Configuration dbCfg) throws Exception {
 		this.serverConfig = serverConfig;
-		init();
+		init(dbCfg);
 	}
 
-	private void init() throws Exception {
+	private void init(Configuration dbCfg) throws Exception {
 
 		log.info("Starting bemar-DHCP");
 
@@ -29,7 +30,7 @@ public class DHCPServer implements Runnable {
 
 		for (DhcpSubnetConfig subnetConfig : serverConfig.getSubnets()) {
 
-			DatagramHandler handler = new DatagramHandler(serverConfig, subnetConfig);
+			DatagramHandler handler = new DatagramHandler(serverConfig, subnetConfig, dbCfg);
 
 			socketManager.registerHandler(handler);
 

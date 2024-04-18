@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import ch.bemar.dhcp.persistence.cfg.XmlLoader;
 import ch.bemar.dhcp.persistence.dao.LeaseDbDao;
 import ch.bemar.dhcp.persistence.model.DbLease;
 
@@ -26,7 +27,9 @@ public class LeaseDaoTest {
 
 	@BeforeAll
 	static void init() throws Exception {
-		leaseDao = new LeaseDbDao(LeaseDaoTest.class.getResourceAsStream("/persistence.cfg1.xml"));
+
+		leaseDao = new LeaseDbDao(
+				XmlLoader.loadConfiguration(LeaseDaoTest.class.getResourceAsStream("/persistence.cfg1.xml")));
 	}
 
 	@AfterAll
@@ -36,19 +39,17 @@ public class LeaseDaoTest {
 
 	@Test
 	@Order(1)
-	void testAddressSave()
-			throws UnknownHostException, IllegalArgumentException, IllegalAccessException, SQLException {
+	void testAddressSave() throws UnknownHostException, IllegalArgumentException, IllegalAccessException, SQLException {
 
 		lastContact = System.currentTimeMillis();
 
 		DbLease a = new DbLease();
-		a.setIp("192.169.64.54");		
+		a.setIp("192.169.64.54");
 		a.setHostname("bemar-pc");
 		a.setLastContact(lastContact);
 
 		leaseDao.save(a);
 	}
-	
 
 	@Test
 	@Order(2)

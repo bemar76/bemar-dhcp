@@ -11,6 +11,8 @@ import org.xbill.DNS.TSIG;
 import org.xbill.DNS.Type;
 import org.xbill.DNS.Update;
 
+import com.google.common.base.Preconditions;
+
 import ch.bemar.dhcp.config.DhcpKeyConfig;
 import ch.bemar.dhcp.config.DhcpSubnetConfig;
 import ch.bemar.dhcp.config.DhcpZoneConfig;
@@ -42,12 +44,27 @@ public class DnsUpdateManager {
 	private Message doDnsUpdateRecord(InetAddress ip, String hostName) throws IOException {
 		try {
 
-			DhcpZoneConfig zoneCfg = getZone(subnetConfig.getDdnsDomainName().getValue());
+			String zoneName = subnetConfig.getDdnsDomainName().getValue();
+			log.debug("zoneName: {}", zoneName);
+
+			Preconditions.checkNotNull(zoneName, "No zonename found");
+
+			DhcpZoneConfig zoneCfg = getZone(zoneName);
+			log.debug("zoneCfg: {}", zoneCfg);
+
+			Preconditions.checkNotNull(zoneName, "No zone config found for name " + zoneName);
 
 			DhcpKeyConfig keyCfg = getKey(zoneCfg.getKey().getValue());
+			log.debug("keyCfg: {}", keyCfg);
+
+			Preconditions.checkNotNull(zoneName, "No key config found for name " + zoneCfg.getKey().getValue());
 
 			Name zone = Name.fromString(zoneCfg.getZoneName());
+			log.debug("zone: {}", zone);
+
 			Name host = Name.fromString(hostName, zone);
+			log.debug("host: {}", host);
+
 			Update update = new Update(zone);
 
 			update.add(host, Type.A, subnetConfig.getDefaultLeaseTime().getValue(), ip.getHostAddress());
@@ -79,12 +96,9 @@ public class DnsUpdateManager {
 		}
 	}
 
-	public DhcpKeyConfig getKey(String zoneName) {
-		if (!zoneName.trim().endsWith(".")) {
-			zoneName = zoneName.trim() + ".";
-		}
+	public DhcpKeyConfig getKey(String keyName) {
 
-		return subnetConfig.getKeys().get(zoneName.trim());
+		return subnetConfig.getKeys().get(keyName.trim());
 	}
 
 	public DhcpZoneConfig getZone(String zoneName) {
