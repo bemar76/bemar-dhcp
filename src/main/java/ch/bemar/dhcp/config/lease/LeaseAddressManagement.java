@@ -40,7 +40,7 @@ public class LeaseAddressManagement {
 			address = getNextAddress(mac, hostname);
 		}
 
-		return persist(address);
+		return persist(cleanup(address, mac));
 
 	}
 
@@ -56,7 +56,7 @@ public class LeaseAddressManagement {
 				IAddress addr = leaseManager.handleReservedLeasing(address, hostname, mac);
 
 				if (addr != null) {
-					return persist(addr);
+					return persist(cleanup(addr, mac));
 				}
 
 			}
@@ -71,7 +71,7 @@ public class LeaseAddressManagement {
 
 	synchronized IAddress getNextAddress(HardwareAddress mac, String hostname) throws Exception {
 
-		return persist(getNextAddress(mac, hostname, null));
+		return persist(cleanup(getNextAddress(mac, hostname, null), mac));
 	}
 
 	synchronized IAddress getNextAddress(HardwareAddress mac, String hostname, InetAddress requestAddress)
@@ -84,7 +84,7 @@ public class LeaseAddressManagement {
 				IAddress addr = leaseManager.handleNextFreeLeasing(address, hostname, mac);
 
 				if (addr != null) {
-					return persist(address);
+					return persist(cleanup(address, mac));
 				}
 
 			}
@@ -104,6 +104,31 @@ public class LeaseAddressManagement {
 		if (a != null)
 			leaseTable.persist((LeaseAddress) a);
 
+		return a;
+	}
+
+	/**
+	 * checks whether the mac is already defined with other records
+	 * 
+	 * @param a
+	 * @return
+	 * @throws SQLException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws UnknownHostException
+	 */
+	private IAddress cleanup(IAddress a, HardwareAddress mac)
+			throws UnknownHostException, IllegalArgumentException, IllegalAccessException, SQLException {
+
+		for (LeaseAddress address : leaseTable.getLeaseAddresses()) {
+
+			if (!address.getIp().equals(a) && address.getLeasedTo() != null && address.getLeasedTo().equals(mac)) {
+				log.debug("removing old lease for mac {}", mac.getAsMac());
+				address.evictLeasing();
+				persist(address);
+			}
+
+		}
 		return a;
 	}
 

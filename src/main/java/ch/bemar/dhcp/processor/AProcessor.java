@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.dhcp4java.DHCPConstants;
 import org.dhcp4java.DHCPOption;
@@ -23,6 +25,8 @@ public abstract class AProcessor implements IProcessor {
 	protected abstract DhcpSubnetConfig getSubnetConfig();
 
 	private final DnsUpdateManager dnsUpdateManager;
+
+	private final ExecutorService executor = Executors.newFixedThreadPool(5);
 
 	AProcessor(DnsUpdateManager dnsUpdateManager) {
 		this.dnsUpdateManager = dnsUpdateManager;
@@ -109,8 +113,18 @@ public abstract class AProcessor implements IProcessor {
 
 		if (name != null) {
 
-			dnsUpdateManager.updateDnsRecord(packet.getYiaddr(), name);
-			log.info("update request sent");
+			executor.submit(new Runnable() {
+				public void run() {
+					try {
+						
+						dnsUpdateManager.updateDnsRecord(packet.getYiaddr(), name);
+						log.info("update request sent");
+						
+					} catch (Exception ex) {
+						log.error(ex.getMessage(), ex);
+					}
+				}
+			});
 
 		} else {
 			log.warn("no dns update sent because no name present");
